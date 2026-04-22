@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -70,7 +71,7 @@ function DashboardPage() {
           </div>
           <Button
             size="lg"
-            onClick={() => navigate({ to: "/dashboard/new-case" })}
+            onClick={() => toast.info("سيتم إطلاق محرّك الحالات قريبًا")}
             className="bg-white text-primary shadow-lg hover:bg-white/90"
           >
             ابدأ حالة جديدة
