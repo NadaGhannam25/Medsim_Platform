@@ -1,10 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth-context";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { GoogleButton } from "@/components/auth/GoogleButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,12 +21,21 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!authLoading && user) navigate({ to: "/dashboard" });
+  }, [user, authLoading, navigate]);
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!email.trim() || !password) {
+      toast.error("الرجاء تعبئة جميع الحقول");
+      return;
+    }
     const parsed = schema.safeParse({ email, password });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0].message);
@@ -36,7 +45,12 @@ function LoginPage() {
     const { error } = await supabase.auth.signInWithPassword(parsed.data);
     setLoading(false);
     if (error) {
-      toast.error("بيانات الدخول غير صحيحة");
+      const msg = error.message.toLowerCase();
+      if (msg.includes("email not confirmed")) {
+        toast.error("يرجى تأكيد بريدك الإلكتروني أولًا");
+      } else {
+        toast.error("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+      }
       return;
     }
     toast.success("مرحبًا بعودتك");
@@ -64,11 +78,6 @@ function LoginPage() {
         <Button type="submit" disabled={loading} className="w-full bg-[image:var(--gradient-primary)] shadow-[var(--shadow-soft)]">
           {loading ? "جارٍ الدخول..." : "تسجيل الدخول"}
         </Button>
-        <div className="relative py-2">
-          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
-          <div className="relative flex justify-center"><span className="bg-card px-3 text-xs text-muted-foreground">أو</span></div>
-        </div>
-        <GoogleButton />
       </form>
     </AuthLayout>
   );
