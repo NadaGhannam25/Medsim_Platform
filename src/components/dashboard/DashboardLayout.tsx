@@ -4,23 +4,25 @@ import {
   LogOut, Stethoscope, Bell, Menu, X
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 
 type NavItem = {
-  to: string;
   label: string;
   icon: typeof Home;
+  to?: "/dashboard";
   highlight?: boolean;
+  comingSoon?: boolean;
 };
 
 const navItems: NavItem[] = [
   { to: "/dashboard", label: "الرئيسية", icon: Home },
-  { to: "/dashboard/cases", label: "حالاتي", icon: BookOpen },
-  { to: "/dashboard/new-case", label: "ابدأ حالة جديدة", icon: PlayCircle, highlight: true },
-  { to: "/dashboard/insights", label: "نقاط القوة والضعف", icon: Activity },
-  { to: "/dashboard/feedback", label: "التغذية الراجعة", icon: MessageSquare },
-  { to: "/dashboard/settings", label: "الإعدادات", icon: Settings },
+  { label: "حالاتي", icon: BookOpen, comingSoon: true },
+  { label: "ابدأ حالة جديدة", icon: PlayCircle, highlight: true, comingSoon: true },
+  { label: "نقاط القوة والضعف", icon: Activity, comingSoon: true },
+  { label: "التغذية الراجعة", icon: MessageSquare, comingSoon: true },
+  { label: "الإعدادات", icon: Settings, comingSoon: true },
 ];
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
