@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Stethoscope } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -17,8 +18,12 @@ export function Navbar() {
           <a href="#why" className="text-sm text-muted-foreground transition hover:text-foreground">لماذا نحن</a>
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" className="hidden sm:inline-flex">تسجيل الدخول</Button>
-          <Button className="bg-[image:var(--gradient-primary)] shadow-[var(--shadow-soft)]">ابدأ الآن</Button>
+          <Button asChild variant="ghost" className="hidden sm:inline-flex">
+            <Link to="/login">تسجيل الدخول</Link>
+          </Button>
+          <Button asChild className="bg-[image:var(--gradient-primary)] shadow-[var(--shadow-soft)]">
+            <Link to="/signup">ابدأ الآن</Link>
+          </Button>
         </div>
       </div>
     </header>
