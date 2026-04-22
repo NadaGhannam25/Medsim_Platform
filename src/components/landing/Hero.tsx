@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Sparkles, PlayCircle } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-medical.jpg";
 
@@ -32,9 +33,11 @@ export function Hero() {
             اطرح الأسئلة، اطلب الفحوصات، وضع تشخيصك — واحصل على تقييم تفصيلي يطوّر مهاراتك.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Button size="lg" className="bg-[image:var(--gradient-primary)] shadow-[var(--shadow-elegant)]">
-              ابدأ أول حالة مجانًا
-              <ArrowLeft className="mr-2 h-4 w-4" />
+            <Button asChild size="lg" className="bg-[image:var(--gradient-primary)] shadow-[var(--shadow-elegant)]">
+              <Link to="/signup">
+                ابدأ أول حالة مجانًا
+                <ArrowLeft className="mr-2 h-4 w-4" />
+              </Link>
             </Button>
             <Button size="lg" variant="outline" className="border-primary/30">
               <PlayCircle className="ml-2 h-4 w-4" />
