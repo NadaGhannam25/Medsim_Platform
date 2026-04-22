@@ -19,6 +19,9 @@
  */
 
 @theme inline {
+  --font-display: "Tajawal", "Cairo", system-ui, sans-serif;
+  --font-sans: "Tajawal", "Cairo", system-ui, sans-serif;
+  --color-primary-glow: var(--primary-glow);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -144,8 +147,19 @@
     border-color: var(--color-border);
   }
 
+  html {
+    direction: rtl;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
   }
 }
