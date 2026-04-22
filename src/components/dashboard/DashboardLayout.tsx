@@ -50,35 +50,38 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
       <nav className="flex-1 space-y-1">
         {navItems.map((item) => {
-          const active = location.pathname === item.to;
+          const active = item.to ? location.pathname === item.to : false;
           const Icon = item.icon;
-          if (item.highlight) {
+          const className = item.highlight
+            ? "my-2 flex items-center gap-3 rounded-xl bg-[image:var(--gradient-primary)] px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition hover:opacity-90 cursor-pointer w-full text-right"
+            : `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition cursor-pointer w-full text-right ${
+                active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`;
+          const content = (
+            <>
+              <Icon className="h-4 w-4" />
+              <span className="flex-1 text-right">{item.label}</span>
+              {item.comingSoon && !item.highlight && (
+                <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">قريبًا</span>
+              )}
+            </>
+          );
+          if (item.to) {
             return (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => setMobileOpen(false)}
-                className="my-2 flex items-center gap-3 rounded-xl bg-[image:var(--gradient-primary)] px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition hover:opacity-90"
-              >
-                <Icon className="h-4 w-4" />
-                {item.label}
+              <Link key={item.label} to={item.to} onClick={() => setMobileOpen(false)} className={className}>
+                {content}
               </Link>
             );
           }
           return (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                active
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
+            <button
+              key={item.label}
+              type="button"
+              onClick={() => { setMobileOpen(false); toast.info("هذه الميزة قريبًا"); }}
+              className={className}
             >
-              <Icon className="h-4 w-4" />
-              {item.label}
-            </Link>
+              {content}
+            </button>
           );
         })}
       </nav>
