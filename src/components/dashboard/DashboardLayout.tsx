@@ -7,14 +7,21 @@ import { useState, type ReactNode } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 
-const navItems = [
+type NavItem = {
+  to: string;
+  label: string;
+  icon: typeof Home;
+  highlight?: boolean;
+};
+
+const navItems: NavItem[] = [
   { to: "/dashboard", label: "الرئيسية", icon: Home },
   { to: "/dashboard/cases", label: "حالاتي", icon: BookOpen },
   { to: "/dashboard/new-case", label: "ابدأ حالة جديدة", icon: PlayCircle, highlight: true },
   { to: "/dashboard/insights", label: "نقاط القوة والضعف", icon: Activity },
   { to: "/dashboard/feedback", label: "التغذية الراجعة", icon: MessageSquare },
   { to: "/dashboard/settings", label: "الإعدادات", icon: Settings },
-] as const;
+];
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, signOut } = useAuth();
