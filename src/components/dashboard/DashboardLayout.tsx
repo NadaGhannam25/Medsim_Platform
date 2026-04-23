@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 type NavItem = {
   label: string;
   icon: typeof Home;
-  to?: "/dashboard" | "/simulation";
+  to?: "/dashboard" | "/simulation" | "/examination";
   highlight?: boolean;
   comingSoon?: boolean;
 };
@@ -20,6 +20,7 @@ const navItems: NavItem[] = [
   { to: "/dashboard", label: "الرئيسية", icon: Home },
   { label: "حالاتي", icon: BookOpen, comingSoon: true },
   { to: "/simulation", label: "ابدأ حالة جديدة", icon: PlayCircle, highlight: true },
+  { to: "/examination", label: "الفحص السريري", icon: Activity },
   { label: "نقاط القوة والضعف", icon: Activity, comingSoon: true },
   { label: "التغذية الراجعة", icon: MessageSquare, comingSoon: true },
   { label: "الإعدادات", icon: Settings, comingSoon: true },
