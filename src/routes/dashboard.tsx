@@ -71,7 +71,7 @@ function DashboardPage() {
           </div>
           <Button
             size="lg"
-            onClick={() => toast.info("سيتم إطلاق محرّك الحالات قريبًا")}
+            onClick={() => navigate({ to: "/simulation" })}
             className="bg-white text-primary shadow-lg hover:bg-white/90"
           >
             ابدأ حالة جديدة
