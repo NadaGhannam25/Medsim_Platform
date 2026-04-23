@@ -54,7 +54,20 @@ function SignupPage() {
     });
     setLoading(false);
     if (error) {
-      toast.error(error.message.includes("registered") ? "هذا البريد مسجّل مسبقًا" : "تعذّر إنشاء الحساب");
+      const msg = error.message.toLowerCase();
+      if (msg.includes("registered") || msg.includes("already")) {
+        toast.error("هذا البريد مسجّل مسبقًا. سجّل الدخول بدلاً من ذلك");
+      } else if (msg.includes("password") && (msg.includes("weak") || msg.includes("pwned") || msg.includes("compromised"))) {
+        toast.error("كلمة المرور ضعيفة أو مكشوفة. اختر كلمة مرور أقوى");
+      } else if (msg.includes("password")) {
+        toast.error("كلمة المرور غير مقبولة. استخدم ٨ أحرف على الأقل");
+      } else if (msg.includes("email") && msg.includes("invalid")) {
+        toast.error("البريد الإلكتروني غير صالح");
+      } else if (msg.includes("rate") || msg.includes("limit")) {
+        toast.error("حاول مرة أخرى بعد قليل");
+      } else {
+        toast.error(`تعذّر إنشاء الحساب: ${error.message}`);
+      }
       return;
     }
     toast.success("تم إنشاء حسابك بنجاح");
