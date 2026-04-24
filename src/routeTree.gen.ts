@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SimulationRouteImport } from './routes/simulation'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PreviousCasesRouteImport } from './routes/previous-cases'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ExaminationRouteImport } from './routes/examination'
@@ -33,6 +34,11 @@ const SignupRoute = SignupRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreviousCasesRoute = PreviousCasesRouteImport.update({
+  id: '/previous-cases',
+  path: '/previous-cases',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/examination': typeof ExaminationRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/previous-cases': typeof PreviousCasesRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/simulation': typeof SimulationRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/examination': typeof ExaminationRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/previous-cases': typeof PreviousCasesRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/simulation': typeof SimulationRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/examination': typeof ExaminationRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/previous-cases': typeof PreviousCasesRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/simulation': typeof SimulationRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/examination'
     | '/forgot-password'
     | '/login'
+    | '/previous-cases'
     | '/reset-password'
     | '/signup'
     | '/simulation'
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/examination'
     | '/forgot-password'
     | '/login'
+    | '/previous-cases'
     | '/reset-password'
     | '/signup'
     | '/simulation'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/examination'
     | '/forgot-password'
     | '/login'
+    | '/previous-cases'
     | '/reset-password'
     | '/signup'
     | '/simulation'
@@ -154,6 +166,7 @@ export interface RootRouteChildren {
   ExaminationRoute: typeof ExaminationRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  PreviousCasesRoute: typeof PreviousCasesRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   SimulationRoute: typeof SimulationRoute
@@ -181,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/previous-cases': {
+      id: '/previous-cases'
+      path: '/previous-cases'
+      fullPath: '/previous-cases'
+      preLoaderRoute: typeof PreviousCasesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -242,6 +262,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExaminationRoute: ExaminationRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  PreviousCasesRoute: PreviousCasesRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   SimulationRoute: SimulationRoute,
