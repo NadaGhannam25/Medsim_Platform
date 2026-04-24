@@ -71,7 +71,7 @@ function DashboardPage() {
           </div>
           <Button
             size="lg"
-            onClick={() => navigate({ to: "/simulation" })}
+            onClick={() => navigate({ to: "/clinical-cases" })}
             className="bg-white text-primary shadow-lg hover:bg-white/90"
           >
             ابدأ حالة جديدة
