@@ -11,12 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SimulationRouteImport } from './routes/simulation'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PreviousCasesRouteImport } from './routes/previous-cases'
+import { Route as PerformanceRouteImport } from './routes/performance'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ExaminationRouteImport } from './routes/examination'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ClinicalCasesRouteImport } from './routes/clinical-cases'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CaseCaseIdRouteImport } from './routes/case.$caseId'
 
 const SimulationRoute = SimulationRouteImport.update({
   id: '/simulation',
@@ -28,9 +33,24 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreviousCasesRoute = PreviousCasesRouteImport.update({
+  id: '/previous-cases',
+  path: '/previous-cases',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerformanceRoute = PerformanceRouteImport.update({
+  id: '/performance',
+  path: '/performance',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -53,85 +73,130 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClinicalCasesRoute = ClinicalCasesRouteImport.update({
+  id: '/clinical-cases',
+  path: '/clinical-cases',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaseCaseIdRoute = CaseCaseIdRouteImport.update({
+  id: '/case/$caseId',
+  path: '/case/$caseId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/clinical-cases': typeof ClinicalCasesRoute
   '/dashboard': typeof DashboardRoute
   '/examination': typeof ExaminationRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/performance': typeof PerformanceRoute
+  '/previous-cases': typeof PreviousCasesRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/simulation': typeof SimulationRoute
+  '/case/$caseId': typeof CaseCaseIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/clinical-cases': typeof ClinicalCasesRoute
   '/dashboard': typeof DashboardRoute
   '/examination': typeof ExaminationRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/performance': typeof PerformanceRoute
+  '/previous-cases': typeof PreviousCasesRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/simulation': typeof SimulationRoute
+  '/case/$caseId': typeof CaseCaseIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/clinical-cases': typeof ClinicalCasesRoute
   '/dashboard': typeof DashboardRoute
   '/examination': typeof ExaminationRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/performance': typeof PerformanceRoute
+  '/previous-cases': typeof PreviousCasesRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/simulation': typeof SimulationRoute
+  '/case/$caseId': typeof CaseCaseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/clinical-cases'
     | '/dashboard'
     | '/examination'
     | '/forgot-password'
     | '/login'
+    | '/performance'
+    | '/previous-cases'
     | '/reset-password'
+    | '/settings'
     | '/signup'
     | '/simulation'
+    | '/case/$caseId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/clinical-cases'
     | '/dashboard'
     | '/examination'
     | '/forgot-password'
     | '/login'
+    | '/performance'
+    | '/previous-cases'
     | '/reset-password'
+    | '/settings'
     | '/signup'
     | '/simulation'
+    | '/case/$caseId'
   id:
     | '__root__'
     | '/'
+    | '/clinical-cases'
     | '/dashboard'
     | '/examination'
     | '/forgot-password'
     | '/login'
+    | '/performance'
+    | '/previous-cases'
     | '/reset-password'
+    | '/settings'
     | '/signup'
     | '/simulation'
+    | '/case/$caseId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ClinicalCasesRoute: typeof ClinicalCasesRoute
   DashboardRoute: typeof DashboardRoute
   ExaminationRoute: typeof ExaminationRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  PerformanceRoute: typeof PerformanceRoute
+  PreviousCasesRoute: typeof PreviousCasesRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   SimulationRoute: typeof SimulationRoute
+  CaseCaseIdRoute: typeof CaseCaseIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -150,11 +215,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/previous-cases': {
+      id: '/previous-cases'
+      path: '/previous-cases'
+      fullPath: '/previous-cases'
+      preLoaderRoute: typeof PreviousCasesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/performance': {
+      id: '/performance'
+      path: '/performance'
+      fullPath: '/performance'
+      preLoaderRoute: typeof PerformanceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -185,6 +271,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/clinical-cases': {
+      id: '/clinical-cases'
+      path: '/clinical-cases'
+      fullPath: '/clinical-cases'
+      preLoaderRoute: typeof ClinicalCasesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -192,18 +285,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/case/$caseId': {
+      id: '/case/$caseId'
+      path: '/case/$caseId'
+      fullPath: '/case/$caseId'
+      preLoaderRoute: typeof CaseCaseIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ClinicalCasesRoute: ClinicalCasesRoute,
   DashboardRoute: DashboardRoute,
   ExaminationRoute: ExaminationRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  PerformanceRoute: PerformanceRoute,
+  PreviousCasesRoute: PreviousCasesRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   SimulationRoute: SimulationRoute,
+  CaseCaseIdRoute: CaseCaseIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
