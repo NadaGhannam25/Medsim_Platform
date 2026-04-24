@@ -1,15 +1,21 @@
 // Clinical case dataset for the examination simulator.
-// Each case includes patient identity, EMR summary, visits, and the body
+// Each case includes patient identity, EMR summary, visits, and precise body
 // regions that are clinically relevant for smart feedback.
 
 export type BodyRegionId =
-  | "head" | "neck" | "chest" | "abdomen" | "pelvis"
+  | "head-right-frontal" | "head-left-frontal" | "head-right-temporal" | "head-left-temporal"
+  | "head-occipital" | "head-vertex" | "face" | "jaw"
+  | "neck-anterior" | "neck-posterior"
+  | "chest-right-upper" | "chest-left-upper" | "chest-central" | "chest-lower"
+  | "abdomen-epigastric" | "abdomen-ruq" | "abdomen-luq" | "abdomen-umbilical" | "abdomen-rlq" | "abdomen-llq" | "suprapubic"
+  | "pelvis-right" | "pelvis-left"
   | "shoulder-left" | "shoulder-right"
-  | "arm-left" | "arm-right"
+  | "upper-arm-left" | "upper-arm-right" | "forearm-left" | "forearm-right"
   | "hand-left" | "hand-right"
-  | "leg-left" | "leg-right"
-  | "foot-left" | "foot-right"
-  | "upper-back" | "lower-back" | "buttocks";
+  | "upper-back-left" | "upper-back-right" | "mid-back-left" | "mid-back-right" | "lower-back-left" | "lower-back-right" | "sacral"
+  | "buttock-left" | "buttock-right"
+  | "thigh-left" | "thigh-right" | "knee-left" | "knee-right" | "lower-leg-left" | "lower-leg-right"
+  | "foot-left" | "foot-right";
 
 export type CaseCategory =
   | "chest-pain" | "abdominal-pain" | "headache" | "lower-back-pain" | "shortness-of-breath";
@@ -40,7 +46,6 @@ export type ClinicalCase = {
   medications: string[];
   previousDiagnoses: string[];
   visits: Visit[];
-  // Regions clinically expected for this case → used for smart feedback
   expectedRegions: BodyRegionId[];
   vitals: { hr: string; bp: string; temp: string; rr: string; spo2: string };
 };
@@ -62,7 +67,7 @@ export const CLINICAL_CASES: ClinicalCase[] = [
       { id: "v2", date: "٢٠٢٤/٠٧/١٥", reason: "ألم صدري عابر", summary: "ECG طبيعي، Troponin سلبي", details: "ألم خفيف زال بالراحة. أُجري ECG وتحاليل قلب. خرج على نتروجلسرين عند الحاجة." },
       { id: "v3", date: "٢٠٢٣/١٢/٢٠", reason: "فحص دوري", summary: "HbA1c 7.8%", details: "تعديل خطة السكري والنظام الغذائي. تحويل لاختصاصي تغذية." },
     ],
-    expectedRegions: ["chest", "shoulder-left", "arm-left", "neck"],
+    expectedRegions: ["chest-central", "chest-left-upper", "shoulder-left", "upper-arm-left", "neck-anterior"],
     vitals: { hr: "١١٢", bp: "١٥٠/٩٥", temp: "٣٧.١", rr: "٢٢", spo2: "٩٦٪" },
   },
   {
@@ -80,7 +85,7 @@ export const CLINICAL_CASES: ClinicalCase[] = [
       { id: "v1", date: "٢٠٢٤/٠٩/١٠", reason: "إعياء عام", summary: "Hb 10.2 — وُصف الحديد", details: "أعراض إعياء وضعف. تحاليل أظهرت أنيميا. بدأ علاج الحديد لمدة ٣ أشهر." },
       { id: "v2", date: "٢٠٢٤/٠٣/٠٥", reason: "صداع متكرر", summary: "صداع توتري", details: "نُصحت بتقليل الكافيين وتمارين استرخاء." },
     ],
-    expectedRegions: ["abdomen", "pelvis", "lower-back"],
+    expectedRegions: ["abdomen-rlq", "suprapubic", "lower-back-right"],
     vitals: { hr: "١٠٢", bp: "١١٨/٧٥", temp: "٣٨.٢", rr: "١٨", spo2: "٩٩٪" },
   },
   {
@@ -98,7 +103,7 @@ export const CLINICAL_CASES: ClinicalCase[] = [
       { id: "v1", date: "٢٠٢٤/١٠/١٨", reason: "نوبة شقيقة", summary: "استجابة للتريبتان", details: "نوبة دامت ٦ ساعات. تحسّن بعد الدواء والراحة." },
       { id: "v2", date: "٢٠٢٤/٠٢/١٢", reason: "تقييم صداع مزمن", summary: "MRI طبيعي", details: "تم استبعاد الأسباب العضوية. خطة وقاية بالبروبرانولول." },
     ],
-    expectedRegions: ["head", "neck"],
+    expectedRegions: ["head-right-temporal", "head-right-frontal", "neck-posterior"],
     vitals: { hr: "٨٨", bp: "١٣٥/٨٥", temp: "٣٦.٨", rr: "١٦", spo2: "٩٨٪" },
   },
   {
@@ -115,7 +120,7 @@ export const CLINICAL_CASES: ClinicalCase[] = [
     visits: [
       { id: "v1", date: "٢٠٢٢/٠٦/٢٢", reason: "ألم ظهر حاد", summary: "MRI: انزلاق L4-L5", details: "علاج تحفظي بالأدوية والعلاج الطبيعي. تحسّن خلال ٦ أسابيع." },
     ],
-    expectedRegions: ["lower-back", "leg-right", "buttocks"],
+    expectedRegions: ["lower-back-right", "buttock-right", "thigh-right", "lower-leg-right"],
     vitals: { hr: "٨٢", bp: "١٢٨/٨٢", temp: "٣٦.٧", rr: "١٦", spo2: "٩٩٪" },
   },
   {
@@ -133,7 +138,7 @@ export const CLINICAL_CASES: ClinicalCase[] = [
       { id: "v1", date: "٢٠٢٤/٠٨/٣٠", reason: "نوبة ربو", summary: "PEFR منخفض، استجابت للنبيولايزر", details: "بقيت تحت الملاحظة ٤ ساعات. خرجت على بريدنيزون لمدة ٥ أيام." },
       { id: "v2", date: "٢٠٢٤/٠٤/١٢", reason: "متابعة الربو", summary: "السيطرة جيدة", details: "تعديل الخطة الوقائية. تدريب على استخدام البخاخات." },
     ],
-    expectedRegions: ["chest", "neck"],
+    expectedRegions: ["chest-right-upper", "chest-left-upper", "chest-central", "neck-anterior"],
     vitals: { hr: "١٠٥", bp: "١٤٠/٨٨", temp: "٣٧.٤", rr: "٢٦", spo2: "٩٢٪" },
   },
 ];
@@ -157,22 +162,62 @@ export type Severity = typeof SEVERITY_OPTIONS[number]["value"];
 export type SymptomType = typeof SYMPTOM_OPTIONS[number]["value"];
 
 export const REGION_LABELS: Record<BodyRegionId, string> = {
-  head: "الرأس",
-  neck: "الرقبة",
-  chest: "الصدر",
-  abdomen: "البطن",
-  pelvis: "الحوض",
+  "head-right-frontal": "الجبهة اليمنى",
+  "head-left-frontal": "الجبهة اليسرى",
+  "head-right-temporal": "الصدغ الأيمن",
+  "head-left-temporal": "الصدغ الأيسر",
+  "head-occipital": "مؤخرة الرأس",
+  "head-vertex": "قمة الرأس",
+  face: "الوجه",
+  jaw: "الفك",
+  "neck-anterior": "مقدمة الرقبة",
+  "neck-posterior": "مؤخرة الرقبة",
+  "chest-right-upper": "أعلى الصدر الأيمن",
+  "chest-left-upper": "أعلى الصدر الأيسر",
+  "chest-central": "منتصف الصدر",
+  "chest-lower": "أسفل الصدر",
+  "abdomen-epigastric": "فوق المعدة",
+  "abdomen-ruq": "الربع العلوي الأيمن للبطن",
+  "abdomen-luq": "الربع العلوي الأيسر للبطن",
+  "abdomen-umbilical": "حول السرة",
+  "abdomen-rlq": "الربع السفلي الأيمن للبطن",
+  "abdomen-llq": "الربع السفلي الأيسر للبطن",
+  suprapubic: "فوق العانة",
+  "pelvis-right": "الحوض الأيمن",
+  "pelvis-left": "الحوض الأيسر",
   "shoulder-left": "الكتف الأيسر",
   "shoulder-right": "الكتف الأيمن",
-  "arm-left": "الذراع الأيسر",
-  "arm-right": "الذراع الأيمن",
+  "upper-arm-left": "العضد الأيسر",
+  "upper-arm-right": "العضد الأيمن",
+  "forearm-left": "الساعد الأيسر",
+  "forearm-right": "الساعد الأيمن",
   "hand-left": "اليد اليسرى",
   "hand-right": "اليد اليمنى",
-  "leg-left": "الساق اليسرى",
-  "leg-right": "الساق اليمنى",
+  "upper-back-left": "أعلى الظهر الأيسر",
+  "upper-back-right": "أعلى الظهر الأيمن",
+  "mid-back-left": "منتصف الظهر الأيسر",
+  "mid-back-right": "منتصف الظهر الأيمن",
+  "lower-back-left": "أسفل الظهر الأيسر",
+  "lower-back-right": "أسفل الظهر الأيمن",
+  sacral: "العجز",
+  "buttock-left": "الأرداف اليسرى",
+  "buttock-right": "الأرداف اليمنى",
+  "thigh-left": "الفخذ الأيسر",
+  "thigh-right": "الفخذ الأيمن",
+  "knee-left": "الركبة اليسرى",
+  "knee-right": "الركبة اليمنى",
+  "lower-leg-left": "الساق السفلى اليسرى",
+  "lower-leg-right": "الساق السفلى اليمنى",
   "foot-left": "القدم اليسرى",
   "foot-right": "القدم اليمنى",
-  "upper-back": "أعلى الظهر",
-  "lower-back": "أسفل الظهر",
-  buttocks: "الأرداف",
+};
+
+export const REGION_SIDE: Partial<Record<BodyRegionId, "أيمن" | "أيسر" | "وسطي">> = {
+  "head-right-frontal": "أيمن", "head-left-frontal": "أيسر", "head-right-temporal": "أيمن", "head-left-temporal": "أيسر",
+  "chest-right-upper": "أيمن", "chest-left-upper": "أيسر", "chest-central": "وسطي", "chest-lower": "وسطي",
+  "abdomen-ruq": "أيمن", "abdomen-luq": "أيسر", "abdomen-rlq": "أيمن", "abdomen-llq": "أيسر",
+  "pelvis-right": "أيمن", "pelvis-left": "أيسر", "shoulder-right": "أيمن", "shoulder-left": "أيسر",
+  "upper-arm-right": "أيمن", "upper-arm-left": "أيسر", "forearm-right": "أيمن", "forearm-left": "أيسر", "hand-right": "أيمن", "hand-left": "أيسر",
+  "upper-back-right": "أيمن", "upper-back-left": "أيسر", "mid-back-right": "أيمن", "mid-back-left": "أيسر", "lower-back-right": "أيمن", "lower-back-left": "أيسر",
+  "buttock-right": "أيمن", "buttock-left": "أيسر", "thigh-right": "أيمن", "thigh-left": "أيسر", "knee-right": "أيمن", "knee-left": "أيسر", "lower-leg-right": "أيمن", "lower-leg-left": "أيسر", "foot-right": "أيمن", "foot-left": "أيسر",
 };
