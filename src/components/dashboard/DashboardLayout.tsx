@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import {
-  Home, BookOpen, PlayCircle, Activity, MessageSquare, Settings,
-  LogOut, Stethoscope, Bell, Menu, X
+  Home, BookOpen, Activity, Settings,
+  LogOut, Stethoscope, Bell, Menu, X, BarChart3, ClipboardList
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { toast } from "sonner";
@@ -11,19 +11,16 @@ import { Button } from "@/components/ui/button";
 type NavItem = {
   label: string;
   icon: typeof Home;
-  to?: "/dashboard" | "/simulation" | "/examination";
-  highlight?: boolean;
-  comingSoon?: boolean;
+  to: "/dashboard" | "/clinical-cases" | "/previous-cases" | "/performance" | "/settings";
+  bottom?: boolean;
 };
 
 const navItems: NavItem[] = [
   { to: "/dashboard", label: "الرئيسية", icon: Home },
-  { label: "حالاتي", icon: BookOpen, comingSoon: true },
-  { to: "/simulation", label: "ابدأ حالة جديدة", icon: PlayCircle, highlight: true },
-  { to: "/examination", label: "الفحص السريري", icon: Activity },
-  { label: "نقاط القوة والضعف", icon: Activity, comingSoon: true },
-  { label: "التغذية الراجعة", icon: MessageSquare, comingSoon: true },
-  { label: "الإعدادات", icon: Settings, comingSoon: true },
+  { to: "/clinical-cases", label: "الحالات السريرية", icon: ClipboardList },
+  { to: "/previous-cases", label: "حالاتي السابقة", icon: BookOpen },
+  { to: "/performance", label: "تحليلات الأداء", icon: BarChart3 },
+  { to: "/settings", label: "الإعدادات", icon: Settings, bottom: true },
 ];
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
@@ -50,44 +47,29 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       </Link>
 
       <nav className="flex-1 space-y-1">
-        {navItems.map((item) => {
-          const active = item.to ? location.pathname === item.to : false;
+        {navItems.filter((item) => !item.bottom).map((item) => {
+          const active = location.pathname === item.to || (item.to === "/clinical-cases" && location.pathname.startsWith("/case/"));
           const Icon = item.icon;
-          const className = item.highlight
-            ? "my-2 flex items-center gap-3 rounded-xl bg-[image:var(--gradient-primary)] px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition hover:opacity-90 cursor-pointer w-full text-right"
-            : `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition cursor-pointer w-full text-right ${
-                active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`;
-          const content = (
-            <>
+          return (
+            <Link key={item.label} to={item.to} onClick={() => setMobileOpen(false)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-right text-sm font-bold transition ${active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
               <Icon className="h-4 w-4" />
               <span className="flex-1 text-right">{item.label}</span>
-              {item.comingSoon && !item.highlight && (
-                <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">قريبًا</span>
-              )}
-            </>
-          );
-          if (item.to) {
-            return (
-              <Link key={item.label} to={item.to} onClick={() => setMobileOpen(false)} className={className}>
-                {content}
-              </Link>
-            );
-          }
-          return (
-            <button
-              key={item.label}
-              type="button"
-              onClick={() => { setMobileOpen(false); toast.info("هذه الميزة قريبًا"); }}
-              className={className}
-            >
-              {content}
-            </button>
+            </Link>
           );
         })}
       </nav>
 
       <div className="mt-6 border-t border-border pt-4">
+        {navItems.filter((item) => item.bottom).map((item) => {
+          const Icon = item.icon;
+          const active = location.pathname === item.to;
+          return (
+            <Link key={item.label} to={item.to} onClick={() => setMobileOpen(false)} className={`mb-3 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-right text-sm font-bold transition ${active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
+              <Icon className="h-4 w-4" />
+              <span className="flex-1 text-right">{item.label}</span>
+            </Link>
+          );
+        })}
         <div className="flex items-center gap-3 rounded-xl px-2 py-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
             {initials}
