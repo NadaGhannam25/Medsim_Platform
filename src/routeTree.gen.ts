@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ExaminationRouteImport } from './routes/examination'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ClinicalCasesRouteImport } from './routes/clinical-cases'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SimulationRoute = SimulationRouteImport.update({
@@ -53,6 +54,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClinicalCasesRoute = ClinicalCasesRouteImport.update({
+  id: '/clinical-cases',
+  path: '/clinical-cases',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,6 +67,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/clinical-cases': typeof ClinicalCasesRoute
   '/dashboard': typeof DashboardRoute
   '/examination': typeof ExaminationRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/clinical-cases': typeof ClinicalCasesRoute
   '/dashboard': typeof DashboardRoute
   '/examination': typeof ExaminationRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -82,6 +90,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/clinical-cases': typeof ClinicalCasesRoute
   '/dashboard': typeof DashboardRoute
   '/examination': typeof ExaminationRoute
   '/forgot-password': typeof ForgotPasswordRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/clinical-cases'
     | '/dashboard'
     | '/examination'
     | '/forgot-password'
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/clinical-cases'
     | '/dashboard'
     | '/examination'
     | '/forgot-password'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/clinical-cases'
     | '/dashboard'
     | '/examination'
     | '/forgot-password'
@@ -125,6 +137,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ClinicalCasesRoute: typeof ClinicalCasesRoute
   DashboardRoute: typeof DashboardRoute
   ExaminationRoute: typeof ExaminationRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -185,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/clinical-cases': {
+      id: '/clinical-cases'
+      path: '/clinical-cases'
+      fullPath: '/clinical-cases'
+      preLoaderRoute: typeof ClinicalCasesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -197,6 +217,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ClinicalCasesRoute: ClinicalCasesRoute,
   DashboardRoute: DashboardRoute,
   ExaminationRoute: ExaminationRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
