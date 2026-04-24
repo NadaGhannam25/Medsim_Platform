@@ -18,6 +18,7 @@ import { Route as ExaminationRouteImport } from './routes/examination'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ClinicalCasesRouteImport } from './routes/clinical-cases'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CaseCaseIdRouteImport } from './routes/case.$caseId'
 
 const SimulationRoute = SimulationRouteImport.update({
   id: '/simulation',
@@ -64,6 +65,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaseCaseIdRoute = CaseCaseIdRouteImport.update({
+  id: '/case/$caseId',
+  path: '/case/$caseId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/simulation': typeof SimulationRoute
+  '/case/$caseId': typeof CaseCaseIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/simulation': typeof SimulationRoute
+  '/case/$caseId': typeof CaseCaseIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/simulation': typeof SimulationRoute
+  '/case/$caseId': typeof CaseCaseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/simulation'
+    | '/case/$caseId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/simulation'
+    | '/case/$caseId'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/simulation'
+    | '/case/$caseId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +157,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   SimulationRoute: typeof SimulationRoute
+  CaseCaseIdRoute: typeof CaseCaseIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/case/$caseId': {
+      id: '/case/$caseId'
+      path: '/case/$caseId'
+      fullPath: '/case/$caseId'
+      preLoaderRoute: typeof CaseCaseIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   SimulationRoute: SimulationRoute,
+  CaseCaseIdRoute: CaseCaseIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
