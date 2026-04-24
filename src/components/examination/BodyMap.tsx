@@ -7,105 +7,135 @@ type Props = {
   onToggle: (id: BodyRegionId) => void;
 };
 
-// Region styling helpers
-const FILL_DEFAULT = "hsl(210 40% 92%)";
-const FILL_HOVER = "hsl(210 80% 85%)";
-const FILL_SELECTED = "hsl(0 75% 60%)";
-const FILL_MATCH = "hsl(150 70% 45%)";
-const STROKE = "hsl(215 25% 55%)";
+type RegionDef = { id: BodyRegionId; d: string };
+
+const FRONT_REGIONS: RegionDef[] = [
+  { id: "head-vertex", d: "M92 18 C98 8 112 8 118 18 L116 34 L94 34 Z" },
+  { id: "head-right-frontal", d: "M82 36 C84 24 91 17 100 15 L100 52 L84 52 C82 46 81 41 82 36 Z" },
+  { id: "head-left-frontal", d: "M100 15 C109 17 116 24 118 36 C119 41 118 46 116 52 L100 52 Z" },
+  { id: "head-right-temporal", d: "M78 51 C78 42 80 37 84 33 L88 61 C82 62 79 58 78 51 Z" },
+  { id: "head-left-temporal", d: "M116 33 C120 37 122 42 122 51 C121 58 118 62 112 61 Z" },
+  { id: "face", d: "M87 52 L113 52 C112 70 107 80 100 82 C93 80 88 70 87 52 Z" },
+  { id: "jaw", d: "M91 76 C96 82 104 82 109 76 L106 89 L94 89 Z" },
+  { id: "neck-anterior", d: "M91 90 L109 90 L114 111 L86 111 Z" },
+  { id: "shoulder-right", d: "M85 111 C69 113 57 121 50 137 L72 145 L89 126 Z" },
+  { id: "shoulder-left", d: "M115 111 C131 113 143 121 150 137 L128 145 L111 126 Z" },
+  { id: "chest-right-upper", d: "M73 143 C79 126 88 116 100 116 L100 171 L67 171 C67 160 69 150 73 143 Z" },
+  { id: "chest-left-upper", d: "M100 116 C112 116 121 126 127 143 C131 150 133 160 133 171 L100 171 Z" },
+  { id: "chest-central", d: "M91 124 L109 124 L113 190 L87 190 Z" },
+  { id: "chest-lower", d: "M68 171 L132 171 L126 208 L74 208 Z" },
+  { id: "abdomen-epigastric", d: "M78 209 L122 209 L118 235 L82 235 Z" },
+  { id: "abdomen-ruq", d: "M70 209 L100 209 L100 241 L75 241 Z" },
+  { id: "abdomen-luq", d: "M100 209 L130 209 L125 241 L100 241 Z" },
+  { id: "abdomen-umbilical", d: "M77 235 L123 235 L121 268 L79 268 Z" },
+  { id: "abdomen-rlq", d: "M75 268 L100 268 L100 300 L70 300 Z" },
+  { id: "abdomen-llq", d: "M100 268 L125 268 L130 300 L100 300 Z" },
+  { id: "suprapubic", d: "M70 300 L130 300 L119 328 L81 328 Z" },
+  { id: "pelvis-right", d: "M69 304 L100 328 L88 351 L62 331 Z" },
+  { id: "pelvis-left", d: "M100 328 L131 304 L138 331 L112 351 Z" },
+  { id: "upper-arm-right", d: "M50 138 L70 146 L60 223 L43 219 C42 184 44 158 50 138 Z" },
+  { id: "upper-arm-left", d: "M150 138 C156 158 158 184 157 219 L140 223 L130 146 Z" },
+  { id: "forearm-right", d: "M43 219 L60 223 L58 286 L40 288 C38 264 39 239 43 219 Z" },
+  { id: "forearm-left", d: "M140 223 L157 219 C161 239 162 264 160 288 L142 286 Z" },
+  { id: "hand-right", d: "M40 288 L58 286 L61 319 C56 326 45 326 38 317 Z" },
+  { id: "hand-left", d: "M142 286 L160 288 L162 317 C155 326 144 326 139 319 Z" },
+  { id: "thigh-right", d: "M70 330 L99 330 L94 432 L74 432 C66 394 64 361 70 330 Z" },
+  { id: "thigh-left", d: "M101 330 L130 330 C136 361 134 394 126 432 L106 432 Z" },
+  { id: "knee-right", d: "M74 432 L94 432 L93 462 L74 462 Z" },
+  { id: "knee-left", d: "M106 432 L126 432 L126 462 L107 462 Z" },
+  { id: "lower-leg-right", d: "M74 462 L93 462 L90 552 L70 552 C68 519 69 489 74 462 Z" },
+  { id: "lower-leg-left", d: "M107 462 L126 462 C131 489 132 519 130 552 L110 552 Z" },
+  { id: "foot-right", d: "M70 552 L90 552 L96 579 L58 584 C57 569 61 558 70 552 Z" },
+  { id: "foot-left", d: "M110 552 L130 552 C139 558 143 569 142 584 L104 579 Z" },
+];
+
+const BACK_REGIONS: RegionDef[] = [
+  { id: "head-occipital", d: "M82 36 C83 19 94 10 100 10 C106 10 117 19 118 36 L114 72 C109 82 91 82 86 72 Z" },
+  { id: "head-vertex", d: "M91 17 C96 8 104 8 109 17 L112 35 L88 35 Z" },
+  { id: "neck-posterior", d: "M90 82 L110 82 L115 112 L85 112 Z" },
+  { id: "shoulder-left", d: "M85 112 C68 114 56 122 49 138 L72 146 L90 126 Z" },
+  { id: "shoulder-right", d: "M115 112 C132 114 144 122 151 138 L128 146 L110 126 Z" },
+  { id: "upper-back-left", d: "M67 145 C75 125 88 116 100 116 L100 177 L68 177 Z" },
+  { id: "upper-back-right", d: "M100 116 C112 116 125 125 133 145 L132 177 L100 177 Z" },
+  { id: "mid-back-left", d: "M68 177 L100 177 L100 242 L72 242 Z" },
+  { id: "mid-back-right", d: "M100 177 L132 177 L128 242 L100 242 Z" },
+  { id: "lower-back-left", d: "M72 242 L100 242 L100 304 L70 304 Z" },
+  { id: "lower-back-right", d: "M100 242 L128 242 L130 304 L100 304 Z" },
+  { id: "sacral", d: "M74 304 L126 304 L116 333 L84 333 Z" },
+  { id: "buttock-left", d: "M66 324 C77 310 92 312 100 333 L92 365 L66 354 Z" },
+  { id: "buttock-right", d: "M100 333 C108 312 123 310 134 324 L134 354 L108 365 Z" },
+  { id: "upper-arm-left", d: "M49 138 L70 146 L60 224 L43 220 C42 185 44 158 49 138 Z" },
+  { id: "upper-arm-right", d: "M151 138 C156 158 158 185 157 220 L140 224 L130 146 Z" },
+  { id: "forearm-left", d: "M43 220 L60 224 L58 286 L40 288 C38 264 39 240 43 220 Z" },
+  { id: "forearm-right", d: "M140 224 L157 220 C161 240 162 264 160 288 L142 286 Z" },
+  { id: "hand-left", d: "M40 288 L58 286 L61 319 C56 326 45 326 38 317 Z" },
+  { id: "hand-right", d: "M142 286 L160 288 L162 317 C155 326 144 326 139 319 Z" },
+  { id: "thigh-left", d: "M68 356 L99 356 L94 432 L74 432 C66 403 64 378 68 356 Z" },
+  { id: "thigh-right", d: "M101 356 L132 356 C136 378 134 403 126 432 L106 432 Z" },
+  { id: "knee-left", d: "M74 432 L94 432 L93 462 L74 462 Z" },
+  { id: "knee-right", d: "M106 432 L126 432 L126 462 L107 462 Z" },
+  { id: "lower-leg-left", d: "M74 462 L93 462 L90 552 L70 552 C68 519 69 489 74 462 Z" },
+  { id: "lower-leg-right", d: "M107 462 L126 462 C131 489 132 519 130 552 L110 552 Z" },
+  { id: "foot-left", d: "M70 552 L90 552 L96 579 L58 584 C57 569 61 558 70 552 Z" },
+  { id: "foot-right", d: "M110 552 L130 552 C139 558 143 569 142 584 L104 579 Z" },
+];
+
+const FILL_DEFAULT = "hsl(205 55% 95%)";
+const FILL_HOVER = "hsl(203 95% 86%)";
+const FILL_SELECTED = "hsl(350 84% 64%)";
+const FILL_MATCH = "hsl(160 72% 43%)";
+const STROKE = "hsl(214 31% 67%)";
 
 export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Props) {
+  const regions = view === "front" ? FRONT_REGIONS : BACK_REGIONS;
   const isSelected = (id: BodyRegionId) => selected.includes(id);
   const isMatch = (id: BodyRegionId) => isSelected(id) && expectedRegions.includes(id);
-
-  const fillFor = (id: BodyRegionId) =>
-    isMatch(id) ? FILL_MATCH : isSelected(id) ? FILL_SELECTED : FILL_DEFAULT;
-
-  // Reusable region renderer
-  const Region = ({ id, d, label }: { id: BodyRegionId; d: string; label?: string }) => (
-    <g className="cursor-pointer transition-all duration-200" onClick={() => onToggle(id)}>
-      <title>{label ?? REGION_LABELS[id]}</title>
-      <path
-        d={d}
-        fill={fillFor(id)}
-        stroke={STROKE}
-        strokeWidth={1.2}
-        className="transition-all hover:brightness-95"
-        style={{
-          filter: isSelected(id) ? "drop-shadow(0 2px 8px rgba(220,38,38,0.4))" : undefined,
-        }}
-        onMouseEnter={(e) => {
-          if (!isSelected(id)) (e.target as SVGPathElement).setAttribute("fill", FILL_HOVER);
-        }}
-        onMouseLeave={(e) => {
-          if (!isSelected(id)) (e.target as SVGPathElement).setAttribute("fill", FILL_DEFAULT);
-        }}
-      />
-    </g>
-  );
+  const fillFor = (id: BodyRegionId) => isMatch(id) ? FILL_MATCH : isSelected(id) ? FILL_SELECTED : FILL_DEFAULT;
 
   return (
-    <div className="relative mx-auto w-full max-w-[340px]">
-      <svg viewBox="0 0 200 460" className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-        {/* Soft body silhouette backdrop */}
+    <div className="relative mx-auto w-full max-w-[390px]">
+      <svg viewBox="0 0 200 600" className="h-full w-full drop-shadow-sm" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={view === "front" ? "نموذج جسم أمامي تفاعلي" : "نموذج جسم خلفي تفاعلي"}>
         <defs>
-          <radialGradient id="bodyGlow" cx="50%" cy="40%" r="60%">
-            <stop offset="0%" stopColor="hsl(210 60% 97%)" />
-            <stop offset="100%" stopColor="hsl(210 30% 92%)" />
+          <radialGradient id="medicalBodyGlow" cx="50%" cy="38%" r="62%">
+            <stop offset="0%" stopColor="hsl(199 90% 98%)" />
+            <stop offset="100%" stopColor="hsl(211 52% 92%)" />
           </radialGradient>
+          <filter id="regionShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="hsl(210 40% 35%)" floodOpacity="0.12" />
+          </filter>
         </defs>
-
-        {view === "front" ? (
-          <>
-            {/* Head */}
-            <Region id="head" d="M100,8 C82,8 70,22 70,42 C70,60 82,74 100,74 C118,74 130,60 130,42 C130,22 118,8 100,8 Z" />
-            {/* Neck */}
-            <Region id="neck" d="M88,74 L112,74 L114,90 L86,90 Z" />
-            {/* Shoulders */}
-            <Region id="shoulder-right" d="M86,90 L60,98 L52,118 L72,120 L86,108 Z" />
-            <Region id="shoulder-left" d="M114,90 L140,98 L148,118 L128,120 L114,108 Z" />
-            {/* Chest */}
-            <Region id="chest" d="M72,108 L128,108 L132,160 L68,160 Z" />
-            {/* Abdomen */}
-            <Region id="abdomen" d="M68,160 L132,160 L130,210 L70,210 Z" />
-            {/* Pelvis */}
-            <Region id="pelvis" d="M70,210 L130,210 L134,250 L66,250 Z" />
-            {/* Arms */}
-            <Region id="arm-right" d="M52,118 L42,180 L48,230 L62,230 L66,178 L72,120 Z" />
-            <Region id="arm-left" d="M148,118 L158,180 L152,230 L138,230 L134,178 L128,120 Z" />
-            {/* Hands */}
-            <Region id="hand-right" d="M48,230 L62,230 L64,260 L46,260 Z" />
-            <Region id="hand-left" d="M138,230 L152,230 L154,260 L136,260 Z" />
-            {/* Legs */}
-            <Region id="leg-right" d="M66,250 L100,250 L98,360 L80,400 L66,400 L62,330 Z" />
-            <Region id="leg-left" d="M100,250 L134,250 L138,330 L134,400 L120,400 L102,360 Z" />
-            {/* Feet */}
-            <Region id="foot-right" d="M66,400 L80,400 L84,425 L60,430 L58,418 Z" />
-            <Region id="foot-left" d="M120,400 L134,400 L142,418 L140,430 L116,425 Z" />
-          </>
-        ) : (
-          <>
-            {/* Back view */}
-            <Region id="head" d="M100,8 C82,8 70,22 70,42 C70,60 82,74 100,74 C118,74 130,60 130,42 C130,22 118,8 100,8 Z" label="مؤخرة الرأس" />
-            <Region id="neck" d="M88,74 L112,74 L114,90 L86,90 Z" label="مؤخرة الرقبة" />
-            <Region id="shoulder-left" d="M86,90 L60,98 L52,118 L72,120 L86,108 Z" />
-            <Region id="shoulder-right" d="M114,90 L140,98 L148,118 L128,120 L114,108 Z" />
-            {/* Upper back */}
-            <Region id="upper-back" d="M72,108 L128,108 L132,170 L68,170 Z" />
-            {/* Lower back */}
-            <Region id="lower-back" d="M68,170 L132,170 L130,220 L70,220 Z" />
-            {/* Buttocks */}
-            <Region id="buttocks" d="M70,220 L130,220 L134,260 L66,260 Z" />
-            <Region id="arm-left" d="M52,118 L42,180 L48,230 L62,230 L66,178 L72,120 Z" />
-            <Region id="arm-right" d="M148,118 L158,180 L152,230 L138,230 L134,178 L128,120 Z" />
-            <Region id="hand-left" d="M48,230 L62,230 L64,260 L46,260 Z" />
-            <Region id="hand-right" d="M138,230 L152,230 L154,260 L136,260 Z" />
-            <Region id="leg-left" d="M66,260 L100,260 L98,370 L80,405 L66,405 L62,335 Z" />
-            <Region id="leg-right" d="M100,260 L134,260 L138,335 L134,405 L120,405 L102,370 Z" />
-            <Region id="foot-left" d="M66,405 L80,405 L84,425 L60,430 L58,418 Z" />
-            <Region id="foot-right" d="M120,405 L134,405 L142,418 L140,430 L116,425 Z" />
-          </>
-        )}
+        <path d="M100 10 C128 10 144 38 137 72 C132 92 128 103 128 116 C145 120 157 130 164 153 C172 185 170 241 166 287 C166 306 154 327 139 331 C144 370 143 418 134 462 C137 498 138 540 137 566 C140 574 142 584 141 590 L105 586 C103 571 104 557 108 548 L105 464 L101 362 L99 362 L95 464 L92 548 C96 557 97 571 95 586 L59 590 C58 584 60 574 63 566 C62 540 63 498 66 462 C57 418 56 370 61 331 C46 327 34 306 34 287 C30 241 28 185 36 153 C43 130 55 120 72 116 C72 103 68 92 63 72 C56 38 72 10 100 10 Z" fill="url(#medicalBodyGlow)" opacity="0.45" />
+        <path d="M100 10 L100 585" stroke="hsl(210 40% 80%)" strokeDasharray="4 7" strokeWidth="0.8" opacity="0.75" />
+        {regions.map(({ id, d }) => (
+          <path
+            key={id}
+            d={d}
+            fill={fillFor(id)}
+            stroke={STROKE}
+            strokeWidth={1.1}
+            filter={isSelected(id) ? "url(#regionShadow)" : undefined}
+            className="cursor-pointer transition-all duration-150 outline-none hover:stroke-primary focus:stroke-primary"
+            tabIndex={0}
+            role="button"
+            aria-pressed={isSelected(id)}
+            aria-label={REGION_LABELS[id]}
+            onClick={() => onToggle(id)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onToggle(id);
+              }
+            }}
+            onMouseEnter={(e) => {
+              if (!isSelected(id)) (e.currentTarget as SVGPathElement).setAttribute("fill", FILL_HOVER);
+            }}
+            onMouseLeave={(e) => {
+              if (!isSelected(id)) (e.currentTarget as SVGPathElement).setAttribute("fill", FILL_DEFAULT);
+            }}
+          >
+            <title>{REGION_LABELS[id]}</title>
+          </path>
+        ))}
       </svg>
     </div>
   );
