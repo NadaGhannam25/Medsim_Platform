@@ -12,7 +12,7 @@ import {
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
-  head: () => ({ meta: [{ title: "لوحة التحكم — طبيبك الافتراضي" }] }),
+  head: () => ({ meta: [{ title: "لوحة التحكم — مدسم" }] }),
 });
 
 const strengths = [

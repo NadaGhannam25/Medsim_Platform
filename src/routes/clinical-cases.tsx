@@ -9,7 +9,7 @@ import { INITIAL_CASE_IDS, LEARNING_CASES } from "@/data/case-flow";
 
 export const Route = createFileRoute("/clinical-cases")({
   component: ClinicalCasesPage,
-  head: () => ({ meta: [{ title: "الحالات السريرية — طبيبك الافتراضي" }] }),
+  head: () => ({ meta: [{ title: "الحالات السريرية — مدسم" }] }),
 });
 
 function ClinicalCasesPage() {

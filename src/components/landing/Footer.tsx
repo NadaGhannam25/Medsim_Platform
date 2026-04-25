@@ -10,7 +10,7 @@ export function Footer() {
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground">
                 <Stethoscope className="h-5 w-5" />
               </div>
-              <span className="text-lg font-bold">طبيبك الافتراضي</span>
+              <span className="text-lg font-bold">مدسم</span>
             </div>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
               منصّة عربية للتعلم السريري التفاعلي مدعومة بالذكاء الاصطناعي،
@@ -35,7 +35,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row">
-          <div>© {new Date().getFullYear()} طبيبك الافتراضي. جميع الحقوق محفوظة.</div>
+          <div>© {new Date().getFullYear()} مدسم. جميع الحقوق محفوظة.</div>
           <div className="flex gap-5">
             <a href="#" className="transition hover:text-foreground">سياسة الخصوصية</a>
             <a href="#" className="transition hover:text-foreground">الشروط والأحكام</a>

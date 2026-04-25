@@ -14,7 +14,7 @@ import { Progress } from "@/components/ui/progress";
 
 export const Route = createFileRoute("/simulation")({
   component: SimulationPage,
-  head: () => ({ meta: [{ title: "محاكاة سريرية — طبيبك الافتراضي" }] }),
+  head: () => ({ meta: [{ title: "محاكاة سريرية — مدسم" }] }),
 });
 
 type Step = { id: number; label: string; icon: typeof PlayCircle };

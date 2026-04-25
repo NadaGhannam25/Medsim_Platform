@@ -22,7 +22,7 @@ import {
 
 export const Route = createFileRoute("/case/$caseId")({
   component: CaseJourneyPage,
-  head: () => ({ meta: [{ title: "رحلة الحالة السريرية — طبيبك الافتراضي" }] }),
+  head: () => ({ meta: [{ title: "رحلة الحالة السريرية — مدسم" }] }),
 });
 
 type StageId = "interview" | "exam" | "investigations" | "diagnosis" | "treatment" | "feedback";

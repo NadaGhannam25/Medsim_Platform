@@ -43,7 +43,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-soft)]">
           <Stethoscope className="h-5 w-5" />
         </div>
-        <span className="text-base font-bold">طبيبك الافتراضي</span>
+        <span className="text-base font-bold">مدسم</span>
       </Link>
 
       <nav className="flex-1 space-y-1">
