@@ -40,9 +40,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const SidebarContent = () => (
     <>
       <Link to="/dashboard" className="mb-8 flex items-center gap-2.5 px-2">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-soft)]">
-          <Stethoscope className="h-5 w-5" />
-        </div>
+        <img src={logo} alt="مدسم" className="h-10 w-10 rounded-xl object-contain" />
         <span className="text-base font-bold">مدسم</span>
       </Link>
 
