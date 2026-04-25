@@ -1,4 +1,4 @@
-import { Stethoscope } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 export function Footer() {
   return (
@@ -7,9 +7,7 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground">
-                <Stethoscope className="h-5 w-5" />
-              </div>
+              <img src={logo} alt="مدسم" className="h-10 w-10 rounded-xl object-contain" />
               <span className="text-lg font-bold">مدسم</span>
             </div>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
