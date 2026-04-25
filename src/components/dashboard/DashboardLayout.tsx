@@ -1,12 +1,12 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import {
-  Home, BookOpen, Activity, Settings,
-  LogOut, Stethoscope, Bell, Menu, X, BarChart3, ClipboardList
+  Home, BookOpen, Settings,
+  LogOut, Bell, Menu, X, BarChart3, ClipboardList
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.png";
 
 type NavItem = {
   label: string;
@@ -40,10 +40,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const SidebarContent = () => (
     <>
       <Link to="/dashboard" className="mb-8 flex items-center gap-2.5 px-2">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-soft)]">
-          <Stethoscope className="h-5 w-5" />
-        </div>
-        <span className="text-base font-bold">طبيبك الافتراضي</span>
+        <img src={logo} alt="مدسم" className="h-10 w-10 rounded-xl object-contain" />
+        <span className="text-base font-bold">مدسم</span>
       </Link>
 
       <nav className="flex-1 space-y-1">

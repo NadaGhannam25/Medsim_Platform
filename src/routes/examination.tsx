@@ -18,7 +18,7 @@ import {
 
 export const Route = createFileRoute("/examination")({
   component: ExaminationPage,
-  head: () => ({ meta: [{ title: "الفحص السريري المتقدم — طبيبك الافتراضي" }] }),
+  head: () => ({ meta: [{ title: "الفحص السريري المتقدم — مدسم" }] }),
 });
 
 type Finding = {

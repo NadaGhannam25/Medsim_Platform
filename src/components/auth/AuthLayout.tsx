@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Stethoscope } from "lucide-react";
 import type { ReactNode } from "react";
+import logo from "@/assets/logo.png";
 
 export function AuthLayout({ title, subtitle, children, footer }: {
   title: string;
@@ -12,10 +12,8 @@ export function AuthLayout({ title, subtitle, children, footer }: {
     <div dir="rtl" className="min-h-screen bg-[image:var(--gradient-soft)]">
       <div className="mx-auto flex min-h-screen max-w-md flex-col px-6 py-10">
         <Link to="/" className="mb-10 flex items-center gap-2.5 self-start">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-soft)]">
-            <Stethoscope className="h-5 w-5" />
-          </div>
-          <span className="text-lg font-bold">طبيبك الافتراضي</span>
+          <img src={logo} alt="مدسم" className="h-10 w-10 rounded-xl object-contain" />
+          <span className="text-lg font-bold">مدسم</span>
         </Link>
 
         <div className="flex flex-1 flex-col justify-center">

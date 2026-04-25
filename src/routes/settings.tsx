@@ -9,7 +9,7 @@ import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
-  head: () => ({ meta: [{ title: "الإعدادات — طبيبك الافتراضي" }] }),
+  head: () => ({ meta: [{ title: "الإعدادات — مدسم" }] }),
 });
 
 function SettingsPage() {

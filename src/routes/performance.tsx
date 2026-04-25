@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/performance")({
   component: PerformancePage,
-  head: () => ({ meta: [{ title: "تحليلات الأداء — طبيبك الافتراضي" }] }),
+  head: () => ({ meta: [{ title: "تحليلات الأداء — مدسم" }] }),
 });
 
 function PerformancePage() {

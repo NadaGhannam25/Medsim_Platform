@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/previous-cases")({
   component: PreviousCasesPage,
-  head: () => ({ meta: [{ title: "حالاتي السابقة — طبيبك الافتراضي" }] }),
+  head: () => ({ meta: [{ title: "حالاتي السابقة — مدسم" }] }),
 });
 
 const rows = [

@@ -17,7 +17,7 @@ const schema = z.object({
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
-  head: () => ({ meta: [{ title: "إنشاء حساب — طبيبك الافتراضي" }] }),
+  head: () => ({ meta: [{ title: "إنشاء حساب — مدسم" }] }),
 });
 
 function SignupPage() {
