@@ -1,12 +1,12 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import {
-  Home, BookOpen, Activity, Settings,
-  LogOut, Stethoscope, Bell, Menu, X, BarChart3, ClipboardList
+  Home, BookOpen, Settings,
+  LogOut, Bell, Menu, X, BarChart3, ClipboardList
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.png";
 
 type NavItem = {
   label: string;
