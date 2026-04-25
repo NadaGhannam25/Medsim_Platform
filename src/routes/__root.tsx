@@ -31,14 +31,12 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "مدسم — منصة التعلم السريري الذكية" },
+      { name: "description", content: "مدسم: منصة عربية تفاعلية لطلاب العلوم الصحية للتدرّب على الحالات السريرية بالذكاء الاصطناعي." },
+      { property: "og:title", content: "مدسم — التعلّم السريري الذكي" },
+      { property: "og:description", content: "تعلّم الطب بحالات سريرية تفاعلية بالعربية." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
