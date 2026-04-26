@@ -332,7 +332,9 @@ function CaseJourneyPage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={saveProgress} className="h-11 gap-2 font-black"><Save className="h-4 w-4" /> حفظ التقدم</Button>
-          <Button variant="destructive" onClick={endInterview} disabled={stage === "feedback"} className="h-11 gap-2 font-black">إنهاء الحالة</Button>
+          <Button onClick={submitCase} disabled={submitted} className="h-11 gap-2 bg-[image:var(--gradient-primary)] font-black text-primary-foreground shadow-[var(--shadow-soft)]">
+            <ClipboardCheck className="h-4 w-4" /> {submitted ? t("case.submit.confirm") : t("case.submit")}
+          </Button>
         </div>
       </div>
 
