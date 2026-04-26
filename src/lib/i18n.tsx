@@ -107,6 +107,38 @@ const ar: Dict = {
   "auth.createAccount": "أنشئ حسابًا جديدًا",
   "auth.signin": "سجّل الدخول",
   "auth.terms": "بإنشاء الحساب فإنك توافق على شروط الاستخدام وسياسة الخصوصية",
+
+  // Cases
+  "cases.generate": "إنشاء حالات جديدة",
+  "cases.generated.toast": "تم توليد ٥ حالات جديدة متنوعة",
+  "cases.start": "ابدأ الحالة",
+  "cases.title": "اختر حالة سريرية للتدريب",
+  "cases.subtitle": "ابدأ من مقابلة المريض، ثم الفحص السريري، ثم الفحوصات والتشخيص والعلاج والتغذية الراجعة النهائية.",
+  "cases.chief": "الشكوى الرئيسية",
+  "cases.specialty": "التخصص",
+  "cases.summary": "ملخص الحالة",
+  "cases.year": "سنة",
+  "cases.back": "رجوع",
+  "cases.crumb": "الحالات السريرية",
+  "cases.stat.journey": "رحلة منظمة",
+  "cases.stat.journey.v": "٦ مراحل",
+  "cases.stat.patient": "مريض افتراضي",
+  "cases.stat.patient.v": "محادثة عربية",
+  "cases.stat.available": "حالات متاحة",
+
+  // Vitals
+  "vitals.title": "العلامات الحيوية",
+  "vitals.temp": "درجة الحرارة",
+  "vitals.hr": "النبض",
+  "vitals.bp": "ضغط الدم",
+  "vitals.rr": "معدل التنفس",
+  "vitals.spo2": "نسبة الأكسجين",
+  "vitals.pain": "درجة الألم",
+
+  // Case page
+  "case.submit": "تسليم الحالة",
+  "case.submit.confirm": "تم تسليم الحالة — اطلع على التقييم",
+  "case.submit.locked": "الرجاء تسليم الحالة أولًا للوصول إلى التقييم",
 };
 
 const en: Dict = {
