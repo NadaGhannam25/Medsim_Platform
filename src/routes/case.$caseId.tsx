@@ -206,12 +206,19 @@ function CaseJourneyPage() {
     );
   }
 
-  const moveTo = (next: StageId) => setStage(next);
+  const moveTo = (next: StageId) => {
+    if (next === "feedback" && !submitted) {
+      toast.warning(t("case.submit.locked"));
+      return;
+    }
+    setStage(next);
+  };
   const saveProgress = () => toast.success("تم حفظ تقدمك التعليمي داخل هذه الحالة");
-  const endInterview = () => {
-    if (timeUp) return;
+  const submitCase = () => {
+    if (submitted) { setStage("feedback"); return; }
+    setSubmitted(true);
     setStage("feedback");
-    toast.info("تم إنهاء الحالة — اطلع على التقييم النهائي");
+    toast.success(t("case.submit.confirm"));
   };
 
   const sendQuestion = async (event: FormEvent) => {
