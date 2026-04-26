@@ -799,6 +799,15 @@ function PatientFact({ label, value }: { label: string; value: string }) {
   return <div className="rounded-2xl border border-border bg-muted/45 p-3"><div className="text-xs font-black text-primary">{label}</div><div className="mt-1 line-clamp-2 text-sm font-bold text-foreground">{value}</div></div>;
 }
 
+function VitalCell({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-border bg-card px-3 py-2 text-center">
+      <div className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{label}</div>
+      <div className="mt-0.5 text-base font-black tabular-nums text-primary">{value}</div>
+    </div>
+  );
+}
+
 function ClinicalCard({ title, icon: Icon, children }: { title: string; icon: typeof Brain; children: React.ReactNode }) {
   return <section className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)]"><h2 className="mb-4 flex items-center gap-2 text-xl font-black"><Icon className="h-5 w-5 text-primary" /> {title}</h2>{children}</section>;
 }
