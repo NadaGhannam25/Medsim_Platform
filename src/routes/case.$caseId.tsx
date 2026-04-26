@@ -104,6 +104,7 @@ function CaseJourneyPage() {
         if (next <= 0) {
           clearInterval(id);
           setTimeUp(true);
+          setSubmitted(true);
           toast.error("انتهى الوقت — سيتم نقلك للتقييم النهائي");
           setStage("feedback");
           return 0;
