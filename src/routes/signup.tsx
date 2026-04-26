@@ -8,6 +8,7 @@ import { AuthLayout } from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useI18n } from "@/lib/i18n";
 
 const schema = z.object({
   fullName: z.string().trim().min(2, { message: "الاسم قصير جدًا" }).max(100),
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/signup")({
 function SignupPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const { t } = useI18n();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -76,29 +78,27 @@ function SignupPage() {
 
   return (
     <AuthLayout
-      title="ابدأ رحلتك الطبية"
-      subtitle="أنشئ حسابك المجاني وانضم إلى آلاف الطلاب"
-      footer={<>لديك حساب؟ <Link to="/login" className="font-semibold text-primary">سجّل الدخول</Link></>}
+      title={t("auth.signup.title")}
+      subtitle={t("auth.signup.subtitle")}
+      footer={<>{t("auth.haveAccount")} <Link to="/login" className="font-semibold text-primary">{t("auth.signin")}</Link></>}
     >
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="fullName">الاسم الكامل</Label>
-          <Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="مثال: أحمد محمد" required />
+          <Label htmlFor="fullName">{t("auth.fullName")}</Label>
+          <Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">البريد الإلكتروني</Label>
-          <Input id="email" type="email" dir="ltr" className="text-right" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <Label htmlFor="email">{t("auth.email")}</Label>
+          <Input id="email" type="email" dir="ltr" className="text-start" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">كلمة المرور</Label>
-          <Input id="password" type="password" dir="ltr" className="text-right" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="٨ أحرف على الأقل" required />
+          <Label htmlFor="password">{t("auth.password")}</Label>
+          <Input id="password" type="password" dir="ltr" className="text-start" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
-        <Button type="submit" disabled={loading} className="w-full bg-[image:var(--gradient-primary)] shadow-[var(--shadow-soft)]">
-          {loading ? "جارٍ الإنشاء..." : "إنشاء الحساب"}
+        <Button type="submit" disabled={loading} className="h-11 w-full rounded-full bg-[image:var(--gradient-primary)] text-base shadow-[var(--shadow-soft)]">
+          {loading ? t("auth.signup.loading") : t("auth.signup.cta")}
         </Button>
-        <p className="pt-2 text-center text-xs text-muted-foreground">
-          بإنشاء الحساب فإنك توافق على شروط الاستخدام وسياسة الخصوصية
-        </p>
+        <p className="pt-2 text-center text-xs text-muted-foreground">{t("auth.terms")}</p>
       </form>
     </AuthLayout>
   );

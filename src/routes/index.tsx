@@ -5,6 +5,7 @@ import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Features } from "@/components/landing/Features";
 import { WhyMatters } from "@/components/landing/WhyMatters";
 import { Footer } from "@/components/landing/Footer";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -23,8 +24,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { dir } = useI18n();
   return (
-    <div dir="rtl" className="min-h-screen bg-background text-foreground">
+    <div dir={dir} className="min-h-screen bg-background text-foreground">
       <Navbar />
       <main>
         <Hero />

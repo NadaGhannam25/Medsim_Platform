@@ -8,6 +8,7 @@ import { AuthLayout } from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useI18n } from "@/lib/i18n";
 
 const schema = z.object({
   email: z.string().trim().email({ message: "بريد إلكتروني غير صالح" }).max(255),
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const { t } = useI18n();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -59,24 +61,24 @@ function LoginPage() {
 
   return (
     <AuthLayout
-      title="مرحبًا بعودتك"
-      subtitle="سجّل دخولك لمتابعة رحلتك السريرية"
-      footer={<>ليس لديك حساب؟ <Link to="/signup" className="font-semibold text-primary">أنشئ حسابًا جديدًا</Link></>}
+      title={t("auth.login.title")}
+      subtitle={t("auth.login.subtitle")}
+      footer={<>{t("auth.noAccount")} <Link to="/signup" className="font-semibold text-primary">{t("auth.createAccount")}</Link></>}
     >
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">البريد الإلكتروني</Label>
-          <Input id="email" type="email" dir="ltr" className="text-right" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="student@example.com" required />
+          <Label htmlFor="email">{t("auth.email")}</Label>
+          <Input id="email" type="email" dir="ltr" className="text-start" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="student@example.com" required />
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password">كلمة المرور</Label>
-            <Link to="/forgot-password" className="text-xs text-primary hover:underline">نسيت كلمة المرور؟</Link>
+            <Label htmlFor="password">{t("auth.password")}</Label>
+            <Link to="/forgot-password" className="text-xs text-primary hover:underline">{t("auth.forgot")}</Link>
           </div>
-          <Input id="password" type="password" dir="ltr" className="text-right" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <Input id="password" type="password" dir="ltr" className="text-start" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
-        <Button type="submit" disabled={loading} className="w-full bg-[image:var(--gradient-primary)] shadow-[var(--shadow-soft)]">
-          {loading ? "جارٍ الدخول..." : "تسجيل الدخول"}
+        <Button type="submit" disabled={loading} className="h-11 w-full rounded-full bg-[image:var(--gradient-primary)] text-base shadow-[var(--shadow-soft)]">
+          {loading ? t("auth.login.loading") : t("auth.login.cta")}
         </Button>
       </form>
     </AuthLayout>

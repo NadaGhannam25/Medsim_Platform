@@ -1,34 +1,30 @@
 import { CheckCircle2 } from "lucide-react";
-
-const points = [
-  { title: "جسر بين النظرية والتطبيق", desc: "حوّل ما تدرسه في الكتب إلى مهارات سريرية حقيقية يمكن قياسها." },
-  { title: "تدرّب في أي وقت ومن أي مكان", desc: "لا حاجة للانتظار حتى المناوبة — تعلَّم بإيقاعك الخاص." },
-  { title: "ثقة أكبر مع المرضى الحقيقيين", desc: "ابنِ تفكيرك السريري قبل دخول المستشفى لأول مرة." },
-  { title: "استعداد قوي للامتحانات", desc: "حالات تحاكي امتحانات OSCE والـClinical Reasoning بشكل دقيق." },
-];
+import { useI18n } from "@/lib/i18n";
 
 export function WhyMatters() {
+  const { t } = useI18n();
+  const points = [
+    { title: t("why.p1.t"), desc: t("why.p1.d") },
+    { title: t("why.p2.t"), desc: t("why.p2.d") },
+    { title: t("why.p3.t"), desc: t("why.p3.d") },
+    { title: t("why.p4.t"), desc: t("why.p4.d") },
+  ];
+  const aud = [t("why.aud.1"), t("why.aud.2"), t("why.aud.3")];
+
   return (
-    <section id="why" className="py-24">
+    <section id="why" className="py-28">
       <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-2 lg:items-center">
         <div>
-          <div className="mb-3 text-sm font-semibold uppercase tracking-wider text-primary">لماذا تهمّك هذه المنصة</div>
-          <h2 className="text-3xl font-bold leading-tight md:text-4xl">
-            لأن الطبيب الجيد لا يولد من الكتب وحدها
-          </h2>
-          <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-            في كليات العلوم الصحية، الفجوة بين المعرفة النظرية والممارسة السريرية هي
-            التحدّي الأكبر. منصّتنا تختصر هذه الفجوة بتدريب آمن وذكي يحاكي الواقع.
-          </p>
+          <div className="mb-3 inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+            {t("why.eyebrow")}
+          </div>
+          <h2 className="text-3xl font-extrabold leading-tight tracking-tight md:text-5xl">{t("why.title")}</h2>
+          <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{t("why.desc")}</p>
           <div className="mt-8 grid gap-2">
-            {[
-              "طلاب الطب البشري وطب الأسنان",
-              "طلاب التمريض والصيدلة السريرية",
-              "طلاب العلاج الطبيعي والمختبرات الطبية",
-            ].map((t) => (
-              <div key={t} className="flex items-center gap-2 text-sm text-foreground">
+            {aud.map((tx) => (
+              <div key={tx} className="flex items-center gap-2 text-sm text-foreground">
                 <CheckCircle2 className="h-4 w-4 text-primary" />
-                {t}
+                {tx}
               </div>
             ))}
           </div>
@@ -38,9 +34,9 @@ export function WhyMatters() {
           {points.map((p, i) => (
             <div
               key={p.title}
-              className="flex gap-4 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]"
+              className="flex gap-4 rounded-3xl border border-border/60 bg-card p-6 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-elegant)]"
             >
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground font-bold">
+              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-[image:var(--gradient-primary)] font-extrabold text-primary-foreground shadow-[var(--shadow-soft)]">
                 {String(i + 1).padStart(2, "0")}
               </div>
               <div>
