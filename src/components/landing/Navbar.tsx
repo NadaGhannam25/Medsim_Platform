@@ -10,8 +10,8 @@ export function Navbar() {
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between gap-4 px-6 py-3">
         <Link to="/" className="flex items-center gap-3">
-          <img src={logo} alt="مدسم" width={48} height={48} className="h-12 w-12 object-contain" />
-          <span className="text-xl font-extrabold tracking-tight">مدسم</span>
+          <img src={logo} alt="مدسم" width={64} height={64} className="h-16 w-16 object-contain" />
+          <span className="text-2xl font-extrabold tracking-tight">مدسم</span>
         </Link>
         <nav className="hidden items-center gap-8 md:flex">
           <a href="#how" className="text-sm text-muted-foreground transition hover:text-foreground">{t("nav.how")}</a>
