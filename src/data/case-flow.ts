@@ -202,7 +202,99 @@ const generatedCases: ClinicalCase[] = [
     expectedRegions: ["head-occipital", "neck-posterior"],
     vitals: { hr: "٩٤", bp: "١٧٢/١٠٢", temp: "٣٦.٨", rr: "١٨", spo2: "٩٨٪" },
   },
+  {
+    id: "case-008",
+    category: "abdominal-pain",
+    categoryLabel: "ألم بطني — حامل",
+    patient: { name: "هند الشمري", age: 29, gender: "أنثى", mrn: "MRN-101902", avatarColor: "from-pink-400 to-pink-600" },
+    chiefComplaint: "ألم أسفل البطن في الحمل بالأسبوع ٢٤ مع شعور بانقباضات",
+    pastMedicalHistory: ["حمل أول، متابعة منتظمة"],
+    allergies: ["لا توجد"],
+    chronicDiseases: ["لا توجد"],
+    medications: ["حمض فوليك، حديد"],
+    previousDiagnoses: ["حمل طبيعي"],
+    visits: [{ id: "v1", date: "٢٠٢٤/١١/١٠", reason: "متابعة حمل", summary: "نمو طبيعي، BP طبيعي", details: "نُصحت بالراحة وشرب السوائل ومراقبة حركة الجنين." }],
+    expectedRegions: ["suprapubic", "abdomen-umbilical", "lower-back-left"],
+    vitals: { hr: "٩٨", bp: "١١٨/٧٤", temp: "٣٧.٠", rr: "١٨", spo2: "٩٩٪" },
+  },
+  {
+    id: "case-009",
+    category: "shortness-of-breath",
+    categoryLabel: "حمى وسعال — طفل",
+    patient: { name: "يزيد الغامدي", age: 6, gender: "ذكر", mrn: "MRN-102014", avatarColor: "from-yellow-400 to-yellow-600" },
+    chiefComplaint: "حمى منذ يومين مع سعال وضيق نفس خفيف وفقدان شهية",
+    pastMedicalHistory: ["تطعيمات كاملة"],
+    allergies: ["لا توجد"],
+    chronicDiseases: ["لا توجد"],
+    medications: ["باراسيتامول حسب الحاجة"],
+    previousDiagnoses: ["نزلات صدرية متكررة"],
+    visits: [{ id: "v1", date: "٢٠٢٤/٠٢/٢٠", reason: "نزلة صدرية", summary: "علاج عرضي", details: "تحسن خلال أسبوع دون مضادات حيوية." }],
+    expectedRegions: ["chest-right-upper", "chest-left-upper", "chest-central"],
+    vitals: { hr: "١٢٤", bp: "٩٥/٦٠", temp: "٣٩.١", rr: "٢٨", spo2: "٩٤٪" },
+  },
+  {
+    id: "case-010",
+    category: "chest-pain",
+    categoryLabel: "خفقان — مراهقة",
+    patient: { name: "ريم الفيفي", age: 16, gender: "أنثى", mrn: "MRN-102145", avatarColor: "from-fuchsia-400 to-fuchsia-600" },
+    chiefComplaint: "خفقان متكرر مع دوخة خفيفة عند المجهود منذ شهر",
+    pastMedicalHistory: ["لا يوجد"],
+    allergies: ["لا توجد"],
+    chronicDiseases: ["لا توجد"],
+    medications: ["لا يوجد"],
+    previousDiagnoses: ["لا يوجد"],
+    visits: [],
+    expectedRegions: ["chest-central", "chest-left-upper"],
+    vitals: { hr: "١١٠", bp: "١١٠/٧٠", temp: "٣٦.٧", rr: "١٦", spo2: "٩٩٪" },
+  },
+  {
+    id: "case-011",
+    category: "lower-back-pain",
+    categoryLabel: "سقوط — مسن",
+    patient: { name: "عبدالله الدوسري", age: 78, gender: "ذكر", mrn: "MRN-102266", avatarColor: "from-stone-400 to-stone-600" },
+    chiefComplaint: "ألم في الورك الأيمن بعد سقوط بسيط في المنزل وعدم القدرة على المشي",
+    pastMedicalHistory: ["هشاشة عظام", "سكري النوع الثاني"],
+    allergies: ["لا توجد"],
+    chronicDiseases: ["هشاشة عظام", "السكري", "ارتفاع ضغط الدم"],
+    medications: ["ميتفورمين", "أملوديبين", "كالسيوم وفيتامين د"],
+    previousDiagnoses: ["كسر معصم سابق"],
+    visits: [{ id: "v1", date: "٢٠٢٣/٠٥/١٢", reason: "كسر معصم", summary: "جبس ٦ أسابيع", details: "هشاشة موثقة بفحص DEXA — يحتاج وقاية من السقوط." }],
+    expectedRegions: ["pelvis-right", "thigh-right", "lower-back-right"],
+    vitals: { hr: "٩٢", bp: "١٤٥/٨٥", temp: "٣٦.٩", rr: "١٨", spo2: "٩٧٪" },
+  },
+  {
+    id: "case-012",
+    category: "headache",
+    categoryLabel: "حمى وتيبس رقبة",
+    patient: { name: "سلمى الحربي", age: 22, gender: "أنثى", mrn: "MRN-102389", avatarColor: "from-teal-400 to-teal-600" },
+    chiefComplaint: "صداع شديد مع حمى وتيبس في الرقبة وحساسية للضوء منذ اليوم",
+    pastMedicalHistory: ["لا يوجد"],
+    allergies: ["لا توجد"],
+    chronicDiseases: ["لا توجد"],
+    medications: ["لا يوجد"],
+    previousDiagnoses: ["لا يوجد"],
+    visits: [],
+    expectedRegions: ["head-vertex", "neck-posterior", "head-occipital"],
+    vitals: { hr: "١١٨", bp: "١٢٥/٨٠", temp: "٣٩.٤", rr: "٢٢", spo2: "٩٨٪" },
+  },
 ];
+
+const fallbackEnrichment: Omit<LearningCase, keyof ClinicalCase> = {
+  difficulty: "متوسط",
+  specialty: "تدريب سريري عام",
+  briefSummary: "حالة إضافية للتدريب على المقابلة والفحص واتخاذ القرار.",
+  correctDiagnosis: "—",
+  closeRegions: [],
+  mustAsk: ["بداية الأعراض ومدتها", "العوامل المصاحبة", "العلامات الحيوية", "الأدوية والحساسية"],
+  missedExamPoints: ["العلامات الحيوية", "الفحص الموجه حسب الشكوى"],
+  diagnosisHints: [],
+  investigations: [
+    { ...sharedInvestigations.cbc, useful: true, explanation: "تقييم عام مفيد في معظم الحالات." },
+  ],
+  treatments: [
+    { id: "supportive", label: "علاج داعم وتثقيف صحي ومتابعة", correct: true, explanation: "خطوة آمنة كنقطة بداية في معظم الحالات." },
+  ],
+};
 
 const generatedEnrichments: Record<string, Omit<LearningCase, keyof ClinicalCase>> = {
   "case-006": {
@@ -255,7 +347,7 @@ const generatedEnrichments: Record<string, Omit<LearningCase, keyof ClinicalCase
 
 export const LEARNING_CASES: LearningCase[] = [
   ...CLINICAL_CASES.map((clinicalCase) => ({ ...clinicalCase, ...enrichments[clinicalCase.id] })),
-  ...generatedCases.map((clinicalCase) => ({ ...clinicalCase, ...generatedEnrichments[clinicalCase.id] })),
+  ...generatedCases.map((clinicalCase) => ({ ...clinicalCase, ...(generatedEnrichments[clinicalCase.id] ?? fallbackEnrichment) })),
 ];
 
 export const INITIAL_CASE_IDS = ["case-001", "case-002", "case-003", "case-004", "case-005"];

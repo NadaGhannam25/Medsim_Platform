@@ -107,6 +107,38 @@ const ar: Dict = {
   "auth.createAccount": "أنشئ حسابًا جديدًا",
   "auth.signin": "سجّل الدخول",
   "auth.terms": "بإنشاء الحساب فإنك توافق على شروط الاستخدام وسياسة الخصوصية",
+
+  // Cases
+  "cases.generate": "إنشاء حالات جديدة",
+  "cases.generated.toast": "تم توليد ٥ حالات جديدة متنوعة",
+  "cases.start": "ابدأ الحالة",
+  "cases.title": "اختر حالة سريرية للتدريب",
+  "cases.subtitle": "ابدأ من مقابلة المريض، ثم الفحص السريري، ثم الفحوصات والتشخيص والعلاج والتغذية الراجعة النهائية.",
+  "cases.chief": "الشكوى الرئيسية",
+  "cases.specialty": "التخصص",
+  "cases.summary": "ملخص الحالة",
+  "cases.year": "سنة",
+  "cases.back": "رجوع",
+  "cases.crumb": "الحالات السريرية",
+  "cases.stat.journey": "رحلة منظمة",
+  "cases.stat.journey.v": "٦ مراحل",
+  "cases.stat.patient": "مريض افتراضي",
+  "cases.stat.patient.v": "محادثة عربية",
+  "cases.stat.available": "حالات متاحة",
+
+  // Vitals
+  "vitals.title": "العلامات الحيوية",
+  "vitals.temp": "درجة الحرارة",
+  "vitals.hr": "النبض",
+  "vitals.bp": "ضغط الدم",
+  "vitals.rr": "معدل التنفس",
+  "vitals.spo2": "نسبة الأكسجين",
+  "vitals.pain": "درجة الألم",
+
+  // Case page
+  "case.submit": "تسليم الحالة",
+  "case.submit.confirm": "تم تسليم الحالة — اطلع على التقييم",
+  "case.submit.locked": "الرجاء تسليم الحالة أولًا للوصول إلى التقييم",
 };
 
 const en: Dict = {
@@ -204,6 +236,35 @@ const en: Dict = {
   "auth.createAccount": "Create a new account",
   "auth.signin": "Sign in",
   "auth.terms": "By creating an account you agree to the Terms of Use and Privacy Policy",
+
+  "cases.generate": "Generate New Cases",
+  "cases.generated.toast": "Generated 5 new diverse cases",
+  "cases.start": "Start case",
+  "cases.title": "Choose a clinical case to train on",
+  "cases.subtitle": "Start with the patient interview, then physical exam, investigations, diagnosis, treatment, and final feedback.",
+  "cases.chief": "Chief complaint",
+  "cases.specialty": "Specialty",
+  "cases.summary": "Case summary",
+  "cases.year": "yrs",
+  "cases.back": "Back",
+  "cases.crumb": "Clinical cases",
+  "cases.stat.journey": "Structured journey",
+  "cases.stat.journey.v": "6 stages",
+  "cases.stat.patient": "Virtual patient",
+  "cases.stat.patient.v": "Arabic conversation",
+  "cases.stat.available": "Available cases",
+
+  "vitals.title": "Vital signs",
+  "vitals.temp": "Temperature",
+  "vitals.hr": "Heart Rate",
+  "vitals.bp": "Blood Pressure",
+  "vitals.rr": "Respiratory Rate",
+  "vitals.spo2": "Oxygen Saturation",
+  "vitals.pain": "Pain Score",
+
+  "case.submit": "Submit Case",
+  "case.submit.confirm": "Case submitted — view your evaluation",
+  "case.submit.locked": "Submit the case first to view the evaluation",
 };
 
 const dicts: Record<Lang, Dict> = { ar, en };

@@ -17,8 +17,9 @@ import { getLearningCase } from "@/data/case-flow";
 import { REGION_LABELS, SEVERITY_OPTIONS, SYMPTOM_OPTIONS, type BodyRegionId, type Severity, type SymptomType } from "@/data/clinical-cases";
 import {
   getCaseChecklistData, matchesAny, CATEGORY_LABELS,
-  type ChecklistCategory, type ChecklistItem, type InvestigationEntry, type InvestigationResult, type LabRow,
+  type ChecklistCategory, type ChecklistItem, type InvestigationEntry, type LabRow,
 } from "@/data/case-checklist";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/case/$caseId")({
   component: CaseJourneyPage,
@@ -48,8 +49,10 @@ function CaseJourneyPage() {
   const checklistData = getCaseChecklistData(caseId);
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   const [stage, setStage] = useState<StageId>("interview");
+  const [submitted, setSubmitted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [question, setQuestion] = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -101,6 +104,7 @@ function CaseJourneyPage() {
         if (next <= 0) {
           clearInterval(id);
           setTimeUp(true);
+          setSubmitted(true);
           toast.error("انتهى الوقت — سيتم نقلك للتقييم النهائي");
           setStage("feedback");
           return 0;
@@ -202,12 +206,19 @@ function CaseJourneyPage() {
     );
   }
 
-  const moveTo = (next: StageId) => setStage(next);
+  const moveTo = (next: StageId) => {
+    if (next === "feedback" && !submitted) {
+      toast.warning(t("case.submit.locked"));
+      return;
+    }
+    setStage(next);
+  };
   const saveProgress = () => toast.success("تم حفظ تقدمك التعليمي داخل هذه الحالة");
-  const endInterview = () => {
-    if (timeUp) return;
+  const submitCase = () => {
+    if (submitted) { setStage("feedback"); return; }
+    setSubmitted(true);
     setStage("feedback");
-    toast.info("تم إنهاء الحالة — اطلع على التقييم النهائي");
+    toast.success(t("case.submit.confirm"));
   };
 
   const sendQuestion = async (event: FormEvent) => {
@@ -321,7 +332,9 @@ function CaseJourneyPage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={saveProgress} className="h-11 gap-2 font-black"><Save className="h-4 w-4" /> حفظ التقدم</Button>
-          <Button variant="destructive" onClick={endInterview} disabled={stage === "feedback"} className="h-11 gap-2 font-black">إنهاء الحالة</Button>
+          <Button onClick={submitCase} disabled={submitted} className="h-11 gap-2 bg-[image:var(--gradient-primary)] font-black text-primary-foreground shadow-[var(--shadow-soft)]">
+            <ClipboardCheck className="h-4 w-4" /> {submitted ? t("case.submit.confirm") : t("case.submit")}
+          </Button>
         </div>
       </div>
 
@@ -350,6 +363,20 @@ function CaseJourneyPage() {
             <PatientFact label="الشكوى الرئيسية" value={clinicalCase.chiefComplaint} />
             <PatientFact label="الأمراض المزمنة" value={clinicalCase.chronicDiseases.join("، ") || "لا توجد"} />
             <PatientFact label="الحساسية" value={clinicalCase.allergies.join("، ") || "لا توجد"} />
+          </div>
+        </div>
+
+        {/* Vital signs */}
+        <div className="mt-4 rounded-2xl border border-primary/20 bg-primary/5 p-3">
+          <div className="mb-2 flex items-center gap-2 text-xs font-black text-primary">
+            <Activity className="h-4 w-4" /> {t("vitals.title")}
+          </div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+            <VitalCell label={t("vitals.temp")} value={`${clinicalCase.vitals.temp}°C`} />
+            <VitalCell label={t("vitals.hr")} value={`${clinicalCase.vitals.hr} bpm`} />
+            <VitalCell label={t("vitals.bp")} value={`${clinicalCase.vitals.bp} mmHg`} />
+            <VitalCell label={t("vitals.rr")} value={`${clinicalCase.vitals.rr} /min`} />
+            <VitalCell label={t("vitals.spo2")} value={clinicalCase.vitals.spo2} />
           </div>
         </div>
 
@@ -530,7 +557,7 @@ function CaseJourneyPage() {
             <p className="mb-5 text-base text-muted-foreground">اقترح الخطة العلاجية أو الإجراء التالي بصيغتك. هذه محاكاة تعليمية وليست توصية لمرضى حقيقيين.</p>
             <Textarea value={treatmentPlan} onChange={(e) => setTreatmentPlan(e.target.value)} disabled={timeUp} className="min-h-40 text-base" placeholder="مثال: إحالة جراحية عاجلة، صيام، مسكنات مناسبة، وسوائل وريدية…" />
             <div className="mt-6 flex justify-end">
-              <Button onClick={() => moveTo("feedback")} className="h-12 gap-2 bg-[image:var(--gradient-primary)] font-black">عرض التقييم النهائي <ChevronLeft className="h-5 w-5" /></Button>
+              <Button onClick={submitCase} className="h-12 gap-2 bg-[image:var(--gradient-primary)] font-black"><ClipboardCheck className="h-5 w-5" /> {t("case.submit")}</Button>
             </div>
           </section>
           <aside className="space-y-5">
@@ -770,6 +797,15 @@ function ScoreChip({ label, value, max }: { label: string; value: number; max: n
 
 function PatientFact({ label, value }: { label: string; value: string }) {
   return <div className="rounded-2xl border border-border bg-muted/45 p-3"><div className="text-xs font-black text-primary">{label}</div><div className="mt-1 line-clamp-2 text-sm font-bold text-foreground">{value}</div></div>;
+}
+
+function VitalCell({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-border bg-card px-3 py-2 text-center">
+      <div className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{label}</div>
+      <div className="mt-0.5 text-base font-black tabular-nums text-primary">{value}</div>
+    </div>
+  );
 }
 
 function ClinicalCard({ title, icon: Icon, children }: { title: string; icon: typeof Brain; children: React.ReactNode }) {
