@@ -17,8 +17,9 @@ import { getLearningCase } from "@/data/case-flow";
 import { REGION_LABELS, SEVERITY_OPTIONS, SYMPTOM_OPTIONS, type BodyRegionId, type Severity, type SymptomType } from "@/data/clinical-cases";
 import {
   getCaseChecklistData, matchesAny, CATEGORY_LABELS,
-  type ChecklistCategory, type ChecklistItem, type InvestigationEntry, type InvestigationResult, type LabRow,
+  type ChecklistCategory, type ChecklistItem, type InvestigationEntry, type LabRow,
 } from "@/data/case-checklist";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/case/$caseId")({
   component: CaseJourneyPage,
