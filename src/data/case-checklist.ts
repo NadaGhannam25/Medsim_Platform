@@ -390,6 +390,39 @@ export const CASE_CHECKLIST_DATA: Record<string, CaseChecklistData> = {
   },
 };
 
-export function getCaseChecklistData(caseId: string): CaseChecklistData | undefined {
-  return CASE_CHECKLIST_DATA[caseId];
+const FALLBACK_CHECKLIST: CaseChecklistData = {
+  expectedDiagnosisKeywords: [],
+  expectedTreatmentKeywords: ["علاج داعم", "متابعه", "تثقيف"],
+  checklist: [
+    { id: "fb-h1", category: "history", label: "بداية الأعراض ومدتها", keywords: ["متى", "بدا", "مده", "كم يوم", "كم ساعه"] },
+    { id: "fb-h2", category: "history", label: "الأعراض المصاحبة", keywords: ["مع", "مصاحب", "غثيان", "حمى", "تعب"] },
+    { id: "fb-h3", category: "history", label: "الأدوية والحساسية", keywords: ["دواء", "ادويه", "حساسيه"] },
+    { id: "fb-e1", category: "exam", label: "تقييم العلامات الحيوية", keywords: ["علامات حيويه", "ضغط", "نبض", "حراره"] },
+    { id: "fb-i1", category: "investigations", label: "طلب فحص أساسي مناسب", keywords: ["cbc", "تحليل", "اشعه", "فحص"] },
+    { id: "fb-d1", category: "diagnosis", label: "صياغة تشخيص متوقع", keywords: ["تشخيص"] },
+    { id: "fb-t1", category: "treatment", label: "خطة علاجية أو متابعة", keywords: ["علاج", "متابعه", "تحويل"] },
+  ],
+  investigationCatalog: [
+    {
+      id: "cbc", label: "تحليل دم شامل CBC", aliases: ["cbc", "تحليل دم", "صوره دم"],
+      useful: true, rationale: "تقييم عام مفيد في معظم الحالات.",
+      result: { kind: "lab", title: "CBC", interpretation: "ضمن الطبيعي تقريبًا",
+        rows: [
+          { name: "WBC", value: "8.2", range: "4–11", flag: "normal" },
+          { name: "Hb", value: "13.5", range: "12–16", flag: "normal" },
+          { name: "Platelets", value: "240", range: "150–400", flag: "normal" },
+        ] },
+    },
+    {
+      id: "urine", label: "تحليل بول", aliases: ["urine", "تحليل بول"],
+      useful: true, rationale: "مفيد لاستبعاد عدوى بولية أو مشاكل كلوية.",
+      result: { kind: "lab", title: "Urinalysis", interpretation: "ضمن الطبيعي",
+        rows: [{ name: "Protein", value: "Negative", range: "Negative", flag: "normal" }] },
+    },
+  ],
+};
+
+export function getCaseChecklistData(caseId: string): CaseChecklistData {
+  return CASE_CHECKLIST_DATA[caseId] ?? FALLBACK_CHECKLIST;
 }
+
