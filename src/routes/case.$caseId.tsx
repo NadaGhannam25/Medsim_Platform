@@ -49,8 +49,10 @@ function CaseJourneyPage() {
   const checklistData = getCaseChecklistData(caseId);
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   const [stage, setStage] = useState<StageId>("interview");
+  const [submitted, setSubmitted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [question, setQuestion] = useState("");
   const [streaming, setStreaming] = useState(false);
