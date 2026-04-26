@@ -347,7 +347,7 @@ const generatedEnrichments: Record<string, Omit<LearningCase, keyof ClinicalCase
 
 export const LEARNING_CASES: LearningCase[] = [
   ...CLINICAL_CASES.map((clinicalCase) => ({ ...clinicalCase, ...enrichments[clinicalCase.id] })),
-  ...generatedCases.map((clinicalCase) => ({ ...clinicalCase, ...generatedEnrichments[clinicalCase.id] })),
+  ...generatedCases.map((clinicalCase) => ({ ...clinicalCase, ...(generatedEnrichments[clinicalCase.id] ?? fallbackEnrichment) })),
 ];
 
 export const INITIAL_CASE_IDS = ["case-001", "case-002", "case-003", "case-004", "case-005"];
