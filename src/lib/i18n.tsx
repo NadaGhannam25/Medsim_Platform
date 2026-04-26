@@ -236,6 +236,35 @@ const en: Dict = {
   "auth.createAccount": "Create a new account",
   "auth.signin": "Sign in",
   "auth.terms": "By creating an account you agree to the Terms of Use and Privacy Policy",
+
+  "cases.generate": "Generate New Cases",
+  "cases.generated.toast": "Generated 5 new diverse cases",
+  "cases.start": "Start case",
+  "cases.title": "Choose a clinical case to train on",
+  "cases.subtitle": "Start with the patient interview, then physical exam, investigations, diagnosis, treatment, and final feedback.",
+  "cases.chief": "Chief complaint",
+  "cases.specialty": "Specialty",
+  "cases.summary": "Case summary",
+  "cases.year": "yrs",
+  "cases.back": "Back",
+  "cases.crumb": "Clinical cases",
+  "cases.stat.journey": "Structured journey",
+  "cases.stat.journey.v": "6 stages",
+  "cases.stat.patient": "Virtual patient",
+  "cases.stat.patient.v": "Arabic conversation",
+  "cases.stat.available": "Available cases",
+
+  "vitals.title": "Vital signs",
+  "vitals.temp": "Temperature",
+  "vitals.hr": "Heart Rate",
+  "vitals.bp": "Blood Pressure",
+  "vitals.rr": "Respiratory Rate",
+  "vitals.spo2": "Oxygen Saturation",
+  "vitals.pain": "Pain Score",
+
+  "case.submit": "Submit Case",
+  "case.submit.confirm": "Case submitted — view your evaluation",
+  "case.submit.locked": "Submit the case first to view the evaluation",
 };
 
 const dicts: Record<Lang, Dict> = { ar, en };
