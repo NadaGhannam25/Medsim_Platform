@@ -557,7 +557,7 @@ function CaseJourneyPage() {
             <p className="mb-5 text-base text-muted-foreground">اقترح الخطة العلاجية أو الإجراء التالي بصيغتك. هذه محاكاة تعليمية وليست توصية لمرضى حقيقيين.</p>
             <Textarea value={treatmentPlan} onChange={(e) => setTreatmentPlan(e.target.value)} disabled={timeUp} className="min-h-40 text-base" placeholder="مثال: إحالة جراحية عاجلة، صيام، مسكنات مناسبة، وسوائل وريدية…" />
             <div className="mt-6 flex justify-end">
-              <Button onClick={() => moveTo("feedback")} className="h-12 gap-2 bg-[image:var(--gradient-primary)] font-black">عرض التقييم النهائي <ChevronLeft className="h-5 w-5" /></Button>
+              <Button onClick={submitCase} className="h-12 gap-2 bg-[image:var(--gradient-primary)] font-black"><ClipboardCheck className="h-5 w-5" /> {t("case.submit")}</Button>
             </div>
           </section>
           <aside className="space-y-5">
