@@ -367,16 +367,16 @@ function CaseJourneyPage() {
         </div>
 
         {/* Vital signs */}
-        <div className="mt-4 rounded-2xl border border-primary/20 bg-primary/5 p-3">
-          <div className="mb-2 flex items-center gap-2 text-xs font-black text-primary">
-            <Activity className="h-4 w-4" /> {t("vitals.title")}
+        <div className="mt-5 rounded-3xl border border-primary/20 bg-[image:var(--gradient-soft)] p-4">
+          <div className="mb-3 flex items-center gap-2 text-sm font-black text-primary">
+            <Activity className="h-5 w-5" /> {t("vitals.title")}
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
-            <VitalCell label={t("vitals.temp")} value={`${clinicalCase.vitals.temp}°C`} />
-            <VitalCell label={t("vitals.hr")} value={`${clinicalCase.vitals.hr} bpm`} />
-            <VitalCell label={t("vitals.bp")} value={`${clinicalCase.vitals.bp} mmHg`} />
-            <VitalCell label={t("vitals.rr")} value={`${clinicalCase.vitals.rr} /min`} />
-            <VitalCell label={t("vitals.spo2")} value={clinicalCase.vitals.spo2} />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <VitalCell icon="temp" label={t("vitals.temp")} value={`${clinicalCase.vitals.temp}°C`} status={vitalStatus("temp", clinicalCase.vitals.temp)} />
+            <VitalCell icon="hr" label={t("vitals.hr")} value={`${clinicalCase.vitals.hr} bpm`} status={vitalStatus("hr", clinicalCase.vitals.hr)} />
+            <VitalCell icon="bp" label={t("vitals.bp")} value={`${clinicalCase.vitals.bp} mmHg`} status={vitalStatus("bp", clinicalCase.vitals.bp)} />
+            <VitalCell icon="rr" label={t("vitals.rr")} value={`${clinicalCase.vitals.rr} /min`} status={vitalStatus("rr", clinicalCase.vitals.rr)} />
+            <VitalCell icon="spo2" label={t("vitals.spo2")} value={clinicalCase.vitals.spo2} status={vitalStatus("spo2", clinicalCase.vitals.spo2)} />
           </div>
         </div>
 
