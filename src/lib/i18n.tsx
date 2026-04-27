@@ -282,6 +282,22 @@ const en: Dict = {
   "case.submit": "Submit Case",
   "case.submit.confirm": "Case submitted — view your evaluation",
   "case.submit.locked": "Submit the case first to view the evaluation",
+
+  "settings.title": "Settings",
+  "settings.subtitle": "Account settings, learning preferences and notifications.",
+  "settings.back": "Back",
+  "settings.profile": "Student profile",
+  "settings.name": "Name",
+  "settings.email": "Email",
+  "settings.save": "Save changes",
+  "settings.notifications": "Notifications",
+  "settings.notifications.text": "Weekly training reminders and case recommendations.",
+  "settings.privacy": "Privacy",
+  "settings.privacy.text": "Your learning data is kept within the training environment.",
+  "settings.language": "Language",
+  "settings.language.text": "Choose interface language. Changes apply instantly.",
+  "settings.language.ar": "العربية",
+  "settings.language.en": "English",
 };
 
 const dicts: Record<Lang, Dict> = { ar, en };
