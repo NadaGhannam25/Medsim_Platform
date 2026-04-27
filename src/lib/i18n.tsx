@@ -139,6 +139,23 @@ const ar: Dict = {
   "case.submit": "تسليم الحالة",
   "case.submit.confirm": "تم تسليم الحالة — اطلع على التقييم",
   "case.submit.locked": "الرجاء تسليم الحالة أولًا للوصول إلى التقييم",
+
+  // Settings
+  "settings.title": "الإعدادات",
+  "settings.subtitle": "إعدادات الحساب وتجربة التعلم والتنبيهات.",
+  "settings.back": "رجوع",
+  "settings.profile": "بيانات الطالب",
+  "settings.name": "الاسم",
+  "settings.email": "البريد الإلكتروني",
+  "settings.save": "حفظ التغييرات",
+  "settings.notifications": "التنبيهات",
+  "settings.notifications.text": "تذكيرات التدريب الأسبوعية وتوصيات الحالات.",
+  "settings.privacy": "الخصوصية",
+  "settings.privacy.text": "بياناتك التعليمية محفوظة داخل بيئة التدريب.",
+  "settings.language": "اللغة",
+  "settings.language.text": "اختر لغة الواجهة. سيتم تطبيق التغيير فورًا.",
+  "settings.language.ar": "العربية",
+  "settings.language.en": "English",
 };
 
 const en: Dict = {
@@ -265,6 +282,22 @@ const en: Dict = {
   "case.submit": "Submit Case",
   "case.submit.confirm": "Case submitted — view your evaluation",
   "case.submit.locked": "Submit the case first to view the evaluation",
+
+  "settings.title": "Settings",
+  "settings.subtitle": "Account settings, learning preferences and notifications.",
+  "settings.back": "Back",
+  "settings.profile": "Student profile",
+  "settings.name": "Name",
+  "settings.email": "Email",
+  "settings.save": "Save changes",
+  "settings.notifications": "Notifications",
+  "settings.notifications.text": "Weekly training reminders and case recommendations.",
+  "settings.privacy": "Privacy",
+  "settings.privacy.text": "Your learning data is kept within the training environment.",
+  "settings.language": "Language",
+  "settings.language.text": "Choose interface language. Changes apply instantly.",
+  "settings.language.ar": "العربية",
+  "settings.language.en": "English",
 };
 
 const dicts: Record<Lang, Dict> = { ar, en };

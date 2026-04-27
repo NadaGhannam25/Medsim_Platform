@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } fro
 import { toast } from "sonner";
 import {
   Activity, AlertTriangle, ArrowLeft, Brain, CheckCircle2, ChevronLeft, ClipboardCheck, Circle, Clock,
-  FileText, FlaskConical, Home, ImageIcon, Loader2, MessageSquareText, NotebookPen, Pill, Save, Send,
-  ShieldAlert, Stethoscope, Target, XCircle,
+  Droplets, FileText, FlaskConical, Gauge, HeartPulse, Home, ImageIcon, Loader2, MessageSquareText, NotebookPen, Pill,
+  Save, Send, ShieldAlert, Stethoscope, Target, Thermometer, Wind, XCircle,
 } from "lucide-react";
 import { BodyMap } from "@/components/examination/BodyMap";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -367,16 +367,16 @@ function CaseJourneyPage() {
         </div>
 
         {/* Vital signs */}
-        <div className="mt-4 rounded-2xl border border-primary/20 bg-primary/5 p-3">
-          <div className="mb-2 flex items-center gap-2 text-xs font-black text-primary">
-            <Activity className="h-4 w-4" /> {t("vitals.title")}
+        <div className="mt-5 rounded-3xl border border-primary/20 bg-[image:var(--gradient-soft)] p-4">
+          <div className="mb-3 flex items-center gap-2 text-sm font-black text-primary">
+            <Activity className="h-5 w-5" /> {t("vitals.title")}
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
-            <VitalCell label={t("vitals.temp")} value={`${clinicalCase.vitals.temp}°C`} />
-            <VitalCell label={t("vitals.hr")} value={`${clinicalCase.vitals.hr} bpm`} />
-            <VitalCell label={t("vitals.bp")} value={`${clinicalCase.vitals.bp} mmHg`} />
-            <VitalCell label={t("vitals.rr")} value={`${clinicalCase.vitals.rr} /min`} />
-            <VitalCell label={t("vitals.spo2")} value={clinicalCase.vitals.spo2} />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <VitalCell icon="temp" label={t("vitals.temp")} value={`${clinicalCase.vitals.temp}°C`} status={vitalStatus("temp", clinicalCase.vitals.temp)} />
+            <VitalCell icon="hr" label={t("vitals.hr")} value={`${clinicalCase.vitals.hr} bpm`} status={vitalStatus("hr", clinicalCase.vitals.hr)} />
+            <VitalCell icon="bp" label={t("vitals.bp")} value={`${clinicalCase.vitals.bp} mmHg`} status={vitalStatus("bp", clinicalCase.vitals.bp)} />
+            <VitalCell icon="rr" label={t("vitals.rr")} value={`${clinicalCase.vitals.rr} /min`} status={vitalStatus("rr", clinicalCase.vitals.rr)} />
+            <VitalCell icon="spo2" label={t("vitals.spo2")} value={clinicalCase.vitals.spo2} status={vitalStatus("spo2", clinicalCase.vitals.spo2)} />
           </div>
         </div>
 
@@ -729,8 +729,8 @@ function FeedbackSection({
           <p className="mt-1 text-base text-muted-foreground">{timeUp ? "انتهى الوقت — هذا تحليل أدائك حتى لحظة انتهاء الوقت." : "تحليل أدائك خلال هذه الحالة."}</p>
         </div>
         <div className="rounded-3xl bg-[image:var(--gradient-primary)] px-7 py-5 text-center text-primary-foreground shadow-[var(--shadow-soft)]">
-          <div className="text-sm font-bold">النتيجة النهائية</div>
-          <div className="text-5xl font-black tabular-nums">{score.total}</div>
+          <div className="text-sm font-bold">الدرجة النهائية</div>
+            <div className="text-5xl font-black leading-none tabular-nums">{score.total}<span className="text-2xl font-extrabold opacity-80">/100</span></div>
         </div>
       </div>
 
@@ -799,11 +799,48 @@ function PatientFact({ label, value }: { label: string; value: string }) {
   return <div className="rounded-2xl border border-border bg-muted/45 p-3"><div className="text-xs font-black text-primary">{label}</div><div className="mt-1 line-clamp-2 text-sm font-bold text-foreground">{value}</div></div>;
 }
 
-function VitalCell({ label, value }: { label: string; value: string }) {
+type VitalKey = "temp" | "hr" | "bp" | "rr" | "spo2";
+type VitalStatus = "normal" | "abnormal";
+
+function arabicToNumber(str: string): number {
+  const map: Record<string, string> = { "٠":"0","١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9" };
+  return parseFloat(str.replace(/[٠-٩]/g, (d) => map[d] ?? d).replace(/[^\d.]/g, ""));
+}
+
+function vitalStatus(key: VitalKey, raw: string): VitalStatus {
+  if (key === "bp") {
+    const parts = raw.split("/").map(arabicToNumber);
+    const [sys, dia] = parts;
+    if (!sys || !dia) return "normal";
+    if (sys >= 140 || sys < 90 || dia >= 90 || dia < 60) return "abnormal";
+    return "normal";
+  }
+  const n = arabicToNumber(raw);
+  if (!isFinite(n)) return "normal";
+  if (key === "temp") return n >= 38 || n < 36 ? "abnormal" : "normal";
+  if (key === "hr") return n > 100 || n < 60 ? "abnormal" : "normal";
+  if (key === "rr") return n > 20 || n < 12 ? "abnormal" : "normal";
+  if (key === "spo2") return n < 95 ? "abnormal" : "normal";
+  return "normal";
+}
+
+const VITAL_ICONS: Record<VitalKey, typeof Thermometer> = {
+  temp: Thermometer, hr: HeartPulse, bp: Gauge, rr: Wind, spo2: Droplets,
+};
+
+function VitalCell({ icon, label, value, status }: { icon: VitalKey; label: string; value: string; status: VitalStatus }) {
+  const Icon = VITAL_ICONS[icon];
+  const abnormal = status === "abnormal";
   return (
-    <div className="rounded-xl border border-border bg-card px-3 py-2 text-center">
-      <div className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{label}</div>
-      <div className="mt-0.5 text-base font-black tabular-nums text-primary">{value}</div>
+    <div className={`relative flex items-center gap-3 rounded-2xl border bg-card px-4 py-3 shadow-[var(--shadow-soft)] transition ${abnormal ? "border-destructive/40 bg-destructive/5" : "border-border"}`}>
+      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${abnormal ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}>
+        <Icon className="h-5 w-5" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground line-clamp-1">{label}</div>
+        <div className={`mt-0.5 text-lg font-black tabular-nums leading-tight ${abnormal ? "text-destructive" : "text-foreground"}`}>{value}</div>
+      </div>
+      {abnormal && <span className="absolute -top-1.5 -left-1.5 h-3 w-3 rounded-full bg-destructive ring-2 ring-card" />}
     </div>
   );
 }

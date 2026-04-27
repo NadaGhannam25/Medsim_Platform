@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Bot, ChevronLeft, FilePlus2, Filter, Stethoscope } from "lucide-react";
+import { ArrowLeft, Bot, ChevronLeft, Droplets, FilePlus2, Filter, Gauge, HeartPulse, Stethoscope, Thermometer, Wind } from "lucide-react";
 import { toast } from "sonner";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -99,13 +99,16 @@ function ClinicalCasesPage() {
               <InfoRow label={t("cases.summary")} value={clinicalCase.briefSummary} />
             </div>
 
-            {/* Vital signs preview */}
-            <div className="mt-4 grid grid-cols-5 gap-1.5 rounded-2xl border border-border bg-primary/5 p-2.5">
-              <Vital label={t("vitals.temp")} value={clinicalCase.vitals.temp} />
-              <Vital label={t("vitals.hr")} value={clinicalCase.vitals.hr} />
-              <Vital label={t("vitals.bp")} value={clinicalCase.vitals.bp} />
-              <Vital label={t("vitals.rr")} value={clinicalCase.vitals.rr} />
-              <Vital label={t("vitals.spo2")} value={clinicalCase.vitals.spo2} />
+            {/* Vital signs */}
+            <div className="mt-4 rounded-2xl border border-primary/15 bg-[image:var(--gradient-soft)] p-3">
+              <div className="mb-2 text-[11px] font-black uppercase tracking-wide text-primary">{t("vitals.title")}</div>
+              <div className="grid grid-cols-5 gap-2">
+                <Vital icon={Thermometer} label={t("vitals.temp")} value={`${clinicalCase.vitals.temp}°`} status={vitalStatus("temp", clinicalCase.vitals.temp)} />
+                <Vital icon={HeartPulse} label={t("vitals.hr")} value={clinicalCase.vitals.hr} status={vitalStatus("hr", clinicalCase.vitals.hr)} />
+                <Vital icon={Gauge} label={t("vitals.bp")} value={clinicalCase.vitals.bp} status={vitalStatus("bp", clinicalCase.vitals.bp)} />
+                <Vital icon={Wind} label={t("vitals.rr")} value={clinicalCase.vitals.rr} status={vitalStatus("rr", clinicalCase.vitals.rr)} />
+                <Vital icon={Droplets} label={t("vitals.spo2")} value={clinicalCase.vitals.spo2} status={vitalStatus("spo2", clinicalCase.vitals.spo2)} />
+              </div>
             </div>
 
             <div className="mt-auto pt-5">
@@ -121,11 +124,34 @@ function ClinicalCasesPage() {
   );
 }
 
-function Vital({ label, value }: { label: string; value: string }) {
+function arabicToNumber(str: string): number {
+  const map: Record<string, string> = { "٠":"0","١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9" };
+  return parseFloat(str.replace(/[٠-٩]/g, (d) => map[d] ?? d).replace(/[^\d.]/g, ""));
+}
+
+type VStatus = "normal" | "abnormal";
+function vitalStatus(key: "temp" | "hr" | "bp" | "rr" | "spo2", raw: string): VStatus {
+  if (key === "bp") {
+    const [sys, dia] = raw.split("/").map(arabicToNumber);
+    if (!sys || !dia) return "normal";
+    return sys >= 140 || sys < 90 || dia >= 90 || dia < 60 ? "abnormal" : "normal";
+  }
+  const n = arabicToNumber(raw);
+  if (!isFinite(n)) return "normal";
+  if (key === "temp") return n >= 38 || n < 36 ? "abnormal" : "normal";
+  if (key === "hr") return n > 100 || n < 60 ? "abnormal" : "normal";
+  if (key === "rr") return n > 20 || n < 12 ? "abnormal" : "normal";
+  if (key === "spo2") return n < 95 ? "abnormal" : "normal";
+  return "normal";
+}
+
+function Vital({ icon: Icon, label, value, status }: { icon: typeof Stethoscope; label: string; value: string; status: VStatus }) {
+  const abnormal = status === "abnormal";
   return (
-    <div className="text-center">
+    <div className={`flex flex-col items-center gap-1 rounded-xl border px-2 py-2 text-center transition ${abnormal ? "border-destructive/40 bg-destructive/5" : "border-border bg-card"}`}>
+      <Icon className={`h-4 w-4 ${abnormal ? "text-destructive" : "text-primary"}`} />
       <div className="text-[9px] font-bold uppercase tracking-wide text-muted-foreground line-clamp-1">{label}</div>
-      <div className="text-xs font-black tabular-nums text-foreground">{value}</div>
+      <div className={`text-sm font-black tabular-nums leading-none ${abnormal ? "text-destructive" : "text-foreground"}`}>{value}</div>
     </div>
   );
 }
