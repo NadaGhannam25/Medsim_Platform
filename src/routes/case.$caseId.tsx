@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } fro
 import { toast } from "sonner";
 import {
   Activity, AlertTriangle, ArrowLeft, Brain, CheckCircle2, ChevronLeft, ClipboardCheck, Circle, Clock,
-  FileText, FlaskConical, Home, ImageIcon, Loader2, MessageSquareText, NotebookPen, Pill, Save, Send,
-  ShieldAlert, Stethoscope, Target, XCircle,
+  Droplets, FileText, FlaskConical, Gauge, HeartPulse, Home, ImageIcon, Loader2, MessageSquareText, NotebookPen, Pill,
+  Save, Send, ShieldAlert, Stethoscope, Target, Thermometer, Wind, XCircle,
 } from "lucide-react";
 import { BodyMap } from "@/components/examination/BodyMap";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
