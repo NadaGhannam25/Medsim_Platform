@@ -729,8 +729,8 @@ function FeedbackSection({
           <p className="mt-1 text-base text-muted-foreground">{timeUp ? "انتهى الوقت — هذا تحليل أدائك حتى لحظة انتهاء الوقت." : "تحليل أدائك خلال هذه الحالة."}</p>
         </div>
         <div className="rounded-3xl bg-[image:var(--gradient-primary)] px-7 py-5 text-center text-primary-foreground shadow-[var(--shadow-soft)]">
-          <div className="text-sm font-bold">النتيجة النهائية</div>
-          <div className="text-5xl font-black tabular-nums">{score.total}</div>
+          <div className="text-sm font-bold">الدرجة النهائية</div>
+            <div className="text-5xl font-black leading-none tabular-nums">{score.total}<span className="text-2xl font-extrabold opacity-80">/100</span></div>
         </div>
       </div>
 
