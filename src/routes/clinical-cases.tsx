@@ -99,13 +99,16 @@ function ClinicalCasesPage() {
               <InfoRow label={t("cases.summary")} value={clinicalCase.briefSummary} />
             </div>
 
-            {/* Vital signs preview */}
-            <div className="mt-4 grid grid-cols-5 gap-1.5 rounded-2xl border border-border bg-primary/5 p-2.5">
-              <Vital label={t("vitals.temp")} value={clinicalCase.vitals.temp} />
-              <Vital label={t("vitals.hr")} value={clinicalCase.vitals.hr} />
-              <Vital label={t("vitals.bp")} value={clinicalCase.vitals.bp} />
-              <Vital label={t("vitals.rr")} value={clinicalCase.vitals.rr} />
-              <Vital label={t("vitals.spo2")} value={clinicalCase.vitals.spo2} />
+            {/* Vital signs */}
+            <div className="mt-4 rounded-2xl border border-primary/15 bg-[image:var(--gradient-soft)] p-3">
+              <div className="mb-2 text-[11px] font-black uppercase tracking-wide text-primary">{t("vitals.title")}</div>
+              <div className="grid grid-cols-5 gap-2">
+                <Vital icon={Thermometer} label={t("vitals.temp")} value={`${clinicalCase.vitals.temp}°`} status={vitalStatus("temp", clinicalCase.vitals.temp)} />
+                <Vital icon={HeartPulse} label={t("vitals.hr")} value={clinicalCase.vitals.hr} status={vitalStatus("hr", clinicalCase.vitals.hr)} />
+                <Vital icon={Gauge} label={t("vitals.bp")} value={clinicalCase.vitals.bp} status={vitalStatus("bp", clinicalCase.vitals.bp)} />
+                <Vital icon={Wind} label={t("vitals.rr")} value={clinicalCase.vitals.rr} status={vitalStatus("rr", clinicalCase.vitals.rr)} />
+                <Vital icon={Droplets} label={t("vitals.spo2")} value={clinicalCase.vitals.spo2} status={vitalStatus("spo2", clinicalCase.vitals.spo2)} />
+              </div>
             </div>
 
             <div className="mt-auto pt-5">
