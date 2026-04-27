@@ -799,11 +799,48 @@ function PatientFact({ label, value }: { label: string; value: string }) {
   return <div className="rounded-2xl border border-border bg-muted/45 p-3"><div className="text-xs font-black text-primary">{label}</div><div className="mt-1 line-clamp-2 text-sm font-bold text-foreground">{value}</div></div>;
 }
 
-function VitalCell({ label, value }: { label: string; value: string }) {
+type VitalKey = "temp" | "hr" | "bp" | "rr" | "spo2";
+type VitalStatus = "normal" | "abnormal";
+
+function arabicToNumber(str: string): number {
+  const map: Record<string, string> = { "٠":"0","١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9" };
+  return parseFloat(str.replace(/[٠-٩]/g, (d) => map[d] ?? d).replace(/[^\d.]/g, ""));
+}
+
+function vitalStatus(key: VitalKey, raw: string): VitalStatus {
+  if (key === "bp") {
+    const parts = raw.split("/").map(arabicToNumber);
+    const [sys, dia] = parts;
+    if (!sys || !dia) return "normal";
+    if (sys >= 140 || sys < 90 || dia >= 90 || dia < 60) return "abnormal";
+    return "normal";
+  }
+  const n = arabicToNumber(raw);
+  if (!isFinite(n)) return "normal";
+  if (key === "temp") return n >= 38 || n < 36 ? "abnormal" : "normal";
+  if (key === "hr") return n > 100 || n < 60 ? "abnormal" : "normal";
+  if (key === "rr") return n > 20 || n < 12 ? "abnormal" : "normal";
+  if (key === "spo2") return n < 95 ? "abnormal" : "normal";
+  return "normal";
+}
+
+const VITAL_ICONS: Record<VitalKey, typeof Thermometer> = {
+  temp: Thermometer, hr: HeartPulse, bp: Gauge, rr: Wind, spo2: Droplets,
+};
+
+function VitalCell({ icon, label, value, status }: { icon: VitalKey; label: string; value: string; status: VitalStatus }) {
+  const Icon = VITAL_ICONS[icon];
+  const abnormal = status === "abnormal";
   return (
-    <div className="rounded-xl border border-border bg-card px-3 py-2 text-center">
-      <div className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{label}</div>
-      <div className="mt-0.5 text-base font-black tabular-nums text-primary">{value}</div>
+    <div className={`relative flex items-center gap-3 rounded-2xl border bg-card px-4 py-3 shadow-[var(--shadow-soft)] transition ${abnormal ? "border-destructive/40 bg-destructive/5" : "border-border"}`}>
+      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${abnormal ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}>
+        <Icon className="h-5 w-5" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground line-clamp-1">{label}</div>
+        <div className={`mt-0.5 text-lg font-black tabular-nums leading-tight ${abnormal ? "text-destructive" : "text-foreground"}`}>{value}</div>
+      </div>
+      {abnormal && <span className="absolute -top-1.5 -left-1.5 h-3 w-3 rounded-full bg-destructive ring-2 ring-card" />}
     </div>
   );
 }
