@@ -40,8 +40,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const SidebarContent = () => (
     <>
       <Link to="/dashboard" className="mb-8 flex items-center gap-3 px-2">
-        <img src={logo} alt="مدسم" className="h-14 w-14 rounded-xl object-contain" />
-        <span className="text-xl font-extrabold tracking-tight">مدسم</span>
+        <img src={logo} alt="مدسم" className="h-20 w-20 rounded-2xl object-contain drop-shadow-sm" />
+        <span className="text-2xl font-extrabold tracking-tight">مدسم</span>
       </Link>
 
       <nav className="flex-1 space-y-1">
