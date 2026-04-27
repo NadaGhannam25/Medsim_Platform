@@ -139,6 +139,23 @@ const ar: Dict = {
   "case.submit": "تسليم الحالة",
   "case.submit.confirm": "تم تسليم الحالة — اطلع على التقييم",
   "case.submit.locked": "الرجاء تسليم الحالة أولًا للوصول إلى التقييم",
+
+  // Settings
+  "settings.title": "الإعدادات",
+  "settings.subtitle": "إعدادات الحساب وتجربة التعلم والتنبيهات.",
+  "settings.back": "رجوع",
+  "settings.profile": "بيانات الطالب",
+  "settings.name": "الاسم",
+  "settings.email": "البريد الإلكتروني",
+  "settings.save": "حفظ التغييرات",
+  "settings.notifications": "التنبيهات",
+  "settings.notifications.text": "تذكيرات التدريب الأسبوعية وتوصيات الحالات.",
+  "settings.privacy": "الخصوصية",
+  "settings.privacy.text": "بياناتك التعليمية محفوظة داخل بيئة التدريب.",
+  "settings.language": "اللغة",
+  "settings.language.text": "اختر لغة الواجهة. سيتم تطبيق التغيير فورًا.",
+  "settings.language.ar": "العربية",
+  "settings.language.en": "English",
 };
 
 const en: Dict = {
