@@ -86,7 +86,6 @@ function SettingsPage() {
         </div>
       </div>
     </DashboardLayout>
-    </DashboardLayout>
   );
 }
 
