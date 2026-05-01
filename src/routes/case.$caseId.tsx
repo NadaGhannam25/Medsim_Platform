@@ -715,6 +715,7 @@ function FeedbackSection({
   onBack: () => void;
   onHome: () => void;
 }) {
+  const { t } = useI18n();
   const cl = checklistData!.checklist;
   const completedItems = cl.filter((i) => completed.has(i.id));
   const missedItems = cl.filter((i) => !completed.has(i.id));
@@ -722,67 +723,125 @@ function FeedbackSection({
   const requestedIds = new Set(requestedInvestigations.map((r) => r.entry.id));
   const missedUseful = usefulCatalog.filter((e) => !requestedIds.has(e.id));
   const requestedUnnecessary = requestedInvestigations.filter((r) => !r.entry.useful);
+  const requestedUseful = requestedInvestigations.filter((r) => r.entry.useful);
   const correctRegions = findings.filter((f) => f.status === "correct").length;
   const diagnosisHit = matchesAny(diagnosis, checklistData!.expectedDiagnosisKeywords);
+  const scoreOutOf10 = Math.round(score.total / 10);
 
   return (
-    <section className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h2 className="text-3xl font-black">التقييم النهائي</h2>
-          <p className="mt-1 text-base text-muted-foreground">{timeUp ? "انتهى الوقت — هذا تحليل أدائك حتى لحظة انتهاء الوقت." : "تحليل أدائك خلال هذه الحالة."}</p>
+    <section className="space-y-5">
+      {/* Header with score */}
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+        <div className="flex flex-wrap items-center justify-between gap-5">
+          <div>
+            <h2 className="text-3xl font-black">{t("fb.title")}</h2>
+            <p className="mt-1 text-base text-muted-foreground">{timeUp ? t("fb.subTime") : t("fb.sub")}</p>
+          </div>
+          <div className="flex items-center gap-5">
+            <div className="rounded-3xl bg-[image:var(--gradient-primary)] px-7 py-5 text-center text-primary-foreground shadow-[var(--shadow-soft)]">
+              <div className="text-sm font-bold">{t("fb.scoreOutOf10")}</div>
+              <div className="text-5xl font-black leading-none tabular-nums">{scoreOutOf10}<span className="text-2xl font-extrabold opacity-80">/10</span></div>
+            </div>
+            <div className="rounded-2xl border border-border bg-muted/40 px-5 py-4 text-center">
+              <div className="text-xs font-bold text-muted-foreground">{t("fb.final")}</div>
+              <div className="text-2xl font-black tabular-nums text-foreground">{score.total}<span className="text-sm font-bold text-muted-foreground">/100</span></div>
+            </div>
+          </div>
         </div>
-        <div className="rounded-3xl bg-[image:var(--gradient-primary)] px-7 py-5 text-center text-primary-foreground shadow-[var(--shadow-soft)]">
-          <div className="text-sm font-bold">الدرجة النهائية</div>
-            <div className="text-5xl font-black leading-none tabular-nums">{score.total}<span className="text-2xl font-extrabold opacity-80">/100</span></div>
+
+        {/* Score breakdown chips */}
+        <div className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <ScoreChip label={t("fb.s.interview")} value={score.interview} max={25} />
+          <ScoreChip label={t("fb.s.exam")} value={score.exam} max={15} />
+          <ScoreChip label={t("fb.s.inv")} value={score.investigations} max={25} />
+          <ScoreChip label={t("fb.s.dx")} value={score.diagnosis} max={20} />
+          <ScoreChip label={t("fb.s.tx")} value={score.treatment} max={10} />
+          <ScoreChip label={t("fb.s.time")} value={score.time} max={5} />
         </div>
       </div>
 
-      <div className="mb-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <ScoreChip label="المقابلة" value={score.interview} max={25} />
-        <ScoreChip label="الفحص" value={score.exam} max={15} />
-        <ScoreChip label="الفحوصات" value={score.investigations} max={25} />
-        <ScoreChip label="التشخيص" value={score.diagnosis} max={20} />
-        <ScoreChip label="العلاج" value={score.treatment} max={10} />
-        <ScoreChip label="إدارة الوقت" value={score.time} max={5} />
+      {/* Diagnosis accuracy */}
+      <div className={`rounded-3xl border p-5 shadow-[var(--shadow-card)] ${diagnosisHit ? "border-primary/30 bg-primary/5" : "border-amber-400/30 bg-amber-50/60 dark:bg-amber-950/20"}`}>
+        <div className="flex items-center gap-3">
+          <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${diagnosisHit ? "bg-primary/10 text-primary" : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"}`}>
+            <Target className="h-6 w-6" />
+          </div>
+          <div>
+            <div className="text-sm font-black text-muted-foreground">{t("fb.diagAccuracy")}</div>
+            <div className={`text-lg font-black ${diagnosisHit ? "text-primary" : "text-amber-700 dark:text-amber-400"}`}>
+              {diagnosisHit ? t("fb.diagAccuracy.hit") : t("fb.diagAccuracy.miss")}
+            </div>
+          </div>
+        </div>
+        {!diagnosisHit && (
+          <p className="mt-3 text-sm font-bold text-foreground">
+            {t("fb.dxEval.expected", { d: clinicalCase.correctDiagnosis })}
+          </p>
+        )}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <FeedbackCard title="ما أديته جيدًا" positive items={[
-          ...(completedItems.length ? completedItems.map((i) => i.label) : ["بدأت الحالة وفتحت ملف المريض"]),
-          correctRegions ? `حددت ${correctRegions} موضعًا سريريًا صحيحًا` : "",
-          requestedInvestigations.filter((r) => r.entry.useful).length ? `طلبت ${requestedInvestigations.filter((r) => r.entry.useful).length} فحصًا مناسبًا` : "",
-          diagnosisHit ? `تشخيصك (${diagnosis}) متوافق مع الحالة` : "",
+      <div className="grid gap-5 lg:grid-cols-2">
+        {/* What student did right */}
+        <FeedbackCard title={t("fb.whatRight")} icon={CheckCircle2} positive items={[
+          ...(completedItems.length ? completedItems.map((i) => i.label) : [t("fb.good.opened")]),
+          correctRegions ? t("fb.good.regions", { n: correctRegions }) : "",
+          requestedUseful.length ? t("fb.good.invs", { n: requestedUseful.length }) : "",
+          diagnosisHit ? t("fb.good.dx", { d: diagnosis }) : "",
         ].filter(Boolean)} />
 
-        <FeedbackCard title="نقاط مفقودة من قائمة التحقق" items={
-          missedItems.length ? missedItems.map((i) => `${CATEGORY_LABELS[i.category]} — ${i.label}`) : ["أكملت كل عناصر قائمة التحقق ✓"]
+        {/* Missed steps */}
+        <FeedbackCard title={t("fb.whatMissed")} icon={Circle} items={
+          missedItems.length ? missedItems.map((i) => `${CATEGORY_LABELS[i.category]} — ${i.label}`) : [t("fb.missed.allDone")]
         } />
 
-        <FeedbackCard title="فحوصات مهمة لم تطلبها" items={
-          missedUseful.length ? missedUseful.map((e) => `لم تطلب ${e.label} رغم أنه كان مهمًا — ${e.rationale}`) : ["طلبت كل الفحوصات المهمة ✓"]
+        {/* Appropriate tests */}
+        <FeedbackCard title={t("fb.appropriateTests")} icon={FlaskConical} positive items={
+          requestedUseful.length ? requestedUseful.map((r) => r.entry.label) : [t("fb.missedInvs.allDone")]
         } />
 
-        <FeedbackCard title="فحوصات غير ضرورية" items={
-          requestedUnnecessary.length ? requestedUnnecessary.map((r) => `${r.entry.label}: ${r.entry.rationale}`) : ["لم تطلب فحوصات غير ضرورية ✓"]
+        {/* Unnecessary tests */}
+        <FeedbackCard title={t("fb.inappropriateTests")} icon={AlertTriangle} items={
+          requestedUnnecessary.length ? requestedUnnecessary.map((r) => `${r.entry.label}: ${r.entry.rationale}`) : [t("fb.unnecessary.none")]
         } />
 
-        <FeedbackCard title="تقييم التفكير التشخيصي" items={[
-          diagnosisHit ? `تشخيصك مناسب: ${diagnosis}` : `راجع التشخيص — التشخيص التعليمي المتوقع: ${clinicalCase.correctDiagnosis}`,
-          treatmentPlan.trim() ? "كتبت خطة علاجية — تأكد من شموليتها" : "لم تكتب خطة علاجية واضحة",
-        ]} />
+        {/* Missed important tests */}
+        {missedUseful.length > 0 && (
+          <FeedbackCard title={t("fb.missedInvs")} icon={FileText} items={
+            missedUseful.map((e) => t("fb.missedInvs.row", { label: e.label, why: e.rationale }))
+          } />
+        )}
 
-        <FeedbackCard title="توصيات للتحسين" positive items={[
-          "ابدأ بأسئلة مفتوحة ثم انتقل للموجّهة.",
-          "حدد موضع الألم بدقة قبل اقتراح فحوصات.",
-          "اطلب فقط الفحوصات التي تغيّر القرار السريري.",
-          "اكتب مبررًا واضحًا يربط القصة بالفحص وبالنتائج.",
+        {/* Diagnostic reasoning */}
+        <FeedbackCard title={t("fb.dxEval")} icon={Brain} items={[
+          diagnosisHit ? t("fb.dxEval.ok", { d: diagnosis }) : t("fb.dxEval.expected", { d: clinicalCase.correctDiagnosis }),
+          treatmentPlan.trim() ? t("fb.dxEval.txYes") : t("fb.dxEval.txNo"),
         ]} />
       </div>
 
-      <div className="mt-6 flex flex-wrap justify-end gap-3">
-        <Button variant="outline" onClick={onBack}>العودة للحالات</Button>
-        <Button onClick={onHome} className="bg-[image:var(--gradient-primary)]">العودة للرئيسية</Button>
+      {/* Brief educational feedback */}
+      <div className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-[var(--shadow-card)]">
+        <h3 className="mb-3 flex items-center gap-2 text-lg font-black text-primary"><Lightbulb className="h-5 w-5" /> {t("fb.briefFeedback")}</h3>
+        <ul className="space-y-2">
+          {[t("fb.tip1"), t("fb.tip2"), t("fb.tip3"), t("fb.tip4")].map((tip) => (
+            <li key={tip} className="flex items-start gap-2 text-sm font-bold text-foreground"><Star className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><span>{tip}</span></li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Next case recommendation */}
+      <div className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
+        <h3 className="mb-2 flex items-center gap-2 text-lg font-black"><Award className="h-5 w-5 text-primary" /> {t("fb.nextRecommendation")}</h3>
+        <p className="text-sm font-bold leading-relaxed text-muted-foreground">{t("fb.nextRecommendation.text")}</p>
+      </div>
+
+      {/* AI disclaimer */}
+      <div className="rounded-2xl border border-amber-400/30 bg-amber-50/50 p-4 text-sm font-bold text-amber-800 dark:bg-amber-950/20 dark:text-amber-300">
+        <div className="flex items-center gap-2"><Info className="h-4 w-4 shrink-0" /> {t("case.aiNotice")}</div>
+      </div>
+
+      <div className="flex flex-wrap justify-end gap-3">
+        <Button variant="outline" onClick={onBack}>{t("fb.backCases")}</Button>
+        <Button onClick={onHome} className="bg-[image:var(--gradient-primary)]">{t("fb.backHome")}</Button>
       </div>
     </section>
   );
@@ -862,8 +921,22 @@ function StatusBadge({ status, text }: { status: Finding["status"]; text: string
   return <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-black ${status === "correct" ? "bg-primary/10 text-primary" : status === "close" ? "bg-accent text-accent-foreground" : "bg-destructive/10 text-destructive"}`}><Icon className="h-3.5 w-3.5" /> {text}</span>;
 }
 
-function FeedbackCard({ title, items, positive = false }: { title: string; items: string[]; positive?: boolean }) {
-  return <div className="rounded-3xl border border-border bg-muted/35 p-5"><h3 className="mb-3 flex items-center gap-2 text-xl font-black">{positive ? <CheckCircle2 className="h-5 w-5 text-primary" /> : <FileText className="h-5 w-5 text-primary" />}{title}</h3><ul className="space-y-2">{items.filter(Boolean).map((item) => <li key={item} className="flex items-start gap-2 rounded-2xl bg-card p-3 text-sm font-bold leading-relaxed text-foreground shadow-sm">{positive ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> : <Circle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />}<span>{item}</span></li>)}</ul></div>;
+function FeedbackCard({ title, items, positive = false, icon: CardIcon }: { title: string; items: string[]; positive?: boolean; icon?: typeof CheckCircle2 }) {
+  const DefaultIcon = positive ? CheckCircle2 : FileText;
+  const TitleIcon = CardIcon ?? DefaultIcon;
+  return (
+    <div className="rounded-3xl border border-border bg-muted/35 p-5">
+      <h3 className="mb-3 flex items-center gap-2 text-lg font-black"><TitleIcon className="h-5 w-5 text-primary" />{title}</h3>
+      <ul className="space-y-2">
+        {items.filter(Boolean).map((item) => (
+          <li key={item} className="flex items-start gap-2 rounded-2xl bg-card p-3 text-sm font-bold leading-relaxed text-foreground shadow-sm">
+            {positive ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> : <Circle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />}
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 function buildPatientReply(question: string, complaint: string) {
