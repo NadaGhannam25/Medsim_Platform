@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { ArrowLeft, Bell, Globe, Shield, User2 } from "lucide-react";
+import { ArrowLeft, Bell, BookOpen, Globe, Info, Shield, User2 } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
