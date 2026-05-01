@@ -6,6 +6,7 @@ import {
 import { useState, type ReactNode } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n";
 import logo from "@/assets/logo.png";
 
 type NavItem = {
@@ -28,6 +29,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { lang } = useI18n();
+  const brandName = lang === "ar" ? "مدسم" : "Madsam";
 
   const handleSignOut = async () => {
     await signOut();
