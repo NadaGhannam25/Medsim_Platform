@@ -84,8 +84,8 @@ function SettingsPage() {
             <p className="text-base font-bold leading-relaxed text-amber-900 dark:text-amber-200">{t("about.disclaimerText")}</p>
           </section>
         </div>
-        </div>
       </div>
+    </DashboardLayout>
     </DashboardLayout>
   );
 }
