@@ -556,7 +556,11 @@ function CaseJourneyPage() {
             <h2 className="mb-2 flex items-center gap-2 text-2xl font-black"><Pill className="h-6 w-6 text-primary" /> الخطة العلاجية / الخطوة التالية</h2>
             <p className="mb-5 text-base text-muted-foreground">اقترح الخطة العلاجية أو الإجراء التالي بصيغتك. هذه محاكاة تعليمية وليست توصية لمرضى حقيقيين.</p>
             <Textarea value={treatmentPlan} onChange={(e) => setTreatmentPlan(e.target.value)} disabled={timeUp} className="min-h-40 text-base" placeholder="مثال: إحالة جراحية عاجلة، صيام، مسكنات مناسبة، وسوائل وريدية…" />
-            <div className="mt-6 flex justify-end">
+            <div className="mt-5 rounded-2xl border border-primary/20 bg-primary/5 p-4 text-sm font-bold leading-relaxed text-foreground">
+              <div className="mb-1 flex items-center gap-2 text-xs font-black text-primary"><Info className="h-4 w-4" /> {t("about.disclaimerTitle")}</div>
+              {t("case.aiNotice")}
+            </div>
+            <div className="mt-4 flex justify-end">
               <Button onClick={submitCase} className="h-12 gap-2 bg-[image:var(--gradient-primary)] font-black"><ClipboardCheck className="h-5 w-5" /> {t("case.submit")}</Button>
             </div>
           </section>
