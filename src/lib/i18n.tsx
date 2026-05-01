@@ -405,6 +405,28 @@ const ar: Dict = {
   "settings.language.en": "English",
   "settings.profile.fallback": "طالب طب",
 
+  // About / How it works
+  "about.howTitle": "كيف يعمل مدسم؟",
+  "about.howText": "مدسم يستخدم الذكاء الاصطناعي لمحاكاة مريض افتراضي باللغة العربية، ومساعدة الطالب على ممارسة المقابلة السريرية، اختيار الفحوصات، وصياغة التشخيص، مع تقديم تغذية راجعة تعليمية منظمة بعد التقييم النهائي.",
+  "about.disclaimerTitle": "تنبيه تعليمي",
+  "about.disclaimerText": "هذه المنصة مخصصة لأغراض التعليم والتدريب فقط، ولا تُعد بديلاً عن الطبيب أو التشخيص الطبي الحقيقي. لا يُنصح بإدخال بيانات مرضى حقيقية داخل النظام، وتُستخدم مخرجات الذكاء الاصطناعي كتغذية راجعة تعليمية قابلة للمراجعة من المختصين.",
+
+  // Case page AI notice
+  "case.aiNotice": "التقييم النهائي يتم باستخدام محاكاة تعليمية مدعومة بالذكاء الاصطناعي. النتائج للأغراض التعليمية فقط.",
+
+  // Feedback improved
+  "fb.scoreOutOf10": "الدرجة من ١٠",
+  "fb.diagAccuracy": "دقة التشخيص",
+  "fb.diagAccuracy.hit": "تشخيص صحيح ✓",
+  "fb.diagAccuracy.miss": "يحتاج مراجعة",
+  "fb.whatRight": "ما قام به الطالب بشكل صحيح",
+  "fb.whatMissed": "الأسئلة أو الخطوات التي نسيها الطالب",
+  "fb.appropriateTests": "الفحوصات المناسبة التي اختارها",
+  "fb.inappropriateTests": "الفحوصات غير الضرورية",
+  "fb.briefFeedback": "تغذية راجعة تعليمية مختصرة",
+  "fb.nextRecommendation": "توصية للحالة القادمة",
+  "fb.nextRecommendation.text": "ركّز في الحالة القادمة على الجوانب التي فاتتك، وابدأ بأسئلة مفتوحة لجمع أكبر قدر من المعلومات قبل التوجه للتشخيص.",
+
   // 404
   "nf.title": "الصفحة غير موجودة",
   "nf.text": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
@@ -423,7 +445,7 @@ const ar: Dict = {
 };
 
 const en: Dict = {
-  "brand.name": "Medsim",
+  "brand.name": "Madsam",
 
   "nav.how": "How it works",
   "nav.features": "Features",
