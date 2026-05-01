@@ -405,6 +405,28 @@ const ar: Dict = {
   "settings.language.en": "English",
   "settings.profile.fallback": "طالب طب",
 
+  // About / How it works
+  "about.howTitle": "كيف يعمل مدسم؟",
+  "about.howText": "مدسم يستخدم الذكاء الاصطناعي لمحاكاة مريض افتراضي باللغة العربية، ومساعدة الطالب على ممارسة المقابلة السريرية، اختيار الفحوصات، وصياغة التشخيص، مع تقديم تغذية راجعة تعليمية منظمة بعد التقييم النهائي.",
+  "about.disclaimerTitle": "تنبيه تعليمي",
+  "about.disclaimerText": "هذه المنصة مخصصة لأغراض التعليم والتدريب فقط، ولا تُعد بديلاً عن الطبيب أو التشخيص الطبي الحقيقي. لا يُنصح بإدخال بيانات مرضى حقيقية داخل النظام، وتُستخدم مخرجات الذكاء الاصطناعي كتغذية راجعة تعليمية قابلة للمراجعة من المختصين.",
+
+  // Case page AI notice
+  "case.aiNotice": "التقييم النهائي يتم باستخدام محاكاة تعليمية مدعومة بالذكاء الاصطناعي. النتائج للأغراض التعليمية فقط.",
+
+  // Feedback improved
+  "fb.scoreOutOf10": "الدرجة من ١٠",
+  "fb.diagAccuracy": "دقة التشخيص",
+  "fb.diagAccuracy.hit": "تشخيص صحيح ✓",
+  "fb.diagAccuracy.miss": "يحتاج مراجعة",
+  "fb.whatRight": "ما قام به الطالب بشكل صحيح",
+  "fb.whatMissed": "الأسئلة أو الخطوات التي نسيها الطالب",
+  "fb.appropriateTests": "الفحوصات المناسبة التي اختارها",
+  "fb.inappropriateTests": "الفحوصات غير الضرورية",
+  "fb.briefFeedback": "تغذية راجعة تعليمية مختصرة",
+  "fb.nextRecommendation": "توصية للحالة القادمة",
+  "fb.nextRecommendation.text": "ركّز في الحالة القادمة على الجوانب التي فاتتك، وابدأ بأسئلة مفتوحة لجمع أكبر قدر من المعلومات قبل التوجه للتشخيص.",
+
   // 404
   "nf.title": "الصفحة غير موجودة",
   "nf.text": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
@@ -423,7 +445,7 @@ const ar: Dict = {
 };
 
 const en: Dict = {
-  "brand.name": "Medsim",
+  "brand.name": "Madsam",
 
   "nav.how": "How it works",
   "nav.features": "Features",
@@ -796,19 +818,38 @@ const en: Dict = {
   "settings.language.en": "English",
   "settings.profile.fallback": "Medical student",
 
+  "about.howTitle": "How does Madsam work?",
+  "about.howText": "Madsam uses artificial intelligence to simulate a virtual patient in Arabic, helping students practice clinical interviews, choose investigations, and formulate diagnoses, with structured educational feedback after the final evaluation.",
+  "about.disclaimerTitle": "Educational Notice",
+  "about.disclaimerText": "This platform is intended for educational and training purposes only and is not a substitute for a physician or real medical diagnosis. Do not enter real patient data. AI outputs are educational feedback subject to expert review.",
+
+  "case.aiNotice": "The final evaluation uses an AI-powered educational simulation. Results are for educational purposes only.",
+
+  "fb.scoreOutOf10": "Score out of 10",
+  "fb.diagAccuracy": "Diagnostic accuracy",
+  "fb.diagAccuracy.hit": "Correct diagnosis ✓",
+  "fb.diagAccuracy.miss": "Needs review",
+  "fb.whatRight": "What the student did correctly",
+  "fb.whatMissed": "Questions or steps the student missed",
+  "fb.appropriateTests": "Appropriate tests selected",
+  "fb.inappropriateTests": "Unnecessary tests",
+  "fb.briefFeedback": "Brief educational feedback",
+  "fb.nextRecommendation": "Recommendation for next case",
+  "fb.nextRecommendation.text": "In the next case, focus on the areas you missed. Start with open-ended questions to gather as much information as possible before heading to the diagnosis.",
+
   "nf.title": "Page not found",
   "nf.text": "The page you're looking for doesn't exist or has been moved.",
   "nf.home": "Go home",
 
-  "title.home": "Medsim — Learn medicine through smart clinical cases",
-  "title.dashboard": "Dashboard — Medsim",
-  "title.cases": "Clinical Cases — Medsim",
-  "title.previous": "My Previous Cases — Medsim",
-  "title.performance": "Performance Analytics — Medsim",
-  "title.settings": "Settings — Medsim",
-  "title.case": "Clinical case journey — Medsim",
-  "title.login": "Sign in — Medsim",
-  "title.signup": "Create account — Medsim",
+  "title.home": "Madsam — Learn medicine through smart clinical cases",
+  "title.dashboard": "Dashboard — Madsam",
+  "title.cases": "Clinical Cases — Madsam",
+  "title.previous": "My Previous Cases — Madsam",
+  "title.performance": "Performance Analytics — Madsam",
+  "title.settings": "Settings — Madsam",
+  "title.case": "Clinical case journey — Madsam",
+  "title.login": "Sign in — Madsam",
+  "title.signup": "Create account — Madsam",
 };
 
 const dicts: Record<Lang, Dict> = { ar, en };

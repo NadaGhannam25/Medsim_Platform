@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { ArrowLeft, Bell, Globe, Shield, User2 } from "lucide-react";
+import { ArrowLeft, Bell, BookOpen, Globe, Info, Shield, User2 } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -70,6 +70,18 @@ function SettingsPage() {
 
             <SettingCard icon={Bell} title={t("settings.notifications")} text={t("settings.notifications.text")} />
             <SettingCard icon={Shield} title={t("settings.privacy")} text={t("settings.privacy.text")} />
+          </section>
+        </div>
+
+        {/* How it works & Disclaimer */}
+        <div className="mt-6 grid gap-5 lg:grid-cols-2">
+          <section className="rounded-3xl border border-primary/20 bg-primary/5 p-6 shadow-[var(--shadow-card)]">
+            <h2 className="mb-3 flex items-center gap-2 text-xl font-black text-primary"><BookOpen className="h-5 w-5" /> {t("about.howTitle")}</h2>
+            <p className="text-base font-bold leading-relaxed text-foreground">{t("about.howText")}</p>
+          </section>
+          <section className="rounded-3xl border border-amber-400/30 bg-amber-50/60 p-6 shadow-[var(--shadow-card)] dark:bg-amber-950/20">
+            <h2 className="mb-3 flex items-center gap-2 text-xl font-black text-amber-700 dark:text-amber-400"><Info className="h-5 w-5" /> {t("about.disclaimerTitle")}</h2>
+            <p className="text-base font-bold leading-relaxed text-amber-900 dark:text-amber-200">{t("about.disclaimerText")}</p>
           </section>
         </div>
       </div>
