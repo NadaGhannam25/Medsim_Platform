@@ -2,9 +2,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import {
-  Activity, AlertTriangle, ArrowLeft, Brain, CheckCircle2, ChevronLeft, ClipboardCheck, Circle, Clock,
-  Droplets, FileText, FlaskConical, Gauge, HeartPulse, Home, ImageIcon, Loader2, MessageSquareText, NotebookPen, Pill,
-  Save, Send, ShieldAlert, Stethoscope, Target, Thermometer, Wind, XCircle,
+  Activity, AlertTriangle, ArrowLeft, Award, Brain, CheckCircle2, ChevronLeft, ClipboardCheck, Circle, Clock,
+  Droplets, FileText, FlaskConical, Gauge, HeartPulse, Home, ImageIcon, Info, Lightbulb, Loader2, MessageSquareText, NotebookPen, Pill,
+  Save, Send, ShieldAlert, Star, Stethoscope, Target, Thermometer, Wind, XCircle,
 } from "lucide-react";
 import { BodyMap } from "@/components/examination/BodyMap";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
