@@ -117,8 +117,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
           <div className="flex items-center gap-3">
             <Link to="/dashboard" className="flex items-center gap-2.5">
-              <span className="hidden text-xl font-extrabold tracking-tight sm:inline">مدسم</span>
-              <img src={logo} alt="مدسم" className="h-14 w-14 rounded-xl object-contain drop-shadow-sm" />
+              <span className="hidden text-xl font-extrabold tracking-tight sm:inline">{brandName}</span>
+              <img src={logo} alt={brandName} className="h-14 w-14 rounded-xl object-contain drop-shadow-sm" />
             </Link>
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-5 w-5" />
