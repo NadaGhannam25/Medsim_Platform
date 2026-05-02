@@ -407,8 +407,8 @@ function CaseJourneyPage() {
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
           <section className="rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
             <div className="border-b border-border p-5">
-              <h2 className="flex items-center gap-2 text-2xl font-black"><MessageSquareText className="h-6 w-6 text-primary" /> مقابلة المريض</h2>
-              <p className="mt-1 text-base text-muted-foreground">اطرح أسئلتك بنفسك واجمع التاريخ المرضي. لا توجد اقتراحات جاهزة — فكّر كما تفعل في عيادة حقيقية.</p>
+              <h2 className="flex items-center gap-2 text-2xl font-black"><MessageSquareText className="h-6 w-6 text-primary" /> {t("interview.title")}</h2>
+              <p className="mt-1 text-base text-muted-foreground">{t("interview.desc")}</p>
             </div>
             <div ref={scrollRef} className="h-[440px] space-y-4 overflow-y-auto p-5">
               {messages.map((message, index) => (
@@ -421,20 +421,20 @@ function CaseJourneyPage() {
             </div>
             <form onSubmit={sendQuestion} className="border-t border-border p-5">
               <div className="flex gap-3">
-                <Input value={question} onChange={(event) => setQuestion(event.target.value)} disabled={timeUp} className="h-12 text-base" placeholder="اكتب سؤالك للمريض… مثل: متى بدأ الألم؟ هل ينتشر؟" />
-                <Button disabled={streaming || timeUp} className="h-12 gap-2 px-6 font-black"><Send className="h-4 w-4" /> إرسال</Button>
+                <Input value={question} onChange={(event) => setQuestion(event.target.value)} disabled={timeUp} className="h-12 text-base" placeholder={t("interview.placeholder")} />
+                <Button disabled={streaming || timeUp} className="h-12 gap-2 px-6 font-black"><Send className="h-4 w-4" /> {t("interview.send")}</Button>
               </div>
             </form>
           </section>
 
-          <aside className="space-y-5">
+          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
-            <ClinicalCard title="ملاحظات سريرية" icon={NotebookPen}>
+            <ClinicalCard title={t("interview.notes")} icon={NotebookPen}>
               <div className="space-y-2">
-                {interviewNotes.length ? interviewNotes.slice(-5).map((note) => <div key={note} className="rounded-2xl bg-muted p-3 text-sm font-bold">{note}</div>) : <EmptyText text="ستظهر هنا أهم الأسئلة التي طرحتها." />}
+                {interviewNotes.length ? interviewNotes.slice(-5).map((note) => <div key={note} className="rounded-2xl bg-muted p-3 text-sm font-bold">{note}</div>) : <EmptyText text={t("interview.notes.empty")} />}
               </div>
             </ClinicalCard>
-            <Button onClick={() => moveTo("exam")} className="h-12 w-full gap-2 bg-[image:var(--gradient-primary)] text-base font-black shadow-[var(--shadow-soft)]">الانتقال للفحص السريري <ChevronLeft className="h-5 w-5" /></Button>
+            <Button onClick={() => moveTo("exam")} className="h-12 w-full gap-2 bg-[image:var(--gradient-primary)] text-base font-black shadow-[var(--shadow-soft)]">{t("interview.next")} <ChevronLeft className="h-5 w-5" /></Button>
           </aside>
         </div>
       )}
