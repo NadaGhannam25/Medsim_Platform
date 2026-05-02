@@ -454,7 +454,7 @@ function CaseJourneyPage() {
               <BodyMap view={bodyView} selected={selectedRegions} expectedRegions={clinicalCase.expectedRegions} onToggle={toggleRegion} />
             </div>
           </section>
-          <aside className="space-y-5">
+          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
             <ClinicalCard title="المناطق المحددة" icon={Target}>
               {findings.length === 0 ? <EmptyText text="انقر على موضع الألم أو العرض في الجسم." /> : <div className="space-y-3">{findings.map((finding) => (
