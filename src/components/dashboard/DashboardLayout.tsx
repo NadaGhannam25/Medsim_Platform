@@ -30,6 +30,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { lang, t } = useI18n();
+  const dir = lang === "ar" ? "rtl" : "ltr";
   const brandName = lang === "ar" ? "مدسم" : "Madsam";
 
   const handleSignOut = async () => {
