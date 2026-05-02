@@ -10,18 +10,18 @@ import { useI18n } from "@/lib/i18n";
 import logo from "@/assets/logo.png";
 
 type NavItem = {
-  label: string;
+  labelKey: string;
   icon: typeof Home;
   to: "/dashboard" | "/clinical-cases" | "/previous-cases" | "/performance" | "/settings";
   bottom?: boolean;
 };
 
 const navItems: NavItem[] = [
-  { to: "/dashboard", label: "الرئيسية", icon: Home },
-  { to: "/clinical-cases", label: "الحالات السريرية", icon: ClipboardList },
-  { to: "/previous-cases", label: "حالاتي السابقة", icon: BookOpen },
-  { to: "/performance", label: "تحليلات الأداء", icon: BarChart3 },
-  { to: "/settings", label: "الإعدادات", icon: Settings, bottom: true },
+  { to: "/dashboard", labelKey: "sb.home", icon: Home },
+  { to: "/clinical-cases", labelKey: "sb.cases", icon: ClipboardList },
+  { to: "/previous-cases", labelKey: "sb.previous", icon: BookOpen },
+  { to: "/performance", labelKey: "sb.performance", icon: BarChart3 },
+  { to: "/settings", labelKey: "sb.settings", icon: Settings, bottom: true },
 ];
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
@@ -29,7 +29,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
+  const dir = lang === "ar" ? "rtl" : "ltr";
   const brandName = lang === "ar" ? "مدسم" : "Madsam";
 
   const handleSignOut = async () => {
@@ -52,9 +53,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           const active = location.pathname === item.to || (item.to === "/clinical-cases" && location.pathname.startsWith("/case/"));
           const Icon = item.icon;
           return (
-            <Link key={item.label} to={item.to} onClick={() => setMobileOpen(false)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-right text-sm font-bold transition ${active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
+            <Link key={item.labelKey} to={item.to} onClick={() => setMobileOpen(false)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-right text-sm font-bold transition ${active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
               <Icon className="h-4 w-4" />
-              <span className="flex-1 text-right">{item.label}</span>
+              <span className="flex-1 text-right">{t(item.labelKey)}</span>
             </Link>
           );
         })}
@@ -65,9 +66,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           const Icon = item.icon;
           const active = location.pathname === item.to;
           return (
-            <Link key={item.label} to={item.to} onClick={() => setMobileOpen(false)} className={`mb-3 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-right text-sm font-bold transition ${active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
+            <Link key={item.labelKey} to={item.to} onClick={() => setMobileOpen(false)} className={`mb-3 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-right text-sm font-bold transition ${active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
               <Icon className="h-4 w-4" />
-              <span className="flex-1 text-right">{item.label}</span>
+              <span className="flex-1 text-right">{t(item.labelKey)}</span>
             </Link>
           );
         })}
@@ -76,20 +77,20 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             {initials}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-sm font-semibold">{user?.user_metadata?.full_name || "طالب"}</div>
+            <div className="truncate text-sm font-semibold">{user?.user_metadata?.full_name || t("sb.studentFallback")}</div>
             <div className="truncate text-xs text-muted-foreground">{user?.email}</div>
           </div>
         </div>
         <Button variant="ghost" onClick={handleSignOut} className="mt-2 w-full justify-start gap-3 text-muted-foreground">
           <LogOut className="h-4 w-4" />
-          تسجيل الخروج
+          {t("sb.signout")}
         </Button>
       </div>
     </>
   );
 
   return (
-    <div dir="rtl" className="min-h-screen bg-[image:var(--gradient-soft)]">
+    <div dir={dir} className="min-h-screen bg-[image:var(--gradient-soft)]">
       {/* Desktop sidebar */}
       <aside className="fixed right-0 top-0 hidden h-screen w-72 flex-col border-l border-border bg-card p-5 lg:flex">
         <SidebarContent />
@@ -112,13 +113,13 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
             <div className="hidden text-sm text-muted-foreground lg:block">
-              <span className="font-semibold text-foreground">لوحة التعلّم السريري</span>
+              <span className="font-semibold text-foreground">{t("sb.headerTitle")}</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <Link to="/dashboard" className="flex items-center gap-2.5">
-              <span className="hidden text-xl font-extrabold tracking-tight sm:inline">مدسم</span>
-              <img src={logo} alt="مدسم" className="h-14 w-14 rounded-xl object-contain drop-shadow-sm" />
+              <span className="hidden text-xl font-extrabold tracking-tight sm:inline">{brandName}</span>
+              <img src={logo} alt={brandName} className="h-14 w-14 rounded-xl object-contain drop-shadow-sm" />
             </Link>
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-5 w-5" />

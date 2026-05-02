@@ -166,7 +166,7 @@ function CaseJourneyPage() {
   const completedCount = checklistData?.checklist.filter((i) => completedChecklist.has(i.id)).length ?? 0;
   const totalChecklist = checklistData?.checklist.length ?? 0;
 
-  // ===== Final scoring (only revealed in feedback) =====
+  // ===== Final scoring — all criteria out of 10 =====
   const scoreBreakdown = useMemo(() => {
     if (!checklistData) return { interview: 0, exam: 0, investigations: 0, diagnosis: 0, treatment: 0, time: 0, total: 0 };
     const cl = checklistData.checklist;
@@ -175,19 +175,20 @@ function CaseJourneyPage() {
       const done = items.filter((i) => completedChecklist.has(i.id)).length;
       return items.length ? done / items.length : 0;
     };
-    const interview = Math.round(cat("history") * 25);
-    const exam = Math.round(cat("exam") * 15);
+    const interview = Math.round(cat("history") * 10);
+    const exam = Math.round(cat("exam") * 10);
     const usefulRequested = requestedInvestigations.filter((r) => r.entry.useful).length;
     const unnecessaryRequested = requestedInvestigations.filter((r) => !r.entry.useful).length;
     const usefulTotal = checklistData.investigationCatalog.filter((e) => e.useful).length || 1;
-    const investigations = Math.max(0, Math.round((usefulRequested / usefulTotal) * 25 - unnecessaryRequested * 4));
+    const investigations = Math.max(0, Math.min(10, Math.round((usefulRequested / usefulTotal) * 10 - unnecessaryRequested * 2)));
     const diagnosisHit = matchesAny(diagnosis, checklistData.expectedDiagnosisKeywords);
-    const diagnosisScore = (diagnosisHit ? 15 : 4) + (justification.trim().length > 20 ? 5 : 0);
+    const diagnosisScore = (diagnosisHit ? 7 : 2) + (justification.trim().length > 20 ? 3 : 0);
     const treatmentHit = matchesAny(treatmentPlan, checklistData.expectedTreatmentKeywords);
     const treatment = treatmentHit ? 10 : treatmentPlan.trim().length > 10 ? 4 : 0;
-    const time = Math.round((secondsLeft / TIMER_SECONDS) * 5);
-    const total = Math.min(100, interview + exam + investigations + diagnosisScore + time + treatment);
-    return { interview, exam, investigations, diagnosis: diagnosisScore, treatment, time, total };
+    const time = Math.round((secondsLeft / TIMER_SECONDS) * 10);
+    const avg = Math.round((interview + exam + investigations + Math.min(10, diagnosisScore) + Math.min(10, treatment) + Math.min(10, time)) / 6);
+    const total = Math.min(10, avg);
+    return { interview, exam, investigations, diagnosis: Math.min(10, diagnosisScore), treatment: Math.min(10, treatment), time: Math.min(10, time), total };
   }, [checklistData, completedChecklist, requestedInvestigations, diagnosis, justification, treatmentPlan, secondsLeft]);
 
   if (loading || !user) {
@@ -406,8 +407,8 @@ function CaseJourneyPage() {
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
           <section className="rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
             <div className="border-b border-border p-5">
-              <h2 className="flex items-center gap-2 text-2xl font-black"><MessageSquareText className="h-6 w-6 text-primary" /> مقابلة المريض</h2>
-              <p className="mt-1 text-base text-muted-foreground">اطرح أسئلتك بنفسك واجمع التاريخ المرضي. لا توجد اقتراحات جاهزة — فكّر كما تفعل في عيادة حقيقية.</p>
+              <h2 className="flex items-center gap-2 text-2xl font-black"><MessageSquareText className="h-6 w-6 text-primary" /> {t("interview.title")}</h2>
+              <p className="mt-1 text-base text-muted-foreground">{t("interview.desc")}</p>
             </div>
             <div ref={scrollRef} className="h-[440px] space-y-4 overflow-y-auto p-5">
               {messages.map((message, index) => (
@@ -420,20 +421,20 @@ function CaseJourneyPage() {
             </div>
             <form onSubmit={sendQuestion} className="border-t border-border p-5">
               <div className="flex gap-3">
-                <Input value={question} onChange={(event) => setQuestion(event.target.value)} disabled={timeUp} className="h-12 text-base" placeholder="اكتب سؤالك للمريض… مثل: متى بدأ الألم؟ هل ينتشر؟" />
-                <Button disabled={streaming || timeUp} className="h-12 gap-2 px-6 font-black"><Send className="h-4 w-4" /> إرسال</Button>
+                <Input value={question} onChange={(event) => setQuestion(event.target.value)} disabled={timeUp} className="h-12 text-base" placeholder={t("interview.placeholder")} />
+                <Button disabled={streaming || timeUp} className="h-12 gap-2 px-6 font-black"><Send className="h-4 w-4" /> {t("interview.send")}</Button>
               </div>
             </form>
           </section>
 
-          <aside className="space-y-5">
+          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
-            <ClinicalCard title="ملاحظات سريرية" icon={NotebookPen}>
+            <ClinicalCard title={t("interview.notes")} icon={NotebookPen}>
               <div className="space-y-2">
-                {interviewNotes.length ? interviewNotes.slice(-5).map((note) => <div key={note} className="rounded-2xl bg-muted p-3 text-sm font-bold">{note}</div>) : <EmptyText text="ستظهر هنا أهم الأسئلة التي طرحتها." />}
+                {interviewNotes.length ? interviewNotes.slice(-5).map((note) => <div key={note} className="rounded-2xl bg-muted p-3 text-sm font-bold">{note}</div>) : <EmptyText text={t("interview.notes.empty")} />}
               </div>
             </ClinicalCard>
-            <Button onClick={() => moveTo("exam")} className="h-12 w-full gap-2 bg-[image:var(--gradient-primary)] text-base font-black shadow-[var(--shadow-soft)]">الانتقال للفحص السريري <ChevronLeft className="h-5 w-5" /></Button>
+            <Button onClick={() => moveTo("exam")} className="h-12 w-full gap-2 bg-[image:var(--gradient-primary)] text-base font-black shadow-[var(--shadow-soft)]">{t("interview.next")} <ChevronLeft className="h-5 w-5" /></Button>
           </aside>
         </div>
       )}
@@ -453,7 +454,7 @@ function CaseJourneyPage() {
               <BodyMap view={bodyView} selected={selectedRegions} expectedRegions={clinicalCase.expectedRegions} onToggle={toggleRegion} />
             </div>
           </section>
-          <aside className="space-y-5">
+          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
             <ClinicalCard title="المناطق المحددة" icon={Target}>
               {findings.length === 0 ? <EmptyText text="انقر على موضع الألم أو العرض في الجسم." /> : <div className="space-y-3">{findings.map((finding) => (
@@ -513,7 +514,7 @@ function CaseJourneyPage() {
               <Button onClick={() => moveTo("diagnosis")} className="h-12 gap-2 font-black">الانتقال للتشخيص <ChevronLeft className="h-5 w-5" /></Button>
             </div>
           </section>
-          <aside className="space-y-5">
+          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -543,7 +544,7 @@ function CaseJourneyPage() {
               <Button onClick={() => moveTo("treatment")} className="h-12 gap-2 font-black">الانتقال للخطة العلاجية <ChevronLeft className="h-5 w-5" /></Button>
             </div>
           </section>
-          <aside className="space-y-5">
+          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -564,7 +565,7 @@ function CaseJourneyPage() {
               <Button onClick={submitCase} className="h-12 gap-2 bg-[image:var(--gradient-primary)] font-black"><ClipboardCheck className="h-5 w-5" /> {t("case.submit")}</Button>
             </div>
           </section>
-          <aside className="space-y-5">
+          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -726,37 +727,36 @@ function FeedbackSection({
   const requestedUseful = requestedInvestigations.filter((r) => r.entry.useful);
   const correctRegions = findings.filter((f) => f.status === "correct").length;
   const diagnosisHit = matchesAny(diagnosis, checklistData!.expectedDiagnosisKeywords);
-  const scoreOutOf10 = Math.round(score.total / 10);
+
+  const criteria = [
+    { label: t("fb.s.interview"), value: score.interview },
+    { label: t("fb.s.exam"), value: score.exam },
+    { label: t("fb.s.inv"), value: score.investigations },
+    { label: t("fb.s.dx"), value: score.diagnosis },
+    { label: t("fb.s.tx"), value: score.treatment },
+    { label: t("fb.s.time"), value: score.time },
+  ];
 
   return (
     <section className="space-y-5">
-      {/* Header with score */}
+      {/* Header with overall score /10 */}
       <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div>
             <h2 className="text-3xl font-black">{t("fb.title")}</h2>
             <p className="mt-1 text-base text-muted-foreground">{timeUp ? t("fb.subTime") : t("fb.sub")}</p>
           </div>
-          <div className="flex items-center gap-5">
-            <div className="rounded-3xl bg-[image:var(--gradient-primary)] px-7 py-5 text-center text-primary-foreground shadow-[var(--shadow-soft)]">
-              <div className="text-sm font-bold">{t("fb.scoreOutOf10")}</div>
-              <div className="text-5xl font-black leading-none tabular-nums">{scoreOutOf10}<span className="text-2xl font-extrabold opacity-80">/10</span></div>
-            </div>
-            <div className="rounded-2xl border border-border bg-muted/40 px-5 py-4 text-center">
-              <div className="text-xs font-bold text-muted-foreground">{t("fb.final")}</div>
-              <div className="text-2xl font-black tabular-nums text-foreground">{score.total}<span className="text-sm font-bold text-muted-foreground">/100</span></div>
-            </div>
+          <div className="rounded-3xl bg-[image:var(--gradient-primary)] px-7 py-5 text-center text-primary-foreground shadow-[var(--shadow-soft)]">
+            <div className="text-sm font-bold">{t("fb.scoreOutOf10")}</div>
+            <div className="text-5xl font-black leading-none tabular-nums">{score.total}<span className="text-2xl font-extrabold opacity-80">/10</span></div>
           </div>
         </div>
 
-        {/* Score breakdown chips */}
+        {/* Score breakdown — each /10 */}
         <div className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          <ScoreChip label={t("fb.s.interview")} value={score.interview} max={25} />
-          <ScoreChip label={t("fb.s.exam")} value={score.exam} max={15} />
-          <ScoreChip label={t("fb.s.inv")} value={score.investigations} max={25} />
-          <ScoreChip label={t("fb.s.dx")} value={score.diagnosis} max={20} />
-          <ScoreChip label={t("fb.s.tx")} value={score.treatment} max={10} />
-          <ScoreChip label={t("fb.s.time")} value={score.time} max={5} />
+          {criteria.map((c) => (
+            <ScoreChip key={c.label} label={c.label} value={c.value} max={10} />
+          ))}
         </div>
       </div>
 
@@ -781,7 +781,6 @@ function FeedbackSection({
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
-        {/* What student did right */}
         <FeedbackCard title={t("fb.whatRight")} icon={CheckCircle2} positive items={[
           ...(completedItems.length ? completedItems.map((i) => i.label) : [t("fb.good.opened")]),
           correctRegions ? t("fb.good.regions", { n: correctRegions }) : "",
@@ -789,29 +788,24 @@ function FeedbackSection({
           diagnosisHit ? t("fb.good.dx", { d: diagnosis }) : "",
         ].filter(Boolean)} />
 
-        {/* Missed steps */}
         <FeedbackCard title={t("fb.whatMissed")} icon={Circle} items={
           missedItems.length ? missedItems.map((i) => `${CATEGORY_LABELS[i.category]} — ${i.label}`) : [t("fb.missed.allDone")]
         } />
 
-        {/* Appropriate tests */}
         <FeedbackCard title={t("fb.appropriateTests")} icon={FlaskConical} positive items={
           requestedUseful.length ? requestedUseful.map((r) => r.entry.label) : [t("fb.missedInvs.allDone")]
         } />
 
-        {/* Unnecessary tests */}
         <FeedbackCard title={t("fb.inappropriateTests")} icon={AlertTriangle} items={
           requestedUnnecessary.length ? requestedUnnecessary.map((r) => `${r.entry.label}: ${r.entry.rationale}`) : [t("fb.unnecessary.none")]
         } />
 
-        {/* Missed important tests */}
         {missedUseful.length > 0 && (
           <FeedbackCard title={t("fb.missedInvs")} icon={FileText} items={
             missedUseful.map((e) => t("fb.missedInvs.row", { label: e.label, why: e.rationale }))
           } />
         )}
 
-        {/* Diagnostic reasoning */}
         <FeedbackCard title={t("fb.dxEval")} icon={Brain} items={[
           diagnosisHit ? t("fb.dxEval.ok", { d: diagnosis }) : t("fb.dxEval.expected", { d: clinicalCase.correctDiagnosis }),
           treatmentPlan.trim() ? t("fb.dxEval.txYes") : t("fb.dxEval.txNo"),
