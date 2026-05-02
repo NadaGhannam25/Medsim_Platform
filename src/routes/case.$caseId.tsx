@@ -727,37 +727,36 @@ function FeedbackSection({
   const requestedUseful = requestedInvestigations.filter((r) => r.entry.useful);
   const correctRegions = findings.filter((f) => f.status === "correct").length;
   const diagnosisHit = matchesAny(diagnosis, checklistData!.expectedDiagnosisKeywords);
-  const scoreOutOf10 = Math.round(score.total / 10);
+
+  const criteria = [
+    { label: t("fb.s.interview"), value: score.interview },
+    { label: t("fb.s.exam"), value: score.exam },
+    { label: t("fb.s.inv"), value: score.investigations },
+    { label: t("fb.s.dx"), value: score.diagnosis },
+    { label: t("fb.s.tx"), value: score.treatment },
+    { label: t("fb.s.time"), value: score.time },
+  ];
 
   return (
     <section className="space-y-5">
-      {/* Header with score */}
+      {/* Header with overall score /10 */}
       <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div>
             <h2 className="text-3xl font-black">{t("fb.title")}</h2>
             <p className="mt-1 text-base text-muted-foreground">{timeUp ? t("fb.subTime") : t("fb.sub")}</p>
           </div>
-          <div className="flex items-center gap-5">
-            <div className="rounded-3xl bg-[image:var(--gradient-primary)] px-7 py-5 text-center text-primary-foreground shadow-[var(--shadow-soft)]">
-              <div className="text-sm font-bold">{t("fb.scoreOutOf10")}</div>
-              <div className="text-5xl font-black leading-none tabular-nums">{scoreOutOf10}<span className="text-2xl font-extrabold opacity-80">/10</span></div>
-            </div>
-            <div className="rounded-2xl border border-border bg-muted/40 px-5 py-4 text-center">
-              <div className="text-xs font-bold text-muted-foreground">{t("fb.final")}</div>
-              <div className="text-2xl font-black tabular-nums text-foreground">{score.total}<span className="text-sm font-bold text-muted-foreground">/100</span></div>
-            </div>
+          <div className="rounded-3xl bg-[image:var(--gradient-primary)] px-7 py-5 text-center text-primary-foreground shadow-[var(--shadow-soft)]">
+            <div className="text-sm font-bold">{t("fb.scoreOutOf10")}</div>
+            <div className="text-5xl font-black leading-none tabular-nums">{score.total}<span className="text-2xl font-extrabold opacity-80">/10</span></div>
           </div>
         </div>
 
-        {/* Score breakdown chips */}
+        {/* Score breakdown — each /10 */}
         <div className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          <ScoreChip label={t("fb.s.interview")} value={score.interview} max={25} />
-          <ScoreChip label={t("fb.s.exam")} value={score.exam} max={15} />
-          <ScoreChip label={t("fb.s.inv")} value={score.investigations} max={25} />
-          <ScoreChip label={t("fb.s.dx")} value={score.diagnosis} max={20} />
-          <ScoreChip label={t("fb.s.tx")} value={score.treatment} max={10} />
-          <ScoreChip label={t("fb.s.time")} value={score.time} max={5} />
+          {criteria.map((c) => (
+            <ScoreChip key={c.label} label={c.label} value={c.value} max={10} />
+          ))}
         </div>
       </div>
 
@@ -782,7 +781,6 @@ function FeedbackSection({
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
-        {/* What student did right */}
         <FeedbackCard title={t("fb.whatRight")} icon={CheckCircle2} positive items={[
           ...(completedItems.length ? completedItems.map((i) => i.label) : [t("fb.good.opened")]),
           correctRegions ? t("fb.good.regions", { n: correctRegions }) : "",
@@ -790,29 +788,24 @@ function FeedbackSection({
           diagnosisHit ? t("fb.good.dx", { d: diagnosis }) : "",
         ].filter(Boolean)} />
 
-        {/* Missed steps */}
         <FeedbackCard title={t("fb.whatMissed")} icon={Circle} items={
           missedItems.length ? missedItems.map((i) => `${CATEGORY_LABELS[i.category]} — ${i.label}`) : [t("fb.missed.allDone")]
         } />
 
-        {/* Appropriate tests */}
         <FeedbackCard title={t("fb.appropriateTests")} icon={FlaskConical} positive items={
           requestedUseful.length ? requestedUseful.map((r) => r.entry.label) : [t("fb.missedInvs.allDone")]
         } />
 
-        {/* Unnecessary tests */}
         <FeedbackCard title={t("fb.inappropriateTests")} icon={AlertTriangle} items={
           requestedUnnecessary.length ? requestedUnnecessary.map((r) => `${r.entry.label}: ${r.entry.rationale}`) : [t("fb.unnecessary.none")]
         } />
 
-        {/* Missed important tests */}
         {missedUseful.length > 0 && (
           <FeedbackCard title={t("fb.missedInvs")} icon={FileText} items={
             missedUseful.map((e) => t("fb.missedInvs.row", { label: e.label, why: e.rationale }))
           } />
         )}
 
-        {/* Diagnostic reasoning */}
         <FeedbackCard title={t("fb.dxEval")} icon={Brain} items={[
           diagnosisHit ? t("fb.dxEval.ok", { d: diagnosis }) : t("fb.dxEval.expected", { d: clinicalCase.correctDiagnosis }),
           treatmentPlan.trim() ? t("fb.dxEval.txYes") : t("fb.dxEval.txNo"),
