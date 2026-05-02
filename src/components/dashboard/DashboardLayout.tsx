@@ -65,9 +65,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           const Icon = item.icon;
           const active = location.pathname === item.to;
           return (
-            <Link key={item.label} to={item.to} onClick={() => setMobileOpen(false)} className={`mb-3 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-right text-sm font-bold transition ${active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
+            <Link key={item.labelKey} to={item.to} onClick={() => setMobileOpen(false)} className={`mb-3 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-right text-sm font-bold transition ${active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
               <Icon className="h-4 w-4" />
-              <span className="flex-1 text-right">{item.label}</span>
+              <span className="flex-1 text-right">{t(item.labelKey)}</span>
             </Link>
           );
         })}
