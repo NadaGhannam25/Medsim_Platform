@@ -90,7 +90,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div dir="rtl" className="min-h-screen bg-[image:var(--gradient-soft)]">
+    <div dir={dir} className="min-h-screen bg-[image:var(--gradient-soft)]">
       {/* Desktop sidebar */}
       <aside className="fixed right-0 top-0 hidden h-screen w-72 flex-col border-l border-border bg-card p-5 lg:flex">
         <SidebarContent />
