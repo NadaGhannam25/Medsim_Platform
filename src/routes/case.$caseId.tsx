@@ -166,7 +166,7 @@ function CaseJourneyPage() {
   const completedCount = checklistData?.checklist.filter((i) => completedChecklist.has(i.id)).length ?? 0;
   const totalChecklist = checklistData?.checklist.length ?? 0;
 
-  // ===== Final scoring (only revealed in feedback) =====
+  // ===== Final scoring — all criteria out of 10 =====
   const scoreBreakdown = useMemo(() => {
     if (!checklistData) return { interview: 0, exam: 0, investigations: 0, diagnosis: 0, treatment: 0, time: 0, total: 0 };
     const cl = checklistData.checklist;
@@ -175,19 +175,20 @@ function CaseJourneyPage() {
       const done = items.filter((i) => completedChecklist.has(i.id)).length;
       return items.length ? done / items.length : 0;
     };
-    const interview = Math.round(cat("history") * 25);
-    const exam = Math.round(cat("exam") * 15);
+    const interview = Math.round(cat("history") * 10);
+    const exam = Math.round(cat("exam") * 10);
     const usefulRequested = requestedInvestigations.filter((r) => r.entry.useful).length;
     const unnecessaryRequested = requestedInvestigations.filter((r) => !r.entry.useful).length;
     const usefulTotal = checklistData.investigationCatalog.filter((e) => e.useful).length || 1;
-    const investigations = Math.max(0, Math.round((usefulRequested / usefulTotal) * 25 - unnecessaryRequested * 4));
+    const investigations = Math.max(0, Math.min(10, Math.round((usefulRequested / usefulTotal) * 10 - unnecessaryRequested * 2)));
     const diagnosisHit = matchesAny(diagnosis, checklistData.expectedDiagnosisKeywords);
-    const diagnosisScore = (diagnosisHit ? 15 : 4) + (justification.trim().length > 20 ? 5 : 0);
+    const diagnosisScore = (diagnosisHit ? 7 : 2) + (justification.trim().length > 20 ? 3 : 0);
     const treatmentHit = matchesAny(treatmentPlan, checklistData.expectedTreatmentKeywords);
     const treatment = treatmentHit ? 10 : treatmentPlan.trim().length > 10 ? 4 : 0;
-    const time = Math.round((secondsLeft / TIMER_SECONDS) * 5);
-    const total = Math.min(100, interview + exam + investigations + diagnosisScore + time + treatment);
-    return { interview, exam, investigations, diagnosis: diagnosisScore, treatment, time, total };
+    const time = Math.round((secondsLeft / TIMER_SECONDS) * 10);
+    const avg = Math.round((interview + exam + investigations + Math.min(10, diagnosisScore) + Math.min(10, treatment) + Math.min(10, time)) / 6);
+    const total = Math.min(10, avg);
+    return { interview, exam, investigations, diagnosis: Math.min(10, diagnosisScore), treatment: Math.min(10, treatment), time: Math.min(10, time), total };
   }, [checklistData, completedChecklist, requestedInvestigations, diagnosis, justification, treatmentPlan, secondsLeft]);
 
   if (loading || !user) {
