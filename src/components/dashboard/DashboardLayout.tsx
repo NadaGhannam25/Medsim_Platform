@@ -10,18 +10,18 @@ import { useI18n } from "@/lib/i18n";
 import logo from "@/assets/logo.png";
 
 type NavItem = {
-  label: string;
+  labelKey: string;
   icon: typeof Home;
   to: "/dashboard" | "/clinical-cases" | "/previous-cases" | "/performance" | "/settings";
   bottom?: boolean;
 };
 
 const navItems: NavItem[] = [
-  { to: "/dashboard", label: "الرئيسية", icon: Home },
-  { to: "/clinical-cases", label: "الحالات السريرية", icon: ClipboardList },
-  { to: "/previous-cases", label: "حالاتي السابقة", icon: BookOpen },
-  { to: "/performance", label: "تحليلات الأداء", icon: BarChart3 },
-  { to: "/settings", label: "الإعدادات", icon: Settings, bottom: true },
+  { to: "/dashboard", labelKey: "sb.home", icon: Home },
+  { to: "/clinical-cases", labelKey: "sb.cases", icon: ClipboardList },
+  { to: "/previous-cases", labelKey: "sb.previous", icon: BookOpen },
+  { to: "/performance", labelKey: "sb.performance", icon: BarChart3 },
+  { to: "/settings", labelKey: "sb.settings", icon: Settings, bottom: true },
 ];
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
@@ -29,7 +29,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const brandName = lang === "ar" ? "مدسم" : "Madsam";
 
   const handleSignOut = async () => {
