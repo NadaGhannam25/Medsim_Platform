@@ -544,7 +544,7 @@ function CaseJourneyPage() {
               <Button onClick={() => moveTo("treatment")} className="h-12 gap-2 font-black">الانتقال للخطة العلاجية <ChevronLeft className="h-5 w-5" /></Button>
             </div>
           </section>
-          <aside className="space-y-5">
+          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
