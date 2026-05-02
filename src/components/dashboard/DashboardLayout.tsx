@@ -112,7 +112,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
             <div className="hidden text-sm text-muted-foreground lg:block">
-              <span className="font-semibold text-foreground">لوحة التعلّم السريري</span>
+              <span className="font-semibold text-foreground">{t("sb.headerTitle")}</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
