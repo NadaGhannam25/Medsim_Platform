@@ -76,13 +76,13 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             {initials}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-sm font-semibold">{user?.user_metadata?.full_name || "طالب"}</div>
+            <div className="truncate text-sm font-semibold">{user?.user_metadata?.full_name || t("sb.studentFallback")}</div>
             <div className="truncate text-xs text-muted-foreground">{user?.email}</div>
           </div>
         </div>
         <Button variant="ghost" onClick={handleSignOut} className="mt-2 w-full justify-start gap-3 text-muted-foreground">
           <LogOut className="h-4 w-4" />
-          تسجيل الخروج
+          {t("sb.signout")}
         </Button>
       </div>
     </>
