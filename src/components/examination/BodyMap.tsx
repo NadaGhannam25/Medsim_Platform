@@ -1,4 +1,5 @@
 import { type BodyRegionId, REGION_LABELS } from "@/data/clinical-cases";
+import mannequinImg from "@/assets/mannequin.png";
 
 type Props = {
   view: "front" | "back";
@@ -9,6 +10,7 @@ type Props = {
 
 type RegionDef = { id: BodyRegionId; d: string };
 
+// Regions mapped to the mannequin image proportions (viewBox 0 0 200 600)
 const FRONT_REGIONS: RegionDef[] = [
   { id: "head-vertex", d: "M92 18 C98 8 112 8 118 18 L116 34 L94 34 Z" },
   { id: "head-right-frontal", d: "M82 36 C84 24 91 17 100 15 L100 52 L84 52 C82 46 81 41 82 36 Z" },
@@ -80,41 +82,50 @@ const BACK_REGIONS: RegionDef[] = [
   { id: "foot-right", d: "M110 552 L130 552 C139 558 143 569 142 584 L104 579 Z" },
 ];
 
-const FILL_DEFAULT = "hsl(205 55% 95%)";
-const FILL_HOVER = "hsl(203 95% 86%)";
-const FILL_SELECTED = "hsl(350 84% 64%)";
-const FILL_MATCH = "hsl(160 72% 43%)";
-const STROKE = "hsl(214 31% 67%)";
+const FILL_SELECTED = "rgba(239, 68, 68, 0.35)";
+const FILL_MATCH = "rgba(34, 197, 94, 0.35)";
+const FILL_HOVER = "rgba(59, 130, 246, 0.2)";
+const STROKE_SELECTED = "rgba(239, 68, 68, 0.6)";
+const STROKE_MATCH = "rgba(34, 197, 94, 0.6)";
+const STROKE_DEFAULT = "transparent";
 
 export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Props) {
   const regions = view === "front" ? FRONT_REGIONS : BACK_REGIONS;
   const isSelected = (id: BodyRegionId) => selected.includes(id);
   const isMatch = (id: BodyRegionId) => isSelected(id) && expectedRegions.includes(id);
-  const fillFor = (id: BodyRegionId) => isMatch(id) ? FILL_MATCH : isSelected(id) ? FILL_SELECTED : FILL_DEFAULT;
+
+  const fillFor = (id: BodyRegionId) =>
+    isMatch(id) ? FILL_MATCH : isSelected(id) ? FILL_SELECTED : "transparent";
+
+  const strokeFor = (id: BodyRegionId) =>
+    isMatch(id) ? STROKE_MATCH : isSelected(id) ? STROKE_SELECTED : STROKE_DEFAULT;
 
   return (
     <div className="relative mx-auto w-full max-w-[390px]">
-      <svg viewBox="0 0 200 600" className="h-full w-full drop-shadow-sm" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={view === "front" ? "نموذج جسم أمامي تفاعلي" : "نموذج جسم خلفي تفاعلي"}>
-        <defs>
-          <radialGradient id="medicalBodyGlow" cx="50%" cy="38%" r="62%">
-            <stop offset="0%" stopColor="hsl(199 90% 98%)" />
-            <stop offset="100%" stopColor="hsl(211 52% 92%)" />
-          </radialGradient>
-          <filter id="regionShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="hsl(210 40% 35%)" floodOpacity="0.12" />
-          </filter>
-        </defs>
-        <path d="M100 10 C128 10 144 38 137 72 C132 92 128 103 128 116 C145 120 157 130 164 153 C172 185 170 241 166 287 C166 306 154 327 139 331 C144 370 143 418 134 462 C137 498 138 540 137 566 C140 574 142 584 141 590 L105 586 C103 571 104 557 108 548 L105 464 L101 362 L99 362 L95 464 L92 548 C96 557 97 571 95 586 L59 590 C58 584 60 574 63 566 C62 540 63 498 66 462 C57 418 56 370 61 331 C46 327 34 306 34 287 C30 241 28 185 36 153 C43 130 55 120 72 116 C72 103 68 92 63 72 C56 38 72 10 100 10 Z" fill="url(#medicalBodyGlow)" opacity="0.45" />
-        <path d="M100 10 L100 585" stroke="hsl(210 40% 80%)" strokeDasharray="4 7" strokeWidth="0.8" opacity="0.75" />
+      {/* Mannequin image as background */}
+      <img
+        src={mannequinImg}
+        alt={view === "front" ? "نموذج جسم أمامي" : "نموذج جسم خلفي"}
+        className="w-full h-auto select-none pointer-events-none"
+        draggable={false}
+        style={view === "back" ? { transform: "scaleX(-1)" } : undefined}
+      />
+      {/* Invisible interactive SVG overlay */}
+      <svg
+        viewBox="0 0 200 600"
+        className="absolute inset-0 w-full h-full"
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-label={view === "front" ? "نموذج جسم أمامي تفاعلي" : "نموذج جسم خلفي تفاعلي"}
+      >
         {regions.map(({ id, d }) => (
           <path
             key={id}
             d={d}
             fill={fillFor(id)}
-            stroke={STROKE}
-            strokeWidth={1.1}
-            filter={isSelected(id) ? "url(#regionShadow)" : undefined}
-            className="cursor-pointer transition-all duration-150 outline-none hover:stroke-primary focus:stroke-primary"
+            stroke={strokeFor(id)}
+            strokeWidth={1.2}
+            className="cursor-pointer transition-all duration-150 outline-none"
             tabIndex={0}
             role="button"
             aria-pressed={isSelected(id)}
@@ -127,10 +138,12 @@ export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Prop
               }
             }}
             onMouseEnter={(e) => {
-              if (!isSelected(id)) (e.currentTarget as SVGPathElement).setAttribute("fill", FILL_HOVER);
+              if (!isSelected(id))
+                (e.currentTarget as SVGPathElement).setAttribute("fill", FILL_HOVER);
             }}
             onMouseLeave={(e) => {
-              if (!isSelected(id)) (e.currentTarget as SVGPathElement).setAttribute("fill", FILL_DEFAULT);
+              if (!isSelected(id))
+                (e.currentTarget as SVGPathElement).setAttribute("fill", "transparent");
             }}
           >
             <title>{REGION_LABELS[id]}</title>
