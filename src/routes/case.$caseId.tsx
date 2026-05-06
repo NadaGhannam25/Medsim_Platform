@@ -740,7 +740,7 @@ function FeedbackSection({
   return (
     <section className="space-y-5">
       {/* Header with overall score /10 */}
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+      <div className="clinical-sticky-summary rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div>
             <h2 className="text-3xl font-black">{t("fb.title")}</h2>
