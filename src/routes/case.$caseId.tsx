@@ -6,7 +6,7 @@ import {
   Droplets, FileText, FlaskConical, Gauge, HeartPulse, Home, ImageIcon, Info, Lightbulb, Loader2, MessageSquareText, NotebookPen, Pill,
   Save, Send, ShieldAlert, Star, Stethoscope, Target, Thermometer, Wind, XCircle,
 } from "lucide-react";
-import { BodyMap } from "@/components/examination/BodyMap";
+import { BodyMap, type BodyClick } from "@/components/examination/BodyMap";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/case/$caseId")({
 
 type StageId = "interview" | "exam" | "investigations" | "diagnosis" | "treatment" | "feedback";
 type Message = { role: "user" | "assistant"; content: string };
-type Finding = { region: BodyRegionId; severity: Severity; symptom: SymptomType; notes: string; feedback: string; status: "correct" | "close" | "wrong" };
+type Finding = { region: BodyRegionId; severity: Severity; symptom: SymptomType; notes: string; feedback: string; status: "correct" | "close" | "wrong"; x?: number; y?: number };
 type RequestedInvestigation = { entry: InvestigationEntry; requestedText: string };
 type RequestLogEntry = { id: string; text: string; status: "accepted" | "unnecessary" | "unknown"; message: string };
 
@@ -274,16 +274,16 @@ function CaseJourneyPage() {
     }
   };
 
-  const toggleRegion = (region: BodyRegionId) => {
+  const toggleRegion = (region: BodyRegionId, click?: BodyClick) => {
     if (timeUp) return;
     const exists = findings.some((item) => item.region === region);
     if (exists) {
       setFindings((prev) => prev.filter((item) => item.region !== region));
       return;
     }
-    const status = clinicalCase.expectedRegions.includes(region) ? "correct" : clinicalCase.closeRegions.includes(region) ? "close" : "wrong";
+    const status = click?.accuracy ?? (clinicalCase.expectedRegions.includes(region) ? "correct" : clinicalCase.closeRegions.includes(region) ? "close" : "wrong");
     const feedback = status === "correct" ? "موضع ملائم للحالة" : status === "close" ? "قريب — حاول الدقة أكثر" : "موضع غير متوافق";
-    setFindings((prev) => [...prev, { region, severity: "moderate", symptom: "pain", notes: "", feedback, status }]);
+    setFindings((prev) => [...prev, { region, severity: "moderate", symptom: "pain", notes: "", feedback, status, x: click?.x, y: click?.y }]);
   };
 
   const updateFinding = (region: BodyRegionId, patch: Partial<Finding>) => {
@@ -405,7 +405,7 @@ function CaseJourneyPage() {
       {/* INTERVIEW */}
       {stage === "interview" && (
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <section className="rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+          <section className="clinical-sticky-panel rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
             <div className="border-b border-border p-5">
               <h2 className="flex items-center gap-2 text-2xl font-black"><MessageSquareText className="h-6 w-6 text-primary" /> {t("interview.title")}</h2>
               <p className="mt-1 text-base text-muted-foreground">{t("interview.desc")}</p>
@@ -427,7 +427,7 @@ function CaseJourneyPage() {
             </form>
           </section>
 
-          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
+          <aside className="clinical-sticky-panel space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
             <ClinicalCard title={t("interview.notes")} icon={NotebookPen}>
               <div className="space-y-2">
@@ -442,7 +442,7 @@ function CaseJourneyPage() {
       {/* EXAM */}
       {stage === "exam" && (
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
-          <section className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+          <section className="clinical-sticky-panel rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <div><h2 className="text-2xl font-black">حدد موضع الأعراض بدقة</h2><p className="text-base text-muted-foreground">اختر منطقة صغيرة كما تفعل في فحص سريري حقيقي.</p></div>
               <div className="flex rounded-2xl border border-border bg-muted p-1.5">
@@ -451,10 +451,10 @@ function CaseJourneyPage() {
               </div>
             </div>
             <div className="rounded-3xl border border-border bg-gradient-to-b from-accent/70 to-card px-4 py-6">
-              <BodyMap view={bodyView} selected={selectedRegions} expectedRegions={clinicalCase.expectedRegions} onToggle={toggleRegion} />
+              <BodyMap view={bodyView} selected={selectedRegions} expectedRegions={clinicalCase.expectedRegions} closeRegions={clinicalCase.closeRegions} onToggle={toggleRegion} />
             </div>
           </section>
-          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
+          <aside className="clinical-sticky-panel space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
             <ClinicalCard title="المناطق المحددة" icon={Target}>
               {findings.length === 0 ? <EmptyText text="انقر على موضع الألم أو العرض في الجسم." /> : <div className="space-y-3">{findings.map((finding) => (
@@ -514,7 +514,7 @@ function CaseJourneyPage() {
               <Button onClick={() => moveTo("diagnosis")} className="h-12 gap-2 font-black">الانتقال للتشخيص <ChevronLeft className="h-5 w-5" /></Button>
             </div>
           </section>
-          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
+          <aside className="clinical-sticky-panel space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -544,7 +544,7 @@ function CaseJourneyPage() {
               <Button onClick={() => moveTo("treatment")} className="h-12 gap-2 font-black">الانتقال للخطة العلاجية <ChevronLeft className="h-5 w-5" /></Button>
             </div>
           </section>
-          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
+          <aside className="clinical-sticky-panel space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -565,7 +565,7 @@ function CaseJourneyPage() {
               <Button onClick={submitCase} className="h-12 gap-2 bg-[image:var(--gradient-primary)] font-black"><ClipboardCheck className="h-5 w-5" /> {t("case.submit")}</Button>
             </div>
           </section>
-          <aside className="space-y-5 xl:sticky xl:top-[100px] xl:self-start">
+          <aside className="clinical-sticky-panel space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -740,7 +740,7 @@ function FeedbackSection({
   return (
     <section className="space-y-5">
       {/* Header with overall score /10 */}
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+      <div className="clinical-sticky-summary rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div>
             <h2 className="text-3xl font-black">{t("fb.title")}</h2>

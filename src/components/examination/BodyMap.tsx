@@ -6,11 +6,14 @@ type Props = {
   view: "front" | "back";
   selected: BodyRegionId[];
   expectedRegions?: BodyRegionId[];
-  onToggle: (id: BodyRegionId) => void;
+  closeRegions?: BodyRegionId[];
+  onToggle: (id: BodyRegionId, click?: BodyClick) => void;
 };
 
 // Map percentage-based Y ranges to body region IDs
 type ZoneMapping = { yMin: number; yMax: number; xMin: number; xMax: number; id: BodyRegionId };
+export type BodyAccuracy = "correct" | "close" | "wrong";
+export type BodyClick = { x: number; y: number; accuracy: BodyAccuracy };
 
 const FRONT_ZONES: ZoneMapping[] = [
   { yMin: 0, yMax: 7, xMin: 30, xMax: 70, id: "head-vertex" },
@@ -84,6 +87,7 @@ const BACK_ZONES: ZoneMapping[] = [
 ];
 
 type Marker = { x: number; y: number; regionId: BodyRegionId };
+type AccuracyMarker = Marker & { accuracy: BodyAccuracy };
 
 function hitTest(xPct: number, yPct: number, zones: ZoneMapping[]): BodyRegionId | null {
   // Find smallest (most specific) zone that contains the click
@@ -101,12 +105,32 @@ function hitTest(xPct: number, yPct: number, zones: ZoneMapping[]): BodyRegionId
   return best?.id ?? null;
 }
 
-export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Props) {
+function zoneDistance(xPct: number, yPct: number, zone: ZoneMapping) {
+  const centerX = (zone.xMin + zone.xMax) / 2;
+  const centerY = (zone.yMin + zone.yMax) / 2;
+  return Math.hypot(xPct - centerX, yPct - centerY);
+}
+
+export function BodyMap({ view, selected, expectedRegions = [], closeRegions = [], onToggle }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [markers, setMarkers] = useState<AccuracyMarker[]>([]);
   const zones = view === "front" ? FRONT_ZONES : BACK_ZONES;
 
-  const isMatch = (id: BodyRegionId) => selected.includes(id) && expectedRegions.includes(id);
+  const classifyAccuracy = (id: BodyRegionId, xPct: number, yPct: number): BodyAccuracy => {
+    if (expectedRegions.includes(id)) return "correct";
+    const expectedZones = zones.filter((zone) => expectedRegions.includes(zone.id));
+    const nearestExpected = expectedZones.length ? Math.min(...expectedZones.map((zone) => zoneDistance(xPct, yPct, zone))) : Infinity;
+    if (closeRegions.includes(id) || nearestExpected <= 13) return "close";
+    return "wrong";
+  };
+
+  const markerStyle = (accuracy: BodyAccuracy) => {
+    const color = accuracy === "correct" ? "var(--accuracy-correct)" : accuracy === "close" ? "var(--accuracy-close)" : "var(--accuracy-wrong)";
+    return {
+      background: `radial-gradient(circle, color-mix(in oklch, ${color} 48%, transparent) 0%, color-mix(in oklch, ${color} 20%, transparent) 38%, transparent 72%)`,
+      boxShadow: `0 0 0 1px color-mix(in oklch, ${color} 42%, transparent), 0 0 16px color-mix(in oklch, ${color} 36%, transparent)`,
+    };
+  };
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -117,16 +141,17 @@ export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Prop
 
       const regionId = hitTest(xPct, yPct, zones);
       if (!regionId) return;
+      const accuracy = classifyAccuracy(regionId, xPct, yPct);
 
       // Toggle: if already selected, remove marker and deselect
       if (selected.includes(regionId)) {
         setMarkers((prev) => prev.filter((m) => m.regionId !== regionId));
       } else {
-        setMarkers((prev) => [...prev.filter((m) => m.regionId !== regionId), { x: xPct, y: yPct, regionId }]);
+        setMarkers((prev) => [...prev.filter((m) => m.regionId !== regionId), { x: xPct, y: yPct, regionId, accuracy }]);
       }
-      onToggle(regionId);
+      onToggle(regionId, { x: xPct, y: yPct, accuracy });
     },
-    [zones, selected, onToggle],
+    [zones, selected, onToggle, expectedRegions, closeRegions],
   );
 
   return (
@@ -144,9 +169,9 @@ export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Prop
         style={view === "back" ? { transform: "scaleX(-1)" } : undefined}
       />
 
-      {/* Click markers — soft green highlights */}
+      {/* Click markers — accuracy color only, no body segmentation */}
       {markers.map((marker) => {
-        const matched = isMatch(marker.regionId);
+        const color = marker.accuracy === "correct" ? "var(--accuracy-correct)" : marker.accuracy === "close" ? "var(--accuracy-close)" : "var(--accuracy-wrong)";
         return (
           <div
             key={marker.regionId}
@@ -157,28 +182,13 @@ export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Prop
               transform: "translate(-50%, -50%)",
             }}
           >
-            {/* Soft glow */}
+            <div className="h-10 w-10 rounded-full" style={markerStyle(marker.accuracy)} />
             <div
-              className="rounded-full"
+              className="absolute left-1/2 top-1/2 h-2.5 w-2.5 rounded-full"
               style={{
-                width: 38,
-                height: 38,
-                background: matched
-                  ? "radial-gradient(circle, rgba(34,197,94,0.45) 0%, rgba(34,197,94,0) 70%)"
-                  : "radial-gradient(circle, rgba(34,197,94,0.35) 0%, rgba(34,197,94,0) 70%)",
-              }}
-            />
-            {/* Center dot */}
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: 10,
-                height: 10,
-                top: "50%",
-                left: "50%",
                 transform: "translate(-50%, -50%)",
-                backgroundColor: matched ? "rgba(34,197,94,0.8)" : "rgba(34,197,94,0.6)",
-                boxShadow: "0 0 6px rgba(34,197,94,0.4)",
+                backgroundColor: color,
+                boxShadow: `0 0 8px color-mix(in oklch, ${color} 60%, transparent)`,
               }}
             />
           </div>
