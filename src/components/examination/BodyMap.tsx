@@ -6,11 +6,14 @@ type Props = {
   view: "front" | "back";
   selected: BodyRegionId[];
   expectedRegions?: BodyRegionId[];
-  onToggle: (id: BodyRegionId) => void;
+  closeRegions?: BodyRegionId[];
+  onToggle: (id: BodyRegionId, click?: BodyClick) => void;
 };
 
 // Map percentage-based Y ranges to body region IDs
 type ZoneMapping = { yMin: number; yMax: number; xMin: number; xMax: number; id: BodyRegionId };
+export type BodyAccuracy = "correct" | "close" | "wrong";
+export type BodyClick = { x: number; y: number; accuracy: BodyAccuracy };
 
 const FRONT_ZONES: ZoneMapping[] = [
   { yMin: 0, yMax: 7, xMin: 30, xMax: 70, id: "head-vertex" },
@@ -84,6 +87,7 @@ const BACK_ZONES: ZoneMapping[] = [
 ];
 
 type Marker = { x: number; y: number; regionId: BodyRegionId };
+type AccuracyMarker = Marker & { accuracy: BodyAccuracy };
 
 function hitTest(xPct: number, yPct: number, zones: ZoneMapping[]): BodyRegionId | null {
   // Find smallest (most specific) zone that contains the click
@@ -103,10 +107,22 @@ function hitTest(xPct: number, yPct: number, zones: ZoneMapping[]): BodyRegionId
 
 export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [markers, setMarkers] = useState<AccuracyMarker[]>([]);
   const zones = view === "front" ? FRONT_ZONES : BACK_ZONES;
 
-  const isMatch = (id: BodyRegionId) => selected.includes(id) && expectedRegions.includes(id);
+  const classifyAccuracy = (id: BodyRegionId): BodyAccuracy => {
+    if (expectedRegions.includes(id)) return "correct";
+    if (closeRegions.includes(id)) return "close";
+    return "wrong";
+  };
+
+  const markerStyle = (accuracy: BodyAccuracy) => {
+    const color = accuracy === "correct" ? "var(--accuracy-correct)" : accuracy === "close" ? "var(--accuracy-close)" : "var(--accuracy-wrong)";
+    return {
+      background: `radial-gradient(circle, color-mix(in oklch, ${color} 48%, transparent) 0%, color-mix(in oklch, ${color} 20%, transparent) 38%, transparent 72%)`,
+      boxShadow: `0 0 0 1px color-mix(in oklch, ${color} 42%, transparent), 0 0 16px color-mix(in oklch, ${color} 36%, transparent)`,
+    };
+  };
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -117,16 +133,17 @@ export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Prop
 
       const regionId = hitTest(xPct, yPct, zones);
       if (!regionId) return;
+      const accuracy = classifyAccuracy(regionId);
 
       // Toggle: if already selected, remove marker and deselect
       if (selected.includes(regionId)) {
         setMarkers((prev) => prev.filter((m) => m.regionId !== regionId));
       } else {
-        setMarkers((prev) => [...prev.filter((m) => m.regionId !== regionId), { x: xPct, y: yPct, regionId }]);
+        setMarkers((prev) => [...prev.filter((m) => m.regionId !== regionId), { x: xPct, y: yPct, regionId, accuracy }]);
       }
-      onToggle(regionId);
+      onToggle(regionId, { x: xPct, y: yPct, accuracy });
     },
-    [zones, selected, onToggle],
+    [zones, selected, onToggle, expectedRegions, closeRegions],
   );
 
   return (
