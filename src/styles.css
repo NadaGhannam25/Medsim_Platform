@@ -45,6 +45,9 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-accuracy-correct: var(--accuracy-correct);
+  --color-accuracy-close: var(--accuracy-close);
+  --color-accuracy-wrong: var(--accuracy-wrong);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -83,6 +86,9 @@
   --accent-foreground: oklch(0.35 0.12 280);
   --destructive: oklch(0.65 0.2 20);
   --destructive-foreground: oklch(0.99 0 0);
+  --accuracy-correct: oklch(0.62 0.17 150);
+  --accuracy-close: oklch(0.72 0.16 65);
+  --accuracy-wrong: oklch(0.62 0.2 25);
   --border: oklch(0.93 0.025 250);
   --input: oklch(0.93 0.025 250);
   --ring: oklch(0.62 0.13 255);
@@ -124,6 +130,9 @@
   --accent-foreground: oklch(0.984 0.003 247.858);
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.984 0.003 247.858);
+  --accuracy-correct: oklch(0.72 0.16 150);
+  --accuracy-close: oklch(0.78 0.15 70);
+  --accuracy-wrong: oklch(0.72 0.19 25);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.551 0.027 264.364);
@@ -161,5 +170,33 @@
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
     letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  .clinical-sticky-panel {
+    position: sticky;
+    top: 5.75rem;
+    align-self: start;
+    max-height: calc(100vh - 7rem);
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    z-index: 15;
+  }
+
+  .clinical-sticky-summary {
+    position: sticky;
+    top: 5.75rem;
+    z-index: 15;
+  }
+
+  @media (max-width: 1279px) {
+    .clinical-sticky-panel,
+    .clinical-sticky-summary {
+      position: relative;
+      top: auto;
+      max-height: none;
+      overflow: visible;
+    }
   }
 }
