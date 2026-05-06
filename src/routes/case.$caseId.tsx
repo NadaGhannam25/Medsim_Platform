@@ -405,7 +405,7 @@ function CaseJourneyPage() {
       {/* INTERVIEW */}
       {stage === "interview" && (
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <section className="rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+          <section className="clinical-sticky-panel rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
             <div className="border-b border-border p-5">
               <h2 className="flex items-center gap-2 text-2xl font-black"><MessageSquareText className="h-6 w-6 text-primary" /> {t("interview.title")}</h2>
               <p className="mt-1 text-base text-muted-foreground">{t("interview.desc")}</p>
@@ -442,7 +442,7 @@ function CaseJourneyPage() {
       {/* EXAM */}
       {stage === "exam" && (
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
-          <section className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+          <section className="clinical-sticky-panel rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <div><h2 className="text-2xl font-black">حدد موضع الأعراض بدقة</h2><p className="text-base text-muted-foreground">اختر منطقة صغيرة كما تفعل في فحص سريري حقيقي.</p></div>
               <div className="flex rounded-2xl border border-border bg-muted p-1.5">
