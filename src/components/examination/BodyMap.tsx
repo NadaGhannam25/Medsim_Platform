@@ -105,7 +105,7 @@ function hitTest(xPct: number, yPct: number, zones: ZoneMapping[]): BodyRegionId
   return best?.id ?? null;
 }
 
-export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Props) {
+export function BodyMap({ view, selected, expectedRegions = [], closeRegions = [], onToggle }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [markers, setMarkers] = useState<AccuracyMarker[]>([]);
   const zones = view === "front" ? FRONT_ZONES : BACK_ZONES;
@@ -161,9 +161,9 @@ export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Prop
         style={view === "back" ? { transform: "scaleX(-1)" } : undefined}
       />
 
-      {/* Click markers — soft green highlights */}
+      {/* Click markers — accuracy color only, no body segmentation */}
       {markers.map((marker) => {
-        const matched = isMatch(marker.regionId);
+        const color = marker.accuracy === "correct" ? "var(--accuracy-correct)" : marker.accuracy === "close" ? "var(--accuracy-close)" : "var(--accuracy-wrong)";
         return (
           <div
             key={marker.regionId}
@@ -174,28 +174,13 @@ export function BodyMap({ view, selected, expectedRegions = [], onToggle }: Prop
               transform: "translate(-50%, -50%)",
             }}
           >
-            {/* Soft glow */}
+            <div className="h-10 w-10 rounded-full" style={markerStyle(marker.accuracy)} />
             <div
-              className="rounded-full"
+              className="absolute left-1/2 top-1/2 h-2.5 w-2.5 rounded-full"
               style={{
-                width: 38,
-                height: 38,
-                background: matched
-                  ? "radial-gradient(circle, rgba(34,197,94,0.45) 0%, rgba(34,197,94,0) 70%)"
-                  : "radial-gradient(circle, rgba(34,197,94,0.35) 0%, rgba(34,197,94,0) 70%)",
-              }}
-            />
-            {/* Center dot */}
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: 10,
-                height: 10,
-                top: "50%",
-                left: "50%",
                 transform: "translate(-50%, -50%)",
-                backgroundColor: matched ? "rgba(34,197,94,0.8)" : "rgba(34,197,94,0.6)",
-                boxShadow: "0 0 6px rgba(34,197,94,0.4)",
+                backgroundColor: color,
+                boxShadow: `0 0 8px color-mix(in oklch, ${color} 60%, transparent)`,
               }}
             />
           </div>
