@@ -6,7 +6,7 @@ import {
   Droplets, FileText, FlaskConical, Gauge, HeartPulse, Home, ImageIcon, Info, Lightbulb, Loader2, MessageSquareText, NotebookPen, Pill,
   Save, Send, ShieldAlert, Star, Stethoscope, Target, Thermometer, Wind, XCircle,
 } from "lucide-react";
-import { BodyMap } from "@/components/examination/BodyMap";
+import { BodyMap, type BodyClick } from "@/components/examination/BodyMap";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/case/$caseId")({
 
 type StageId = "interview" | "exam" | "investigations" | "diagnosis" | "treatment" | "feedback";
 type Message = { role: "user" | "assistant"; content: string };
-type Finding = { region: BodyRegionId; severity: Severity; symptom: SymptomType; notes: string; feedback: string; status: "correct" | "close" | "wrong" };
+type Finding = { region: BodyRegionId; severity: Severity; symptom: SymptomType; notes: string; feedback: string; status: "correct" | "close" | "wrong"; x?: number; y?: number };
 type RequestedInvestigation = { entry: InvestigationEntry; requestedText: string };
 type RequestLogEntry = { id: string; text: string; status: "accepted" | "unnecessary" | "unknown"; message: string };
 
@@ -274,16 +274,16 @@ function CaseJourneyPage() {
     }
   };
 
-  const toggleRegion = (region: BodyRegionId) => {
+  const toggleRegion = (region: BodyRegionId, click?: BodyClick) => {
     if (timeUp) return;
     const exists = findings.some((item) => item.region === region);
     if (exists) {
       setFindings((prev) => prev.filter((item) => item.region !== region));
       return;
     }
-    const status = clinicalCase.expectedRegions.includes(region) ? "correct" : clinicalCase.closeRegions.includes(region) ? "close" : "wrong";
+    const status = click?.accuracy ?? (clinicalCase.expectedRegions.includes(region) ? "correct" : clinicalCase.closeRegions.includes(region) ? "close" : "wrong");
     const feedback = status === "correct" ? "موضع ملائم للحالة" : status === "close" ? "قريب — حاول الدقة أكثر" : "موضع غير متوافق";
-    setFindings((prev) => [...prev, { region, severity: "moderate", symptom: "pain", notes: "", feedback, status }]);
+    setFindings((prev) => [...prev, { region, severity: "moderate", symptom: "pain", notes: "", feedback, status, x: click?.x, y: click?.y }]);
   };
 
   const updateFinding = (region: BodyRegionId, patch: Partial<Finding>) => {
