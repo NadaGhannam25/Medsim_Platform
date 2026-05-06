@@ -105,14 +105,22 @@ function hitTest(xPct: number, yPct: number, zones: ZoneMapping[]): BodyRegionId
   return best?.id ?? null;
 }
 
+function zoneDistance(xPct: number, yPct: number, zone: ZoneMapping) {
+  const centerX = (zone.xMin + zone.xMax) / 2;
+  const centerY = (zone.yMin + zone.yMax) / 2;
+  return Math.hypot(xPct - centerX, yPct - centerY);
+}
+
 export function BodyMap({ view, selected, expectedRegions = [], closeRegions = [], onToggle }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [markers, setMarkers] = useState<AccuracyMarker[]>([]);
   const zones = view === "front" ? FRONT_ZONES : BACK_ZONES;
 
-  const classifyAccuracy = (id: BodyRegionId): BodyAccuracy => {
+  const classifyAccuracy = (id: BodyRegionId, xPct: number, yPct: number): BodyAccuracy => {
     if (expectedRegions.includes(id)) return "correct";
-    if (closeRegions.includes(id)) return "close";
+    const expectedZones = zones.filter((zone) => expectedRegions.includes(zone.id));
+    const nearestExpected = expectedZones.length ? Math.min(...expectedZones.map((zone) => zoneDistance(xPct, yPct, zone))) : Infinity;
+    if (closeRegions.includes(id) || nearestExpected <= 13) return "close";
     return "wrong";
   };
 
@@ -133,7 +141,7 @@ export function BodyMap({ view, selected, expectedRegions = [], closeRegions = [
 
       const regionId = hitTest(xPct, yPct, zones);
       if (!regionId) return;
-      const accuracy = classifyAccuracy(regionId);
+      const accuracy = classifyAccuracy(regionId, xPct, yPct);
 
       // Toggle: if already selected, remove marker and deselect
       if (selected.includes(regionId)) {
