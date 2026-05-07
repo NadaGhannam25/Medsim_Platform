@@ -405,12 +405,12 @@ function CaseJourneyPage() {
       {/* INTERVIEW */}
       {stage === "interview" && (
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <section className="clinical-sticky-panel rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+          <section className="rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
             <div className="border-b border-border p-5">
               <h2 className="flex items-center gap-2 text-2xl font-black"><MessageSquareText className="h-6 w-6 text-primary" /> {t("interview.title")}</h2>
               <p className="mt-1 text-base text-muted-foreground">{t("interview.desc")}</p>
             </div>
-            <div ref={scrollRef} className="h-[440px] space-y-4 overflow-y-auto p-5">
+            <div ref={scrollRef} className="min-h-[300px] space-y-4 p-5">
               {messages.map((message, index) => (
                 <div key={index} className={`flex ${message.role === "user" ? "justify-start" : "justify-end"}`}>
                   <div className={`max-w-[78%] rounded-3xl px-5 py-4 text-base leading-relaxed shadow-sm ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}>
@@ -419,7 +419,7 @@ function CaseJourneyPage() {
                 </div>
               ))}
             </div>
-            <form onSubmit={sendQuestion} className="border-t border-border p-5">
+            <form onSubmit={sendQuestion} className="sticky bottom-0 border-t border-border bg-card p-5 rounded-b-3xl">
               <div className="flex gap-3">
                 <Input value={question} onChange={(event) => setQuestion(event.target.value)} disabled={timeUp} className="h-12 text-base" placeholder={t("interview.placeholder")} />
                 <Button disabled={streaming || timeUp} className="h-12 gap-2 px-6 font-black"><Send className="h-4 w-4" /> {t("interview.send")}</Button>
@@ -427,7 +427,7 @@ function CaseJourneyPage() {
             </form>
           </section>
 
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
             <ClinicalCard title={t("interview.notes")} icon={NotebookPen}>
               <div className="space-y-2">
