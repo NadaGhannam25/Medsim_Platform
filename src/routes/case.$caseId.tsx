@@ -442,7 +442,7 @@ function CaseJourneyPage() {
       {/* EXAM */}
       {stage === "exam" && (
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
-          <section className="clinical-sticky-panel rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+          <section className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <div><h2 className="text-2xl font-black">حدد موضع الأعراض بدقة</h2><p className="text-base text-muted-foreground">اختر منطقة صغيرة كما تفعل في فحص سريري حقيقي.</p></div>
               <div className="flex rounded-2xl border border-border bg-muted p-1.5">
@@ -454,7 +454,7 @@ function CaseJourneyPage() {
               <BodyMap view={bodyView} selected={selectedRegions} expectedRegions={clinicalCase.expectedRegions} closeRegions={clinicalCase.closeRegions} onToggle={toggleRegion} />
             </div>
           </section>
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
             <ClinicalCard title="المناطق المحددة" icon={Target}>
               {findings.length === 0 ? <EmptyText text="انقر على موضع الألم أو العرض في الجسم." /> : <div className="space-y-3">{findings.map((finding) => (
@@ -514,7 +514,7 @@ function CaseJourneyPage() {
               <Button onClick={() => moveTo("diagnosis")} className="h-12 gap-2 font-black">الانتقال للتشخيص <ChevronLeft className="h-5 w-5" /></Button>
             </div>
           </section>
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -544,7 +544,7 @@ function CaseJourneyPage() {
               <Button onClick={() => moveTo("treatment")} className="h-12 gap-2 font-black">الانتقال للخطة العلاجية <ChevronLeft className="h-5 w-5" /></Button>
             </div>
           </section>
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -565,7 +565,7 @@ function CaseJourneyPage() {
               <Button onClick={submitCase} className="h-12 gap-2 bg-[image:var(--gradient-primary)] font-black"><ClipboardCheck className="h-5 w-5" /> {t("case.submit")}</Button>
             </div>
           </section>
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
