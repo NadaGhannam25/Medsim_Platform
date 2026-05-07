@@ -84,7 +84,10 @@ function CaseJourneyPage() {
   }, [clinicalCase, messages.length]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    if (scrollRef.current) {
+      const el = scrollRef.current;
+      el.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
   }, [messages]);
 
   // Timer
