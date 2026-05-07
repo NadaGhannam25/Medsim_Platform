@@ -178,9 +178,6 @@
     position: sticky;
     top: 5.75rem;
     align-self: start;
-    max-height: calc(100vh - 7rem);
-    overflow-y: auto;
-    scrollbar-gutter: stable;
     z-index: 15;
   }
 

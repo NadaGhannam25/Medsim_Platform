@@ -84,7 +84,10 @@ function CaseJourneyPage() {
   }, [clinicalCase, messages.length]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    if (scrollRef.current) {
+      const el = scrollRef.current;
+      el.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
   }, [messages]);
 
   // Timer
@@ -405,12 +408,12 @@ function CaseJourneyPage() {
       {/* INTERVIEW */}
       {stage === "interview" && (
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <section className="clinical-sticky-panel rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+          <section className="rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
             <div className="border-b border-border p-5">
               <h2 className="flex items-center gap-2 text-2xl font-black"><MessageSquareText className="h-6 w-6 text-primary" /> {t("interview.title")}</h2>
               <p className="mt-1 text-base text-muted-foreground">{t("interview.desc")}</p>
             </div>
-            <div ref={scrollRef} className="h-[440px] space-y-4 overflow-y-auto p-5">
+            <div ref={scrollRef} className="min-h-[300px] space-y-4 p-5">
               {messages.map((message, index) => (
                 <div key={index} className={`flex ${message.role === "user" ? "justify-start" : "justify-end"}`}>
                   <div className={`max-w-[78%] rounded-3xl px-5 py-4 text-base leading-relaxed shadow-sm ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}>
@@ -419,7 +422,7 @@ function CaseJourneyPage() {
                 </div>
               ))}
             </div>
-            <form onSubmit={sendQuestion} className="border-t border-border p-5">
+            <form onSubmit={sendQuestion} className="sticky bottom-0 border-t border-border bg-card p-5 rounded-b-3xl">
               <div className="flex gap-3">
                 <Input value={question} onChange={(event) => setQuestion(event.target.value)} disabled={timeUp} className="h-12 text-base" placeholder={t("interview.placeholder")} />
                 <Button disabled={streaming || timeUp} className="h-12 gap-2 px-6 font-black"><Send className="h-4 w-4" /> {t("interview.send")}</Button>
@@ -427,7 +430,7 @@ function CaseJourneyPage() {
             </form>
           </section>
 
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
             <ClinicalCard title={t("interview.notes")} icon={NotebookPen}>
               <div className="space-y-2">
@@ -442,7 +445,7 @@ function CaseJourneyPage() {
       {/* EXAM */}
       {stage === "exam" && (
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
-          <section className="clinical-sticky-panel rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+          <section className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <div><h2 className="text-2xl font-black">حدد موضع الأعراض بدقة</h2><p className="text-base text-muted-foreground">اختر منطقة صغيرة كما تفعل في فحص سريري حقيقي.</p></div>
               <div className="flex rounded-2xl border border-border bg-muted p-1.5">
@@ -454,7 +457,7 @@ function CaseJourneyPage() {
               <BodyMap view={bodyView} selected={selectedRegions} expectedRegions={clinicalCase.expectedRegions} closeRegions={clinicalCase.closeRegions} onToggle={toggleRegion} />
             </div>
           </section>
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
             <ClinicalCard title="المناطق المحددة" icon={Target}>
               {findings.length === 0 ? <EmptyText text="انقر على موضع الألم أو العرض في الجسم." /> : <div className="space-y-3">{findings.map((finding) => (
@@ -514,7 +517,7 @@ function CaseJourneyPage() {
               <Button onClick={() => moveTo("diagnosis")} className="h-12 gap-2 font-black">الانتقال للتشخيص <ChevronLeft className="h-5 w-5" /></Button>
             </div>
           </section>
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -544,7 +547,7 @@ function CaseJourneyPage() {
               <Button onClick={() => moveTo("treatment")} className="h-12 gap-2 font-black">الانتقال للخطة العلاجية <ChevronLeft className="h-5 w-5" /></Button>
             </div>
           </section>
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -565,7 +568,7 @@ function CaseJourneyPage() {
               <Button onClick={submitCase} className="h-12 gap-2 bg-[image:var(--gradient-primary)] font-black"><ClipboardCheck className="h-5 w-5" /> {t("case.submit")}</Button>
             </div>
           </section>
-          <aside className="clinical-sticky-panel space-y-5">
+          <aside className="xl:sticky xl:top-[5.75rem] xl:self-start space-y-5">
             <ChecklistPanel checklistByCategory={checklistByCategory} completed={completedChecklist} />
           </aside>
         </div>
@@ -740,7 +743,7 @@ function FeedbackSection({
   return (
     <section className="space-y-5">
       {/* Header with overall score /10 */}
-      <div className="clinical-sticky-summary rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+      <div className="sticky top-[5.75rem] z-15 rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div>
             <h2 className="text-3xl font-black">{t("fb.title")}</h2>
