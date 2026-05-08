@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { type BodyRegionId, REGION_LABELS } from "@/data/clinical-cases";
-import mannequinImg from "@/assets/mannequin.png";
+import mannequinFrontImg from "@/assets/mannequin.png";
+import mannequinBackImg from "@/assets/mannequin-back.png";
 
 type Props = {
   view: "front" | "back";
@@ -162,11 +163,10 @@ export function BodyMap({ view, selected, expectedRegions = [], closeRegions = [
     >
       {/* Mannequin image */}
       <img
-        src={mannequinImg}
+        src={view === "front" ? mannequinFrontImg : mannequinBackImg}
         alt={view === "front" ? "نموذج جسم أمامي" : "نموذج جسم خلفي"}
         className="w-full h-auto pointer-events-none"
         draggable={false}
-        style={view === "back" ? { transform: "scaleX(-1)" } : undefined}
       />
 
       {/* Click markers — accuracy color only, no body segmentation */}

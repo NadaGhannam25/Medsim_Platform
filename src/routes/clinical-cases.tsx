@@ -94,9 +94,7 @@ function ClinicalCasesPage() {
               : t("cases.subtitle")}
           </p>
         </div>
-        <Button onClick={generateCases} className="h-12 gap-2 bg-[image:var(--gradient-primary)] text-base font-black shadow-[var(--shadow-soft)]">
-          <FilePlus2 className="h-5 w-5" /> {t("cases.generate")}
-        </Button>
+{/* Generate button removed — users select from existing medical blocks */}
       </div>
 
       <div className="mb-6 grid gap-4 md:grid-cols-3">
