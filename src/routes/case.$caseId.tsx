@@ -20,6 +20,9 @@ import {
   type ChecklistCategory, type ChecklistItem, type InvestigationEntry, type LabRow,
 } from "@/data/case-checklist";
 import { useI18n } from "@/lib/i18n";
+import ecg12leadImg from "@/assets/ecg-12lead.png";
+import cxrNormalImg from "@/assets/cxr-normal.png";
+import cxrAbnormalImg from "@/assets/cxr-abnormal.png";
 
 export const Route = createFileRoute("/case/$caseId")({
   component: CaseJourneyPage,
