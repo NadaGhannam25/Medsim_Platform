@@ -312,11 +312,7 @@ function CaseJourneyPage() {
     }
     setRequestedInvestigations((prev) => [...prev, { entry: matched, requestedText: text }]);
     markChecklistByText(text, "investigations");
-    if (matched.useful) {
-      setRequestLog((prev) => [...prev, { id, text, status: "accepted", message: `تم قبول الطلب: ${matched.label} مناسب لهذه الحالة.` }]);
-    } else {
-      setRequestLog((prev) => [...prev, { id, text, status: "unnecessary", message: `${matched.label}: ${matched.rationale}` }]);
-    }
+    setRequestLog((prev) => [...prev, { id, text, status: "accepted", message: `تم طلب: ${matched.label}` }]);
   };
 
   const minutes = Math.floor(secondsLeft / 60);
@@ -486,7 +482,7 @@ function CaseJourneyPage() {
           <section className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
             <div className="mb-5">
               <h2 className="flex items-center gap-2 text-2xl font-black"><FlaskConical className="h-6 w-6 text-primary" /> اطلب فحصًا أو أشعة</h2>
-              <p className="mt-1 text-base text-muted-foreground">اكتب يدويًا اسم الفحص الذي تريد طلبه. مثال: <span className="font-black text-foreground">أحتاج أشعة صدر</span> — <span className="font-black text-foreground">أطلب CBC</span> — <span className="font-black text-foreground">أحتاج ECG</span>.</p>
+              <p className="mt-1 text-base text-muted-foreground">اكتب يدويًا اسم الفحص الذي تريد طلبه.</p>
             </div>
             <form onSubmit={submitInvestigationRequest} className="mb-5 flex gap-3">
               <Input value={investigationInput} onChange={(e) => setInvestigationInput(e.target.value)} disabled={timeUp} className="h-12 text-base" placeholder="اكتب الفحص المطلوب…" />
@@ -509,7 +505,7 @@ function CaseJourneyPage() {
               {requestedInvestigations.length === 0 ? (
                 <EmptyText text="لا توجد نتائج بعد — اطلب فحصًا لتظهر نتيجته." />
               ) : (
-                requestedInvestigations.map((req) => <ResultCard key={req.entry.id} entry={req.entry} />)
+                requestedInvestigations.map((req) => <ResultCard key={req.entry.id} entry={req.entry} caseId={caseId} />)
               )}
             </div>
 
@@ -625,79 +621,71 @@ function ChecklistPanel({ checklistByCategory, completed }: { checklistByCategor
   );
 }
 
-function ResultCard({ entry }: { entry: InvestigationEntry }) {
+function ResultCard({ entry, caseId }: { entry: InvestigationEntry; caseId: string }) {
   return (
     <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
       <div className="flex items-center gap-3 border-b border-border bg-primary/5 px-5 py-3">
         {entry.result.kind === "lab" ? <FlaskConical className="h-5 w-5 text-primary" /> : entry.result.kind === "imaging" ? <ImageIcon className="h-5 w-5 text-primary" /> : <Activity className="h-5 w-5 text-primary" />}
         <div className="flex-1"><div className="text-xs font-black text-primary">نتيجة الفحص</div><div className="text-base font-black text-foreground">{entry.result.title}</div></div>
-        {entry.useful ? <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-black text-primary">طلب مناسب</span> : <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-800">قابل للنقاش</span>}
       </div>
       <div className="p-5">
-        {entry.result.kind === "lab" && <LabResult rows={entry.result.rows} interpretation={entry.result.interpretation} />}
-        {entry.result.kind === "imaging" && <ImagingResult modality={entry.result.modality} impression={entry.result.impression} notes={entry.result.notes} />}
-        {entry.result.kind === "ecg" && <EcgResult rhythm={entry.result.rhythm} rate={entry.result.rate} impression={entry.result.impression} notes={entry.result.notes} />}
+        {entry.result.kind === "lab" && <LabResult rows={entry.result.rows} />}
+        {entry.result.kind === "imaging" && <ImagingResult entryId={entry.id} modality={entry.result.modality} caseId={caseId} />}
+        {entry.result.kind === "ecg" && <EcgResult />}
       </div>
     </div>
   );
 }
 
-function LabResult({ rows, interpretation }: { rows: LabRow[]; interpretation: string }) {
+function LabResult({ rows }: { rows: LabRow[] }) {
   return (
-    <div>
-      <div className="overflow-hidden rounded-2xl border border-border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted text-xs font-black text-muted-foreground"><tr><th className="px-3 py-2 text-right">الفحص</th><th className="px-3 py-2 text-right">النتيجة</th><th className="px-3 py-2 text-right">المعدل الطبيعي</th></tr></thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.name} className="border-t border-border">
-                <td className="px-3 py-2 font-bold">{r.name}</td>
-                <td className={`px-3 py-2 font-black ${r.flag === "high" ? "text-destructive" : r.flag === "low" ? "text-amber-700" : "text-foreground"}`}>
-                  {r.value}{r.flag === "high" ? " ↑" : r.flag === "low" ? " ↓" : ""}
-                </td>
-                <td className="px-3 py-2 text-muted-foreground">{r.range}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-3 rounded-2xl bg-muted/50 p-3 text-sm font-bold"><span className="text-primary">قراءة مبدئية:</span> {interpretation}</div>
+    <div className="overflow-hidden rounded-2xl border border-border">
+      <table className="w-full text-sm">
+        <thead className="bg-muted text-xs font-black text-muted-foreground"><tr><th className="px-3 py-2 text-right">الفحص</th><th className="px-3 py-2 text-right">النتيجة</th><th className="px-3 py-2 text-right">المعدل الطبيعي</th></tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.name} className="border-t border-border">
+              <td className="px-3 py-2 font-bold">{r.name}</td>
+              <td className={`px-3 py-2 font-black ${r.flag === "high" ? "text-destructive" : r.flag === "low" ? "text-amber-700" : "text-foreground"}`}>
+                {r.value}{r.flag === "high" ? " ↑" : r.flag === "low" ? " ↓" : ""}
+              </td>
+              <td className="px-3 py-2 text-muted-foreground">{r.range}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
 
-function ImagingResult({ modality, impression, notes }: { modality: string; impression: string; notes: string }) {
-  return (
-    <div>
-      <div className="flex h-44 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-900 to-slate-700 text-center">
-        <div className="text-slate-200">
-          <ImageIcon className="mx-auto h-10 w-10 opacity-70" />
-          <div className="mt-2 text-sm font-black">صورة الأشعة — {modality}</div>
-          <div className="text-xs opacity-70">عرض تعليمي</div>
-        </div>
+const ABNORMAL_CXR_CASES = ["case-005"];
+
+function ImagingResult({ entryId, modality, caseId }: { entryId: string; modality: string; caseId: string }) {
+  const isCxr = entryId === "cxr";
+  if (isCxr) {
+    const isAbnormal = ABNORMAL_CXR_CASES.includes(caseId);
+    const imgSrc = isAbnormal ? cxrAbnormalImg : cxrNormalImg;
+    return (
+      <div>
+        <img src={imgSrc} alt={`Chest X-ray — ${modality}`} className="w-full rounded-2xl" />
       </div>
-      <div className="mt-3 space-y-2 text-sm">
-        <div className="rounded-2xl bg-muted/50 p-3 font-bold"><span className="text-primary">الانطباع:</span> {impression}</div>
-        <div className="rounded-2xl bg-muted/30 p-3 font-bold text-muted-foreground"><span className="text-primary">ملاحظات سريرية:</span> {notes}</div>
+    );
+  }
+  return (
+    <div className="flex h-44 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-900 to-slate-700 text-center">
+      <div className="text-slate-200">
+        <ImageIcon className="mx-auto h-10 w-10 opacity-70" />
+        <div className="mt-2 text-sm font-black">صورة الأشعة — {modality}</div>
+        <div className="text-xs opacity-70">عرض تعليمي</div>
       </div>
     </div>
   );
 }
 
-function EcgResult({ rhythm, rate, impression, notes }: { rhythm: string; rate: string; impression: string; notes: string }) {
+function EcgResult() {
   return (
     <div>
-      <div className="rounded-2xl border border-border bg-emerald-950 p-4">
-        <svg viewBox="0 0 400 80" className="h-20 w-full text-emerald-400">
-          <path d="M0 40 L40 40 L48 20 L56 60 L64 30 L72 50 L80 40 L120 40 L128 25 L136 55 L144 40 L200 40 L208 18 L216 62 L224 32 L232 48 L240 40 L300 40 L308 22 L316 58 L324 40 L400 40" fill="none" stroke="currentColor" strokeWidth="1.5" />
-        </svg>
-        <div className="mt-2 grid grid-cols-2 gap-2 text-xs font-black text-emerald-200">
-          <div>Rhythm: <span className="text-emerald-100">{rhythm}</span></div>
-          <div>Rate: <span className="text-emerald-100">{rate}</span></div>
-        </div>
-      </div>
-      <div className="mt-3 space-y-2 text-sm">
-        <div className="rounded-2xl bg-muted/50 p-3 font-bold"><span className="text-primary">الانطباع:</span> {impression}</div>
+      <img src={ecg12leadImg} alt="ECG — 12 lead" className="w-full rounded-2xl" />
         <div className="rounded-2xl bg-muted/30 p-3 font-bold text-muted-foreground"><span className="text-primary">ملاحظات سريرية:</span> {notes}</div>
       </div>
     </div>
