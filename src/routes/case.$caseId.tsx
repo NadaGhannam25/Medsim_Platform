@@ -495,8 +495,8 @@ function CaseJourneyPage() {
             {requestLog.length > 0 && (
               <div className="mb-5 space-y-2">
                 {requestLog.slice().reverse().slice(0, 5).map((log) => (
-                  <div key={log.id} className={`flex items-start gap-2 rounded-2xl border p-3 text-sm font-bold ${log.status === "accepted" ? "border-primary/30 bg-primary/5 text-foreground" : log.status === "unnecessary" ? "border-amber-500/40 bg-amber-50 text-amber-900" : "border-destructive/30 bg-destructive/5 text-destructive"}`}>
-                    {log.status === "accepted" ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> : log.status === "unnecessary" ? <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" /> : <XCircle className="mt-0.5 h-4 w-4 shrink-0" />}
+                  <div key={log.id} className={`flex items-start gap-2 rounded-2xl border p-3 text-sm font-bold ${log.status === "unknown" ? "border-destructive/30 bg-destructive/5 text-destructive" : "border-primary/30 bg-primary/5 text-foreground"}`}>
+                    {log.status === "unknown" ? <XCircle className="mt-0.5 h-4 w-4 shrink-0" /> : <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />}
                     <div><div className="font-black">{log.text}</div><div className="text-xs font-medium opacity-90">{log.message}</div></div>
                   </div>
                 ))}
