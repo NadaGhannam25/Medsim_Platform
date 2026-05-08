@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Bot, ChevronLeft, ChevronRight, Droplets, FilePlus2, Filter, Gauge, HeartPulse, Stethoscope, Thermometer, Wind } from "lucide-react";
+import { ArrowLeft, Bot, ChevronLeft, ChevronRight, Droplets, Filter, Gauge, HeartPulse, Stethoscope, Thermometer, Wind } from "lucide-react";
 import { toast } from "sonner";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -94,9 +94,7 @@ function ClinicalCasesPage() {
               : t("cases.subtitle")}
           </p>
         </div>
-        <Button onClick={generateCases} className="h-12 gap-2 bg-[image:var(--gradient-primary)] text-base font-black shadow-[var(--shadow-soft)]">
-          <FilePlus2 className="h-5 w-5" /> {t("cases.generate")}
-        </Button>
+{/* Generate button removed — users select from existing medical blocks */}
       </div>
 
       <div className="mb-6 grid gap-4 md:grid-cols-3">

@@ -64,8 +64,10 @@ function DashboardPage() {
               <Sparkles className="h-3.5 w-3.5" />
               المستوى الحالي: متقدّم
             </div>
-            <h1 className="text-3xl font-bold md:text-4xl">أهلًا د. {name} 👋</h1>
-            <p className="mt-2 text-primary-foreground/85">
+            <h1 className="text-3xl font-bold leading-snug tracking-tight md:text-4xl">
+              أهلًا د. {name} 👋
+            </h1>
+            <p className="mt-3 text-lg leading-relaxed text-primary-foreground/90 font-medium">
               لديك مريض جديد ينتظر التشخيص. هل أنت مستعد للتحدّي؟
             </p>
           </div>
