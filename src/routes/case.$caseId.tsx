@@ -686,8 +686,6 @@ function EcgResult() {
   return (
     <div>
       <img src={ecg12leadImg} alt="ECG — 12 lead" className="w-full rounded-2xl" />
-        <div className="rounded-2xl bg-muted/30 p-3 font-bold text-muted-foreground"><span className="text-primary">ملاحظات سريرية:</span> {notes}</div>
-      </div>
     </div>
   );
 }
