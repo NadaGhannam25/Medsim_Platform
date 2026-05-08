@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Bot, ChevronLeft, ChevronRight, Droplets, FilePlus2, Filter, Gauge, HeartPulse, Stethoscope, Thermometer, Wind } from "lucide-react";
+import { ArrowLeft, Bot, ChevronLeft, ChevronRight, Droplets, Filter, Gauge, HeartPulse, Stethoscope, Thermometer, Wind } from "lucide-react";
 import { toast } from "sonner";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
