@@ -95,4 +95,24 @@ The objectives of Medsim are:
 5. To demonstrate how LLM technology can be used responsibly in medical education.
 
 ---
-## Team Members| Student Name | Role ||---|---|| Nada Al-Mutairi | Student / Project Member || Shahad Alrashoud | Student / Project Member || Rand Alhussaini | Student / Project Member |---## Course Information| Item | Details ||---|---|| Course | INFO 491 || Project Name | Medsim Platform || Institution | AlMaarefa University || Project Type | Educational Medical Simulation Platform || Target Users | Health Sciences Students |---## Future ImprovementsFuture improvements of Medsim may include adding more medical specialties, improving the feedback system, adding progress tracking, supporting more clinical case types, and enhancing the AI response evaluation process. The platform can also be expanded to include advanced assessment tools and supervisor dashboards to support academic training.---## ConclusionMedsim is a student-centered educational platform that supports clinical learning through simulation and AI-powered interaction. It helps students practice clinical reasoning in a safe and interactive environment before real clinical practice. By combining virtual patient simulation, structured feedback, and responsible use of LLM technology, Medsim aims to improve students’ confidence, decision-making, and readiness for future clinical experiences.
+
+## Future Improvements
+
+Future improvements of Medsim may include adding more medical specialties, improving the feedback system, adding progress tracking, supporting more clinical case types, and enhancing the AI response evaluation process. The platform can also be expanded to include advanced assessment tools and supervisor dashboards to support academic training.
+
+---
+
+## Conclusion
+
+Medsim is a student-centered educational platform that supports clinical learning through simulation and AI-powered interaction. It helps students practice clinical reasoning in a safe and interactive environment before real clinical practice. 
+By combining virtual patient simulation, structured feedback, and responsible use of LLM technology, Medsim aims to improve students’ confidence, decision-making, and readiness for future clinical experiences.
+
+---
+
+## Team Members
+
+| Student Name | Role |
+|---|---|
+| Nada Al-Mutairi | Student / Project Member |
+| Shahad Alrashoud | Student / Project Member |
+| Rand Alhussaini | Student / Project Member |
