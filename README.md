@@ -56,3 +56,42 @@ The platform also uses an LLM-based chat flow to generate realistic patient resp
 | 5. Output Display | The response is displayed to the student inside the clinical case interface. |
 
 ---
+## Prompt Design
+
+The prompt is designed to make the AI act as a virtual patient inside a clinical case. It includes the case context, patient details, symptoms, and the allowed response style. This helps the AI generate consistent, realistic, and educational answers during the student interaction.
+
+The prompt structure includes:
+
+| Prompt Element | Purpose |
+|---|---|
+| Case Context | Provides the AI with the medical scenario and patient background. |
+| Student Question | Sends the student’s clinical question as part of the conversation. |
+| Patient Role | Guides the model to answer as a patient, not as a doctor. |
+| Controlled Response | Keeps the response relevant to the case and suitable for learning. |
+
+---
+
+## Responsible AI Practices
+
+Medsim applies responsible AI practices to ensure that the learning experience is safe, reliable, and educational. The platform is designed to support students without replacing real clinical supervision.
+
+| Practice | Description |
+|---|---|
+| Privacy Protection | The system focuses on simulated cases and avoids collecting real patient information. |
+| Secure API Connection | API requests are handled through a backend function instead of exposing keys in the frontend. |
+| Error Handling | If the AI response fails, the system should provide a clear message and allow the student to try again. |
+| Educational Purpose | AI responses are used for training and learning only, not for real medical diagnosis. |
+
+---
+
+## Project Objectives
+
+The objectives of Medsim are:
+
+1. To help health sciences students practice clinical cases in an interactive way.
+2. To improve students’ clinical reasoning and decision-making skills.
+3. To provide a safe learning environment before real patient interaction.
+4. To support students with structured feedback and learning points.
+5. To demonstrate how LLM technology can be used responsibly in medical education.
+
+---
